@@ -175,10 +175,7 @@
             <img src="formulario-maria-castillo.jpg" alt="Yo Estoy con la Profesora María Castillo 2028/2032 PRM" class="w-full h-auto object-contain">
           </div>
           
-          <div class="text-center md:text-left pt-2">
-            <span class="inline-block px-3 py-1 rounded-full text-[11px] font-black tracking-wider uppercase bg-amber-400/20 text-amber-300 border border-amber-400/40 mb-2">
-              Elecciones 2028 - 2032
-            </span>
+          <div class="text-center md:text-left pt-1">
             <h2 class="text-lg sm:text-xl font-black text-white leading-tight">
               PADRÓN ELECTORAL Y GESTIÓN POLÍTICA
             </h2>
