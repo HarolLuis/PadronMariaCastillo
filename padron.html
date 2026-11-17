@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
   <title>Sistema de Padrón Electoral y Estadísticas Ejecutivas</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -70,6 +70,18 @@
     }
     .btn-action:active {
       transform: scale(0.93);
+    }
+
+    /* Soporte para scroll táctil y ocultar barra de desplazamiento en móvil */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .touch-scroll {
+      -webkit-overflow-scrolling: touch;
     }
 
     /* 2. Temas de fondo personalizables */
@@ -152,117 +164,140 @@
   <!-- ===================================================================== -->
   <!-- PANTALLA DE INICIO DE SESIÓN OBLIGATORIO                              -->
   <!-- ===================================================================== -->
-  <div id="loginScreen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 overflow-y-auto">
-    <div class="max-w-4xl w-full grid grid-cols-1 lg:grid-cols-12 bg-white rounded-3xl shadow-2xl overflow-hidden border border-white/20 my-auto">
+  <div id="loginScreen" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 md:p-8 bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 overflow-y-auto">
+    <div class="max-w-4xl w-full grid grid-cols-1 md:grid-cols-12 bg-white rounded-3xl shadow-2xl overflow-hidden border border-white/20 my-auto">
       
-      <!-- Panel Izquierdo: Branding, Imagen Oficial y Credenciales -->
-      <div class="lg:col-span-5 bg-gradient-to-br from-indigo-900 via-indigo-950 to-slate-900 text-white p-7 flex flex-col justify-between relative overflow-hidden">
-        <div class="relative z-10">
-          <div class="mb-4 rounded-2xl overflow-hidden border-2 border-amber-400 shadow-lg bg-white">
+      <!-- Panel Izquierdo: Branding Oficial María Castillo (Sin credenciales demo) -->
+      <div class="md:col-span-5 bg-gradient-to-br from-indigo-900 via-indigo-950 to-slate-900 text-white p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
+        <div class="relative z-10 space-y-4">
+          <!-- Logo / Imagen de Campaña -->
+          <div class="rounded-2xl overflow-hidden border-2 border-amber-400 shadow-xl bg-white max-w-[240px] md:max-w-full mx-auto">
             <img src="formulario-maria-castillo.jpg" alt="Yo Estoy con la Profesora María Castillo 2028/2032 PRM" class="w-full h-auto object-contain">
           </div>
-          <div class="p-3.5 rounded-2xl bg-white/10 border border-amber-400/30 text-indigo-100 text-xs leading-relaxed italic">
+          
+          <div class="text-center md:text-left pt-2">
+            <span class="inline-block px-3 py-1 rounded-full text-[11px] font-black tracking-wider uppercase bg-amber-400/20 text-amber-300 border border-amber-400/40 mb-2">
+              Elecciones 2028 - 2032
+            </span>
+            <h2 class="text-lg sm:text-xl font-black text-white leading-tight">
+              PADRÓN ELECTORAL Y GESTIÓN POLÍTICA
+            </h2>
+            <p class="text-xs text-amber-300 font-semibold mt-1">«Aprender También es Crecer»</p>
+          </div>
+
+          <div class="hidden sm:block p-3.5 rounded-2xl bg-white/10 border border-amber-400/30 text-indigo-100 text-xs leading-relaxed italic">
             <i class="fa-solid fa-quote-left text-amber-400 mr-1"></i>
-            Cada persona que sumamos con respeto, educación y compromiso fortalece nuestra democracia y construye un futuro de progreso para todos. ¡Juntos seguimos creciendo!
+            Cada persona que sumamos con respeto, educación y compromiso fortalece nuestra democracia y construye un futuro de progreso para todos.
             <i class="fa-solid fa-quote-right text-amber-400 ml-1"></i>
           </div>
         </div>
 
-        <!-- Credenciales de Acceso Rápido Dinámicas -->
-        <div class="relative z-10 mt-6 bg-indigo-950/90 border border-indigo-700/80 rounded-2xl p-4 text-xs space-y-2.5">
-          <div class="flex items-center justify-between text-amber-300 font-bold">
-            <span><i class="fa-solid fa-key mr-1.5"></i> Credenciales Oficiales</span>
-            <span id="dbLoginStatus" class="text-[10px] font-bold text-emerald-300 bg-emerald-950/70 px-2 py-0.5 rounded-full border border-emerald-500/30">
-              <i class="fa-solid fa-database text-emerald-400 mr-1"></i> MySQL Hostinger
-            </span>
-          </div>
-          <p class="text-[11px] text-indigo-300">Contraseña inicial = últimos 4 dígitos de la cédula:</p>
-          <div id="listaCredencialesDemo" class="space-y-1.5 max-h-48 overflow-y-auto pr-1"></div>
+        <div class="relative z-10 pt-4 mt-4 border-t border-indigo-800/60 flex items-center justify-between text-xs text-indigo-300">
+          <span class="text-[11px] font-medium"><i class="fa-solid fa-shield-halved text-emerald-400 mr-1"></i> Sistema Seguro</span>
+          <span id="dbLoginStatus" class="text-[10px] font-bold text-emerald-300 bg-emerald-950/70 px-2.5 py-1 rounded-full border border-emerald-500/30">
+            <i class="fa-solid fa-database text-emerald-400 mr-1"></i> MySQL Hostinger
+          </span>
         </div>
       </div>
 
-      <!-- Panel Derecho: Formulario de Autenticación -->
-      <div class="lg:col-span-7 p-8 md:p-10 flex flex-col justify-center bg-white text-slate-800">
+      <!-- Panel Derecho: Formulario de Autenticación para Todos los Usuarios -->
+      <div class="md:col-span-7 p-6 sm:p-8 md:p-10 flex flex-col justify-center bg-white text-slate-800">
         <div class="mb-6">
-          <span class="text-xs font-extrabold uppercase tracking-widest text-indigo-600">Control de Acceso Seguro</span>
-          <h2 class="text-2xl font-extrabold text-slate-900 mt-1">Iniciar Sesión en el Sistema</h2>
-          <p class="text-sm text-slate-500 mt-1">Ingrese sus credenciales asignadas para acceder a las herramientas de su rol.</p>
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
+            <span class="text-xs font-black uppercase tracking-widest text-indigo-600">Acceso Autorizado</span>
+          </div>
+          <h3 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Iniciar Sesión</h3>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">
+            Ingrese sus credenciales de usuario o cédula asignada para acceder al sistema.
+          </p>
         </div>
 
         <div id="loginErrorBox" class="hidden mb-5 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-sm flex items-start gap-3">
-          <i class="fa-solid fa-circle-exclamation text-lg mt-0.5 text-rose-600"></i>
-          <div class="flex-1">
+          <i class="fa-solid fa-circle-exclamation text-lg mt-0.5 text-rose-600 shrink-0"></i>
+          <div class="flex-1 min-w-0">
             <p id="loginErrorTitle" class="font-bold">Error de autenticación</p>
             <p id="loginErrorMsg" class="text-xs mt-0.5"></p>
           </div>
         </div>
 
-        <form onsubmit="procesarLogin(event)" class="space-y-5">
+        <form onsubmit="procesarLogin(event)" class="space-y-4 sm:space-y-5">
           <div>
-            <label class="block text-sm font-bold text-slate-700 mb-2">
-              <i class="fa-solid fa-user text-indigo-600 mr-1.5"></i> Nombre de Usuario
+            <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">
+              <i class="fa-solid fa-user text-indigo-600 mr-1.5"></i> Nombre de Usuario o Cédula
             </label>
-            <input type="text" id="loginUsername" required placeholder="Ej: Directora, Administrador o Coordinador"
-              class="w-full px-4 py-3.5 rounded-xl border border-slate-300 text-slate-900 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600 text-sm font-medium transition">
+            <input type="text" id="loginUsername" required autocomplete="username"
+              placeholder="Ej: Directora, Administrador o Coordinador"
+              class="w-full px-4 py-3 sm:py-3.5 rounded-xl border border-slate-300 text-slate-900 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600 text-base sm:text-sm font-medium transition shadow-xs">
           </div>
 
           <div>
-            <label class="block text-sm font-bold text-slate-700 mb-2">
-              <i class="fa-solid fa-lock text-indigo-600 mr-1.5"></i> Contraseña
+            <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">
+              <i class="fa-solid fa-lock text-indigo-600 mr-1.5"></i> Contraseña de Acceso
             </label>
             <div class="relative">
-              <input type="password" id="loginPassword" required placeholder="Últimos 4 dígitos de su cédula o clave personalizada"
-                class="w-full px-4 py-3.5 pr-12 rounded-xl border border-slate-300 text-slate-900 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600 text-sm font-medium transition">
-              <button type="button" onclick="toggleVerPassword('loginPassword', 'iconEyeLogin')" class="absolute right-3.5 top-3.5 text-slate-400 hover:text-indigo-600 p-1">
-                <i id="iconEyeLogin" class="fa-solid fa-eye text-base"></i>
+              <input type="password" id="loginPassword" required autocomplete="current-password"
+                placeholder="Ingrese su contraseña"
+                class="w-full px-4 py-3 sm:py-3.5 pr-12 rounded-xl border border-slate-300 text-slate-900 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600 text-base sm:text-sm font-medium transition shadow-xs">
+              <button type="button" onclick="toggleVerPassword('loginPassword', 'iconEyeLogin')"
+                class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-600 p-2 text-base"
+                title="Mostrar u ocultar contraseña">
+                <i id="iconEyeLogin" class="fa-solid fa-eye"></i>
               </button>
             </div>
           </div>
 
-          <div class="flex items-center justify-between text-xs text-slate-500 pt-1">
-            <span><i class="fa-solid fa-shield-halved text-emerald-600 mr-1"></i> Límite de seguridad: <strong>3 intentos fallidos</strong></span>
+          <div class="flex items-center justify-between text-[11px] sm:text-xs text-slate-500 pt-1">
+            <span class="flex items-center gap-1">
+              <i class="fa-solid fa-shield-halved text-emerald-600"></i> Límite de seguridad: <strong>3 intentos</strong>
+            </span>
             <button type="button" onclick="desbloquearEmergencia()" class="text-indigo-600 hover:underline font-semibold">
-              ¿Cuenta bloqueada en pruebas? Restaurar
+              Restablecer claves
             </button>
           </div>
 
-          <button type="submit" id="btnSubmitLogin" class="btn-modern w-full bg-indigo-600 hover:bg-indigo-700 text-white text-base py-4">
-            <i class="fa-solid fa-right-to-bracket"></i> Ingresar al Sistema Electoral
+          <button type="submit" id="btnSubmitLogin"
+            class="btn-modern w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm sm:text-base py-3.5 sm:py-4 shadow-lg shadow-indigo-600/30">
+            <i class="fa-solid fa-right-to-bracket mr-1.5"></i> Ingresar al Sistema Electoral
           </button>
         </form>
+
+        <p class="text-center text-[11px] text-slate-400 mt-6">
+          Plataforma Institucional Oficial · Campaña 2028 - 2032
+        </p>
       </div>
     </div>
   </div>
 
-  <!-- ===================================================================== -->
+    <!-- ===================================================================== -->
   <!-- APLICACIÓN PRINCIPAL                                                  -->
   <!-- ===================================================================== -->
   <div id="appContainer" class="hidden flex-1 flex flex-col">
 
-    <!-- CABECERA EJECUTIVA -->
+    <!-- CABECERA EJECUTIVA RESPONSIVA -->
     <header class="bg-indigo-950 text-white shadow-xl sticky top-0 z-40 no-print border-b border-indigo-800">
-      <div class="max-w-7xl mx-auto px-4 py-3.5 flex flex-wrap justify-between items-center gap-4">
+      <div class="max-w-7xl mx-auto px-3 sm:px-4 py-2.5 sm:py-3.5 flex flex-wrap justify-between items-center gap-3">
         
-        <div class="flex items-center space-x-3.5">
-          <img src="formulario-maria-castillo.jpg" alt="Yo Estoy con la Profesora María Castillo 2028/2032 PRM" class="h-12 w-28 rounded-xl object-cover object-left border-2 border-amber-400 shadow-md shrink-0 bg-white">
-          <div>
-            <h1 class="text-lg font-extrabold tracking-tight leading-tight">PADRÓN ELECTORAL · MARÍA CASTILLO (2028/2032)</h1>
-            <p class="text-xs text-amber-300 font-semibold">«Aprender También es Crecer» · Sistema Integrado de Afiliación y Estadísticas</p>
+        <div class="flex items-center space-x-2.5 sm:space-x-3.5 min-w-0">
+          <img src="formulario-maria-castillo.jpg" alt="Yo Estoy con la Profesora María Castillo 2028/2032 PRM" class="h-10 sm:h-12 w-20 sm:w-28 rounded-xl object-cover object-left border-2 border-amber-400 shadow-md shrink-0 bg-white">
+          <div class="min-w-0">
+            <h1 class="text-xs sm:text-base md:text-lg font-extrabold tracking-tight leading-tight truncate sm:whitespace-normal">PADRÓN ELECTORAL · MARÍA CASTILLO</h1>
+            <p class="text-[10px] sm:text-xs text-amber-300 font-semibold truncate sm:whitespace-normal">«Aprender También es Crecer» · 2028 - 2032</p>
           </div>
         </div>
 
-        <div class="flex flex-wrap items-center gap-3">
+        <div class="flex flex-wrap items-center gap-2 sm:gap-3">
           <!-- Indicador de Base de Datos MySQL Hostinger -->
-          <div id="dbStatusBadge" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+          <div id="dbStatusBadge" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl text-[11px] sm:text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             <span id="dbStatusText">MySQL Hostinger</span>
           </div>
 
           <!-- Selector de Tema / Color de Fondo -->
           <div class="relative">
-            <button onclick="toggleMenuColores()" class="btn-modern bg-indigo-900 hover:bg-indigo-800 text-white border border-indigo-700 !py-2.5 !px-4 !text-xs">
+            <button onclick="toggleMenuColores()" class="btn-modern bg-indigo-900 hover:bg-indigo-800 text-white border border-indigo-700 !py-2 sm:!py-2.5 !px-2.5 sm:!px-4 !text-xs">
               <i class="fa-solid fa-palette text-amber-400 text-sm"></i>
-              <span>Color de Fondo</span>
+              <span class="hidden sm:inline">Color de Fondo</span>
               <i class="fa-solid fa-chevron-down text-[10px]"></i>
             </button>
             <div id="menuColores" class="hidden absolute right-0 mt-2 w-60 bg-white text-slate-800 rounded-2xl shadow-2xl border border-slate-200 p-3 z-50">
@@ -291,78 +326,78 @@
           </div>
 
           <!-- Usuario Autenticado -->
-          <div class="flex items-center gap-3 bg-indigo-900/90 px-4 py-2 rounded-2xl border border-indigo-700">
-            <div class="w-9 h-9 rounded-xl bg-amber-400 text-indigo-950 flex items-center justify-center font-black text-sm">
+          <div class="flex items-center gap-2 sm:gap-3 bg-indigo-900/90 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-2xl border border-indigo-700">
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-400 text-indigo-950 flex items-center justify-center font-black text-xs sm:text-sm shrink-0">
               <i id="headerUserIcon" class="fa-solid fa-user-shield"></i>
             </div>
-            <div class="text-left">
-              <div class="flex items-center gap-2">
-                <span id="headerUserName" class="text-sm font-bold text-white leading-none">Usuario</span>
-                <span id="headerUserRoleBadge" class="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-amber-400 text-indigo-950">ROL</span>
+            <div class="text-left min-w-0">
+              <div class="flex items-center gap-1.5 sm:gap-2">
+                <span id="headerUserName" class="text-xs sm:text-sm font-bold text-white leading-none truncate max-w-[100px] sm:max-w-none">Usuario</span>
+                <span id="headerUserRoleBadge" class="text-[9px] sm:text-[10px] font-black uppercase px-1.5 sm:px-2 py-0.5 rounded bg-amber-400 text-indigo-950 shrink-0">ROL</span>
               </div>
-              <p id="headerUserMeta" class="text-[11px] text-indigo-300 mt-0.5">Cédula: ---</p>
+              <p id="headerUserMeta" class="text-[10px] sm:text-[11px] text-indigo-300 mt-0.5 hidden sm:block">Cédula: ---</p>
             </div>
           </div>
 
-          <button onclick="abrirModalCambiarPass(false)" class="btn-modern bg-indigo-800 hover:bg-indigo-700 text-amber-300 border border-indigo-600 !py-2.5 !px-3.5 !text-xs" title="Cambiar mi contraseña">
+          <button onclick="abrirModalCambiarPass(false)" class="btn-modern bg-indigo-800 hover:bg-indigo-700 text-amber-300 border border-indigo-600 !py-2 sm:!py-2.5 !px-2.5 sm:!px-3.5 !text-xs" title="Cambiar mi contraseña">
             <i class="fa-solid fa-key"></i>
-            <span class="hidden sm:inline">Cambiar Clave</span>
+            <span class="hidden md:inline">Clave</span>
           </button>
 
-          <button onclick="cerrarSesion()" class="btn-modern bg-rose-600 hover:bg-rose-700 text-white !py-2.5 !px-4 !text-xs">
+          <button onclick="cerrarSesion()" class="btn-modern bg-rose-600 hover:bg-rose-700 text-white !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-xs">
             <i class="fa-solid fa-power-off"></i>
-            <span>Salir</span>
+            <span class="hidden sm:inline">Salir</span>
           </button>
         </div>
       </div>
 
-      <!-- MENÚ DE NAVEGACIÓN PRINCIPAL CON ICONOS -->
+      <!-- MENÚ DE NAVEGACIÓN PRINCIPAL CON SLIDER HORIZONTAL RESPONSIVO -->
       <div class="bg-indigo-900/80 border-t border-indigo-800/80">
-        <div class="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-2">
-          <nav class="flex flex-wrap gap-2">
-            <button id="navDashboard" onclick="cambiarVista('dashboard')" class="btn-modern !py-2.5 !px-5 !text-xs bg-amber-400 text-indigo-950">
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 py-2 flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-2">
+          <nav class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1 sm:pb-0 w-full xl:w-auto scrollbar-none no-scrollbar touch-scroll">
+            <button id="navDashboard" onclick="cambiarVista('dashboard')" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-5 !text-xs bg-amber-400 text-indigo-950 whitespace-nowrap shrink-0">
               <i class="fa-solid fa-chart-pie text-sm"></i>
-              <span>Dashboard y Estadísticas</span>
+              <span>Dashboard</span>
             </button>
-            <button id="navPadron" onclick="cambiarVista('padron')" class="btn-modern !py-2.5 !px-5 !text-xs bg-indigo-950/70 text-indigo-100 hover:bg-indigo-800">
+            <button id="navPadron" onclick="cambiarVista('padron')" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-5 !text-xs bg-indigo-950/70 text-indigo-100 hover:bg-indigo-800 whitespace-nowrap shrink-0">
               <i class="fa-solid fa-users-viewfinder text-sm"></i>
-              <span>Gestión del Padrón Electoral</span>
+              <span>Padrón Electoral</span>
             </button>
-            <button id="navComparador" onclick="cambiarVista('comparador')" class="btn-modern !py-2.5 !px-5 !text-xs bg-indigo-950/70 text-indigo-100 hover:bg-indigo-800">
+            <button id="navComparador" onclick="cambiarVista('comparador')" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-5 !text-xs bg-indigo-950/70 text-indigo-100 hover:bg-indigo-800 whitespace-nowrap shrink-0">
               <i class="fa-solid fa-scale-balanced text-sm"></i>
-              <span>Comparador de Coordinadores</span>
+              <span>Comparador</span>
             </button>
-            <button id="navSeguridad" onclick="cambiarVista('seguridad')" class="btn-modern !py-2.5 !px-5 !text-xs bg-indigo-950/70 text-indigo-100 hover:bg-indigo-800">
+            <button id="navSeguridad" onclick="cambiarVista('seguridad')" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-5 !text-xs bg-indigo-950/70 text-indigo-100 hover:bg-indigo-800 whitespace-nowrap shrink-0">
               <i class="fa-solid fa-user-lock text-sm"></i>
-              <span>Usuarios, Coordinadores y Bitácora</span>
+              <span>Seguridad & Bitácora</span>
             </button>
-            <button id="navAsistencia" onclick="cambiarVista('asistencia')" class="btn-modern !py-2.5 !px-5 !text-xs bg-indigo-950/70 text-indigo-100 hover:bg-indigo-800 hidden">
+            <button id="navAsistencia" onclick="cambiarVista('asistencia')" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-5 !text-xs bg-indigo-950/70 text-indigo-100 hover:bg-indigo-800 hidden whitespace-nowrap shrink-0">
               <i class="fa-solid fa-clipboard-check text-sm"></i>
-              <span>Pase de Lista (Reuniones)</span>
+              <span>Pase de Lista</span>
             </button>
-            <button id="navMisionVision" onclick="cambiarVista('misionVision')" class="btn-modern !py-2.5 !px-5 !text-xs bg-indigo-950/70 text-indigo-100 hover:bg-indigo-800">
+            <button id="navMisionVision" onclick="cambiarVista('misionVision')" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-5 !text-xs bg-indigo-950/70 text-indigo-100 hover:bg-indigo-800 whitespace-nowrap shrink-0">
               <i class="fa-solid fa-star text-sm"></i>
-              <span>Misión, Visión y Valores</span>
+              <span>Misión y Valores</span>
             </button>
           </nav>
 
           <!-- Botones de Acción Rápida (Inscribir Persona y Agregar Coordinador) -->
-          <div class="flex flex-wrap gap-2">
-            <button id="btnTopNuevoCoordinador" onclick="abrirModalNuevoCoordinador()" class="btn-modern !py-2.5 !px-4 !text-xs bg-amber-400 hover:bg-amber-300 text-indigo-950">
+          <div class="flex items-center gap-2 w-full xl:w-auto justify-end pt-1 xl:pt-0">
+            <button id="btnTopNuevoCoordinador" onclick="abrirModalNuevoCoordinador()" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-xs bg-amber-400 hover:bg-amber-300 text-indigo-950 flex-1 sm:flex-initial whitespace-nowrap">
               <i class="fa-solid fa-user-tie"></i>
-              <span>Agregar Coordinador</span>
+              <span>+ Coordinador</span>
             </button>
-            <button id="btnTopNuevoAfiliado" onclick="abrirModalNuevo()" class="btn-modern !py-2.5 !px-4 !text-xs bg-emerald-600 hover:bg-emerald-500 text-white">
+            <button id="btnTopNuevoAfiliado" onclick="abrirModalNuevo()" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-xs bg-emerald-600 hover:bg-emerald-500 text-white flex-1 sm:flex-initial whitespace-nowrap">
               <i class="fa-solid fa-user-plus"></i>
-              <span>Inscribir Miembros (Militante)</span>
+              <span>+ Inscribir Miembro</span>
             </button>
           </div>
         </div>
       </div>
     </header>
 
-    <!-- CONTENIDO PRINCIPAL -->
-    <main class="max-w-7xl mx-auto px-4 py-6 space-y-6 flex-1 w-full no-print">
+    <!-- CONTENEDOR PRINCIPAL RESPONSIVO -->
+    <main class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6 flex-1 w-full no-print">
 
       <!-- BANNER INSPIRADOR PERSISTENTE EN TODAS LAS VISTAS -->
       <div class="rounded-2xl bg-gradient-to-r from-blue-900 via-indigo-900 to-sky-800 text-white p-4 sm:p-5 shadow-lg border border-amber-400/40 flex flex-col lg:flex-row items-center justify-between gap-4">
@@ -397,18 +432,18 @@
           <p id="roleUserDesc" class="text-sm text-slate-600 mt-0.5">Descripción de permisos del rol.</p>
         </div>
 
-        <div id="panelExportacionesEjecutivas" class="flex flex-wrap gap-2.5">
-          <button onclick="exportarExcelCompleto()" class="btn-modern bg-emerald-600 hover:bg-emerald-700 text-white">
-            <i class="fa-solid fa-file-excel text-base"></i>
-            <span>Exportar a Excel (.xlsx)</span>
+        <div id="panelExportacionesEjecutivas" class="flex flex-wrap items-center gap-2 sm:gap-2.5 w-full lg:w-auto">
+          <button onclick="exportarExcelCompleto()" class="btn-modern flex-1 sm:flex-initial !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-xs bg-emerald-600 hover:bg-emerald-700 text-white whitespace-nowrap">
+            <i class="fa-solid fa-file-excel text-sm"></i>
+            <span>Excel (.xlsx)</span>
           </button>
-          <button onclick="exportarReportePDF()" class="btn-modern bg-rose-600 hover:bg-rose-700 text-white">
-            <i class="fa-solid fa-file-pdf text-base"></i>
-            <span>Exportar Dashboard PDF</span>
+          <button onclick="exportarReportePDF()" class="btn-modern flex-1 sm:flex-initial !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-xs bg-rose-600 hover:bg-rose-700 text-white whitespace-nowrap">
+            <i class="fa-solid fa-file-pdf text-sm"></i>
+            <span>Dashboard PDF</span>
           </button>
-          <button onclick="imprimirReporteEstadistico()" class="btn-modern bg-slate-800 hover:bg-slate-900 text-white">
-            <i class="fa-solid fa-print text-base"></i>
-            <span>Imprimir Reporte</span>
+          <button onclick="imprimirReporteEstadistico()" class="btn-modern flex-1 sm:flex-initial !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-xs bg-slate-800 hover:bg-slate-900 text-white whitespace-nowrap">
+            <i class="fa-solid fa-print text-sm"></i>
+            <span>Imprimir</span>
           </button>
         </div>
       </div>
@@ -559,33 +594,33 @@
       <!-- VISTA 2: TABLA DEL PADRÓN ELECTORAL -->
       <section id="vistaPadron" class="space-y-6 hidden">
         <div class="surface-card bg-white rounded-2xl border border-slate-200 shadow-md overflow-hidden">
-          <div class="surface-sub p-4 bg-slate-50 border-b border-slate-200 flex flex-wrap justify-between items-center gap-4">
-            <div class="relative flex-1 min-w-[260px]">
-              <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400 text-sm"></i>
-              <input type="text" id="inputBuscar" oninput="renderPadron()" placeholder="Buscar afiliado por Nombre, Cédula, Folio, Centro de Votación / Dirección o Mesa..."
-                class="w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
+          <div class="surface-sub p-3 sm:p-4 bg-slate-50 border-b border-slate-200 flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3">
+            <div class="relative flex-1 min-w-0">
+              <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
+              <input type="text" id="inputBuscar" oninput="renderPadron()" placeholder="Buscar afiliado por Nombre, Cédula, Folio, Centro o Mesa..."
+                class="w-full pl-9 pr-4 py-2.5 text-base sm:text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium shadow-xs">
             </div>
 
-            <div class="flex flex-wrap items-center gap-3">
-              <div id="wrapperFiltroCoord" class="flex items-center gap-2">
-                <span class="text-xs text-slate-600 font-extrabold uppercase"><i class="fa-solid fa-filter mr-1 text-indigo-600"></i>Coordinador:</span>
-                <select id="filtroCoordinador" onchange="renderPadron()" class="text-sm px-3 py-2.5 bg-white border border-slate-300 rounded-xl font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+              <div id="wrapperFiltroCoord" class="flex items-center gap-1.5 sm:gap-2 flex-1 sm:flex-initial">
+                <span class="text-xs text-slate-600 font-extrabold uppercase shrink-0"><i class="fa-solid fa-filter mr-1 text-indigo-600"></i>Coord:</span>
+                <select id="filtroCoordinador" onchange="renderPadron()" class="text-xs sm:text-sm px-2.5 sm:px-3 py-2 sm:py-2.5 bg-white border border-slate-300 rounded-xl font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full sm:w-auto">
                   <option value="todos">Todos los Coordinadores</option>
                 </select>
               </div>
-              <button id="btnPadronNuevoCoord" onclick="abrirModalNuevoCoordinador()" class="btn-modern bg-amber-500 hover:bg-amber-600 text-indigo-950">
-                <i class="fa-solid fa-user-tie"></i> Agregar Coordinador
+              <button id="btnPadronNuevoCoord" onclick="abrirModalNuevoCoordinador()" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-xs bg-amber-500 hover:bg-amber-600 text-indigo-950 flex-1 sm:flex-initial whitespace-nowrap">
+                <i class="fa-solid fa-user-tie"></i> <span class="hidden sm:inline">Agregar</span> Coordinador
               </button>
-              <button id="btnPadronVerMiFormulario" onclick="verFormularioCoordinador(rolActual)" class="btn-modern bg-amber-400 hover:bg-amber-300 text-indigo-950 hidden">
-                <i class="fa-solid fa-clipboard-list"></i> Ver Mi Formulario (10 en 10)
+              <button id="btnPadronVerMiFormulario" onclick="verFormularioCoordinador(rolActual)" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-xs bg-amber-400 hover:bg-amber-300 text-indigo-950 hidden flex-1 sm:flex-initial whitespace-nowrap">
+                <i class="fa-solid fa-clipboard-list"></i> Mi Formulario (10)
               </button>
-              <button id="btnPadronNuevo" onclick="abrirModalNuevo()" class="btn-modern bg-indigo-600 hover:bg-indigo-700 text-white">
-                <i class="fa-solid fa-user-plus"></i> Inscribir Miembros (Militante)
+              <button id="btnPadronNuevo" onclick="abrirModalNuevo()" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-xs bg-indigo-600 hover:bg-indigo-700 text-white flex-1 sm:flex-initial whitespace-nowrap">
+                <i class="fa-solid fa-user-plus"></i> Inscribir Miembro
               </button>
             </div>
           </div>
 
-          <div class="overflow-x-auto">
+          <div class="overflow-x-auto touch-scroll">
             <table class="w-full text-left text-sm border-collapse">
               <thead>
                 <tr class="surface-sub bg-slate-100 text-slate-700 uppercase font-extrabold text-xs border-b border-slate-200">
@@ -639,7 +674,7 @@
             </div>
           </div>
 
-          <div class="overflow-x-auto">
+          <div class="overflow-x-auto touch-scroll">
             <table class="w-full text-left text-sm border-collapse">
               <thead>
                 <tr class="surface-sub bg-slate-100 text-slate-700 uppercase font-extrabold text-xs border-b border-slate-200">
@@ -672,7 +707,7 @@
               <i class="fa-solid fa-user-tie"></i> Agregar Nuevo Coordinador
             </button>
           </div>
-          <div class="overflow-x-auto">
+          <div class="overflow-x-auto touch-scroll">
             <table class="w-full text-left text-sm border-collapse">
               <thead>
                 <tr class="surface-sub bg-slate-100 text-slate-700 uppercase font-extrabold text-xs border-b border-slate-200">
@@ -698,7 +733,7 @@
             </div>
           </div>
 
-          <div class="overflow-x-auto">
+          <div class="overflow-x-auto touch-scroll">
             <table class="w-full text-left text-sm border-collapse">
               <thead>
                 <tr class="surface-sub bg-slate-100 text-slate-700 uppercase font-extrabold text-xs border-b border-slate-200">
@@ -836,7 +871,7 @@
             </div>
           </div>
 
-          <div class="overflow-x-auto">
+          <div class="overflow-x-auto touch-scroll">
             <table class="w-full text-left text-sm border-collapse">
               <thead>
                 <tr class="surface-sub bg-slate-100 text-slate-700 uppercase font-extrabold text-xs border-b border-slate-200">
@@ -1229,7 +1264,7 @@
 
         <!-- Tabla numerada estilo Formulario Oficial (1..10+) -->
         <div class="rounded-2xl overflow-hidden border-2 border-blue-900 shadow-sm">
-          <div class="overflow-x-auto">
+          <div class="overflow-x-auto touch-scroll">
             <table class="w-full text-left border-collapse text-xs sm:text-sm">
               <thead>
                 <tr class="bg-gradient-to-r from-sky-200 via-blue-100 to-sky-200 text-blue-950 border-b-2 border-amber-400 font-black uppercase text-xs">
