@@ -285,7 +285,7 @@
 
     <!-- CABECERA EJECUTIVA RESPONSIVA -->
     <header class="bg-indigo-950 text-white shadow-xl sticky top-0 z-40 no-print border-b border-indigo-800">
-      <div class="max-w-7xl mx-auto px-3 sm:px-4 py-2.5 sm:py-3.5 flex flex-wrap justify-between items-center gap-3">
+      <div class="max-w-[1680px] mx-auto px-3 sm:px-5 py-2.5 sm:py-3.5 flex flex-wrap justify-between items-center gap-3">
         
         <div class="flex items-center space-x-2.5 sm:space-x-3.5 min-w-0">
           <img src="formulario-maria-castillo.jpg" alt="Yo Estoy con la Profesora María Castillo 2028/2032 PRM" class="h-10 sm:h-12 w-20 sm:w-28 rounded-xl object-cover object-left border-2 border-amber-400 shadow-md shrink-0 bg-white">
@@ -348,6 +348,16 @@
             </div>
           </div>
 
+          <!-- Botones de Acción Rápida al lado de Administrador -->
+          <button id="btnTopNuevoCoordinador" onclick="abrirModalNuevoCoordinador()" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-[11px] sm:!text-xs bg-amber-400 hover:bg-amber-300 text-indigo-950 whitespace-nowrap">
+            <i class="fa-solid fa-user-tie"></i>
+            <span>Agregar Coordinador</span>
+          </button>
+          <button id="btnTopNuevoAfiliado" onclick="abrirModalNuevo()" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-[11px] sm:!text-xs bg-emerald-600 hover:bg-emerald-500 text-white whitespace-nowrap">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>Inscribir Miembro</span>
+          </button>
+
           <button onclick="abrirModalCambiarPass(false)" class="btn-modern bg-indigo-800 hover:bg-indigo-700 text-amber-300 border border-indigo-600 !py-2 sm:!py-2.5 !px-2.5 sm:!px-3.5 !text-xs" title="Cambiar mi contraseña">
             <i class="fa-solid fa-key"></i>
             <span class="hidden md:inline">Clave</span>
@@ -360,14 +370,15 @@
         </div>
       </div>
 
-      <!-- MENÚ DESPLEGABLE DE NAVEGACIÓN + ACCIONES RÁPIDAS EN LA MISMA FILA -->
+      <!-- MENÚ DESPLEGABLE DE NAVEGACIÓN -->
       <div class="bg-indigo-900/90 border-t border-indigo-800/80">
-        <div class="max-w-[1680px] mx-auto px-3 sm:px-5 py-2.5 flex flex-row flex-wrap sm:flex-nowrap items-center justify-start gap-2 sm:gap-3">
+        <div class="max-w-[1680px] mx-auto px-3 sm:px-5 py-2 flex flex-row items-center justify-start gap-3">
           <!-- Menú Desplegable -->
           <div class="relative shrink-0" id="navDropdownWrapper">
-            <button id="menuNavDropdownBtn" type="button" onclick="toggleNavMenu()" class="btn-modern !py-2 !px-3 sm:!py-2.5 sm:!px-4 !text-[11px] sm:!text-xs bg-amber-400 hover:bg-amber-300 text-indigo-950 whitespace-nowrap">
+            <button id="menuNavDropdownBtn" type="button" onclick="toggleNavMenu()" class="btn-modern !py-2 !px-3.5 sm:!py-2.5 sm:!px-4 !text-xs bg-amber-400 hover:bg-amber-300 text-indigo-950 whitespace-nowrap">
               <i class="fa-solid fa-bars text-sm"></i>
-              <span id="activeNavLabel">Dashboard y Estadísticas</span>
+              <span>Menú</span>
+              <span id="activeNavLabel" class="hidden sm:inline text-[11px] font-extrabold opacity-80">· Dashboard y Estadísticas</span>
               <i id="navDropdownChevron" class="fa-solid fa-chevron-down text-xs transition-transform duration-200"></i>
             </button>
 
@@ -398,46 +409,12 @@
               </button>
             </nav>
           </div>
-
-          <!-- Botones de Acción Rápida en la misma fila -->
-          <div class="flex flex-row items-center gap-2 sm:gap-3 shrink-0">
-            <button id="btnTopNuevoCoordinador" onclick="abrirModalNuevoCoordinador()" class="btn-modern !py-2 !px-3 sm:!py-2.5 sm:!px-4 !text-[11px] sm:!text-xs bg-amber-400 hover:bg-amber-300 text-indigo-950 whitespace-nowrap">
-              <i class="fa-solid fa-user-tie"></i>
-              <span>Agregar Coordinador</span>
-            </button>
-            <button id="btnTopNuevoAfiliado" onclick="abrirModalNuevo()" class="btn-modern !py-2 !px-3 sm:!py-2.5 sm:!px-4 !text-[11px] sm:!text-xs bg-emerald-600 hover:bg-emerald-500 text-white whitespace-nowrap">
-              <i class="fa-solid fa-user-plus"></i>
-              <span>Inscribir Miembro</span>
-            </button>
-          </div>
         </div>
       </div>
     </header>
 
     <!-- CONTENEDOR PRINCIPAL RESPONSIVO -->
     <main class="max-w-[1680px] mx-auto px-3 sm:px-5 md:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6 flex-1 w-full no-print">
-
-      <!-- BANNER INSPIRADOR PERSISTENTE EN TODAS LAS VISTAS -->
-      <div class="rounded-2xl bg-gradient-to-r from-blue-900 via-indigo-900 to-sky-800 text-white p-4 sm:p-5 shadow-lg border border-amber-400/40 flex flex-col lg:flex-row items-center justify-between gap-4">
-        <div class="flex flex-col sm:flex-row items-center gap-4">
-          <img src="formulario-maria-castillo.jpg" alt="Yo Estoy con la Profesora María Castillo 2028/2032 PRM" class="w-full sm:w-64 h-auto rounded-xl object-contain border-2 border-amber-400 shadow-lg shrink-0 bg-white">
-          <div>
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase bg-amber-400 text-indigo-950">
-                <i class="fa-solid fa-lightbulb mr-1"></i> Aprender También es Crecer
-              </span>
-              <span class="text-xs font-bold text-sky-200">María Castillo (La Profe) · 2028/2032 · PRM</span>
-            </div>
-            <p class="text-sm sm:text-base font-bold text-white mt-1.5 leading-snug">
-              «El verdadero liderazgo nace del ejemplo, la educación y el servicio cercano: cada registro en este padrón representa una familia con esperanza y un paso firme hacia un mejor mañana.»
-            </p>
-          </div>
-        </div>
-        <button onclick="cambiarVista('misionVision')" class="shrink-0 px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-indigo-950 font-extrabold text-xs shadow-md transition flex items-center gap-2">
-          <i class="fa-solid fa-star"></i>
-          <span>Ver Misión, Visión y Valores</span>
-        </button>
-      </div>
 
       <!-- BANNER DEL ROL AUTENTICADO -->
       <div class="surface-card bg-white border-l-8 border-indigo-600 p-5 rounded-2xl shadow-md flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
@@ -2149,7 +2126,7 @@
       });
 
       const activeLbl = document.getElementById("activeNavLabel");
-      if (activeLbl && titulos[vista]) activeLbl.innerText = titulos[vista];
+      if (activeLbl && titulos[vista]) activeLbl.innerText = "· " + titulos[vista];
       toggleNavMenu(false);
 
       if (vista === "dashboard") {
