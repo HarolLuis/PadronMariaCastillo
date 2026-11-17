@@ -18,9 +18,21 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
+    html {
+      font-size: 15px;
+    }
+    @media (min-width: 768px) {
+      html { font-size: 17px; }
+    }
+    @media (min-width: 1024px) {
+      html { font-size: 18.5px; }
+    }
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       transition: background-color 0.35s ease, color 0.35s ease;
+    }
+    .overflow-x-auto {
+      -webkit-overflow-scrolling: touch;
     }
 
     /* 1. Botones modernos, grandes y dinámicos */
@@ -348,45 +360,54 @@
         </div>
       </div>
 
-      <!-- MENÚ DE NAVEGACIÓN PRINCIPAL CON SLIDER HORIZONTAL RESPONSIVO -->
-      <div class="bg-indigo-900/80 border-t border-indigo-800/80">
-        <div class="max-w-7xl mx-auto px-3 sm:px-4 py-2 flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-2">
-          <nav class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1 sm:pb-0 w-full xl:w-auto scrollbar-none no-scrollbar touch-scroll">
-            <button id="navDashboard" onclick="cambiarVista('dashboard')" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-5 !text-xs bg-amber-400 text-indigo-950 whitespace-nowrap shrink-0">
-              <i class="fa-solid fa-chart-pie text-sm"></i>
-              <span>Dashboard</span>
+      <!-- MENÚ DESPLEGABLE DE NAVEGACIÓN + ACCIONES RÁPIDAS EN LA MISMA FILA -->
+      <div class="bg-indigo-900/90 border-t border-indigo-800/80">
+        <div class="max-w-[1680px] mx-auto px-3 sm:px-5 py-2.5 flex flex-row flex-wrap sm:flex-nowrap items-center justify-start gap-2 sm:gap-3">
+          <!-- Menú Desplegable -->
+          <div class="relative shrink-0" id="navDropdownWrapper">
+            <button id="menuNavDropdownBtn" type="button" onclick="toggleNavMenu()" class="btn-modern !py-2 !px-3 sm:!py-2.5 sm:!px-4 !text-[11px] sm:!text-xs bg-amber-400 hover:bg-amber-300 text-indigo-950 whitespace-nowrap">
+              <i class="fa-solid fa-bars text-sm"></i>
+              <span id="activeNavLabel">Dashboard y Estadísticas</span>
+              <i id="navDropdownChevron" class="fa-solid fa-chevron-down text-xs transition-transform duration-200"></i>
             </button>
-            <button id="navPadron" onclick="cambiarVista('padron')" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-5 !text-xs bg-indigo-950/70 text-indigo-100 hover:bg-indigo-800 whitespace-nowrap shrink-0">
-              <i class="fa-solid fa-users-viewfinder text-sm"></i>
-              <span>Padrón Electoral</span>
-            </button>
-            <button id="navComparador" onclick="cambiarVista('comparador')" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-5 !text-xs bg-indigo-950/70 text-indigo-100 hover:bg-indigo-800 whitespace-nowrap shrink-0">
-              <i class="fa-solid fa-scale-balanced text-sm"></i>
-              <span>Comparador</span>
-            </button>
-            <button id="navSeguridad" onclick="cambiarVista('seguridad')" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-5 !text-xs bg-indigo-950/70 text-indigo-100 hover:bg-indigo-800 whitespace-nowrap shrink-0">
-              <i class="fa-solid fa-user-lock text-sm"></i>
-              <span>Seguridad & Bitácora</span>
-            </button>
-            <button id="navAsistencia" onclick="cambiarVista('asistencia')" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-5 !text-xs bg-indigo-950/70 text-indigo-100 hover:bg-indigo-800 hidden whitespace-nowrap shrink-0">
-              <i class="fa-solid fa-clipboard-check text-sm"></i>
-              <span>Pase de Lista</span>
-            </button>
-            <button id="navMisionVision" onclick="cambiarVista('misionVision')" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-5 !text-xs bg-indigo-950/70 text-indigo-100 hover:bg-indigo-800 whitespace-nowrap shrink-0">
-              <i class="fa-solid fa-star text-sm"></i>
-              <span>Misión y Valores</span>
-            </button>
-          </nav>
 
-          <!-- Botones de Acción Rápida (Inscribir Persona y Agregar Coordinador) -->
-          <div class="flex items-center gap-2 w-full xl:w-auto justify-end pt-1 xl:pt-0">
-            <button id="btnTopNuevoCoordinador" onclick="abrirModalNuevoCoordinador()" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-xs bg-amber-400 hover:bg-amber-300 text-indigo-950 flex-1 sm:flex-initial whitespace-nowrap">
+            <nav id="menuNavDropdownPanel" class="hidden absolute left-0 right-0 sm:right-auto sm:w-80 mt-2 rounded-2xl bg-indigo-950 border border-indigo-700/80 shadow-2xl p-2 z-50 space-y-1">
+              <button id="navDashboard" onclick="cambiarVista('dashboard')" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition bg-amber-400 text-indigo-950">
+                <i class="fa-solid fa-chart-pie w-5 text-center"></i>
+                <span>Dashboard y Estadísticas</span>
+              </button>
+              <button id="navPadron" onclick="cambiarVista('padron')" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition text-indigo-100 hover:bg-indigo-800">
+                <i class="fa-solid fa-users-viewfinder w-5 text-center"></i>
+                <span>Gestión del Padrón Electoral</span>
+              </button>
+              <button id="navComparador" onclick="cambiarVista('comparador')" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition text-indigo-100 hover:bg-indigo-800">
+                <i class="fa-solid fa-scale-balanced w-5 text-center"></i>
+                <span>Comparador de Coordinadores</span>
+              </button>
+              <button id="navSeguridad" onclick="cambiarVista('seguridad')" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition text-indigo-100 hover:bg-indigo-800">
+                <i class="fa-solid fa-user-lock w-5 text-center"></i>
+                <span>Usuarios, Coordinadores y Bitácora</span>
+              </button>
+              <button id="navAsistencia" onclick="cambiarVista('asistencia')" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition text-indigo-100 hover:bg-indigo-800 hidden">
+                <i class="fa-solid fa-clipboard-check w-5 text-center"></i>
+                <span>Pase de Lista (Reuniones)</span>
+              </button>
+              <button id="navMisionVision" onclick="cambiarVista('misionVision')" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition text-indigo-100 hover:bg-indigo-800">
+                <i class="fa-solid fa-star w-5 text-center"></i>
+                <span>Misión, Visión y Valores</span>
+              </button>
+            </nav>
+          </div>
+
+          <!-- Botones de Acción Rápida en la misma fila -->
+          <div class="flex flex-row items-center gap-2 sm:gap-3 shrink-0">
+            <button id="btnTopNuevoCoordinador" onclick="abrirModalNuevoCoordinador()" class="btn-modern !py-2 !px-3 sm:!py-2.5 sm:!px-4 !text-[11px] sm:!text-xs bg-amber-400 hover:bg-amber-300 text-indigo-950 whitespace-nowrap">
               <i class="fa-solid fa-user-tie"></i>
-              <span>+ Coordinador</span>
+              <span>Agregar Coordinador</span>
             </button>
-            <button id="btnTopNuevoAfiliado" onclick="abrirModalNuevo()" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-xs bg-emerald-600 hover:bg-emerald-500 text-white flex-1 sm:flex-initial whitespace-nowrap">
+            <button id="btnTopNuevoAfiliado" onclick="abrirModalNuevo()" class="btn-modern !py-2 !px-3 sm:!py-2.5 sm:!px-4 !text-[11px] sm:!text-xs bg-emerald-600 hover:bg-emerald-500 text-white whitespace-nowrap">
               <i class="fa-solid fa-user-plus"></i>
-              <span>+ Inscribir Miembro</span>
+              <span>Inscribir Miembro</span>
             </button>
           </div>
         </div>
@@ -394,7 +415,7 @@
     </header>
 
     <!-- CONTENEDOR PRINCIPAL RESPONSIVO -->
-    <main class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6 flex-1 w-full no-print">
+    <main class="max-w-[1680px] mx-auto px-3 sm:px-5 md:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6 flex-1 w-full no-print">
 
       <!-- BANNER INSPIRADOR PERSISTENTE EN TODAS LAS VISTAS -->
       <div class="rounded-2xl bg-gradient-to-r from-blue-900 via-indigo-900 to-sky-800 text-white p-4 sm:p-5 shadow-lg border border-amber-400/40 flex flex-col lg:flex-row items-center justify-between gap-4">
@@ -839,6 +860,7 @@
               <span class="px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 border border-emerald-200">Presentes: <span id="kpiAsisPresentes">0</span></span>
               <span class="px-3 py-1.5 rounded-xl bg-amber-100 text-amber-800 border border-amber-200">Tarde/Excusa: <span id="kpiAsisTarde">0</span></span>
               <span class="px-3 py-1.5 rounded-xl bg-rose-100 text-rose-800 border border-rose-200">Ausentes: <span id="kpiAsisAusentes">0</span></span>
+              <span class="px-3 py-1.5 rounded-xl bg-sky-100 text-sky-800 border border-sky-200">Confirmados Partido (Sí): <span id="kpiAsisConfirmados">0</span></span>
               <span class="px-3 py-1.5 rounded-xl bg-indigo-100 text-indigo-800 border border-indigo-200">Asistencia: <span id="kpiAsisPct">0%</span></span>
             </div>
           </div>
@@ -869,13 +891,15 @@
           </div>
 
           <div class="overflow-x-auto touch-scroll">
-            <table class="w-full text-left text-sm border-collapse">
+            <table class="w-full text-left text-base border-collapse">
               <thead>
-                <tr class="surface-sub bg-slate-100 text-slate-700 uppercase font-extrabold text-xs border-b border-slate-200">
+                <tr class="surface-sub bg-slate-100 text-slate-700 uppercase font-extrabold text-sm border-b border-slate-200">
                   <th class="p-3.5 w-12 text-center">#</th>
                   <th class="p-3.5">Nombre Completo</th>
                   <th class="p-3.5">Cédula</th>
                   <th class="p-3.5">Rol / Coordinación</th>
+                  <th class="p-3.5"><i class="fa-solid fa-phone text-sky-600 mr-1"></i>Celular</th>
+                  <th class="p-3.5 text-center">Confirmación de Partido (Sí / No)</th>
                   <th class="p-3.5 text-center">Estado de Asistencia</th>
                   <th class="p-3.5">Observación / Nota</th>
                 </tr>
@@ -2068,6 +2092,22 @@
       actualizarTodoElSistema();
     }
 
+    function toggleNavMenu(forceState) {
+      const panel = document.getElementById("menuNavDropdownPanel");
+      const chevron = document.getElementById("navDropdownChevron");
+      if (!panel) return;
+      const open = typeof forceState === "boolean" ? forceState : panel.classList.contains("hidden");
+      panel.classList.toggle("hidden", !open);
+      if (chevron) chevron.classList.toggle("rotate-180", open);
+    }
+
+    document.addEventListener("click", (e) => {
+      const wrapper = document.getElementById("navDropdownWrapper");
+      if (wrapper && !wrapper.contains(e.target)) {
+        toggleNavMenu(false);
+      }
+    });
+
     function cambiarVista(vista) {
       if ((vista === "asistencia" || vista === "comparador" || vista === "seguridad" || vista === "dashboard" || vista === "misionVision") && !tieneControlTotal()) {
         return;
@@ -2088,16 +2128,29 @@
         asistencia: document.getElementById("navAsistencia"),
         misionVision: document.getElementById("navMisionVision")
       };
+      const titulos = {
+        dashboard: "Dashboard y Estadísticas",
+        padron: "Gestión del Padrón Electoral",
+        comparador: "Comparador de Coordinadores",
+        seguridad: "Usuarios, Coordinadores y Bitácora",
+        asistencia: "Pase de Lista (Reuniones)",
+        misionVision: "Misión, Visión y Valores"
+      };
 
       Object.keys(vistas).forEach(k => {
+        const estabaOculto = botones[k].classList.contains("hidden");
         if (k === vista) {
           vistas[k].classList.remove("hidden");
-          botones[k].className = "btn-modern !py-2.5 !px-5 !text-xs bg-amber-400 text-indigo-950";
+          botones[k].className = "w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition bg-amber-400 text-indigo-950" + (estabaOculto ? " hidden" : "");
         } else {
           vistas[k].classList.add("hidden");
-          botones[k].className = "btn-modern !py-2.5 !px-5 !text-xs bg-indigo-950/70 text-indigo-100 hover:bg-indigo-800";
+          botones[k].className = "w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition text-indigo-100 hover:bg-indigo-800" + (estabaOculto ? " hidden" : "");
         }
       });
+
+      const activeLbl = document.getElementById("activeNavLabel");
+      if (activeLbl && titulos[vista]) activeLbl.innerText = titulos[vista];
+      toggleNavMenu(false);
 
       if (vista === "dashboard") {
         actualizarGraficos();
@@ -3110,6 +3163,7 @@
         tipo: "coordinadores",
         nombre: c.nombre,
         cedula: c.cedula || "---",
+        telefono: c.telefono || "---",
         detalleRol: `Coordinador (${c.zona})`
       }));
       const listaMilitantes = datos.map(d => {
@@ -3119,6 +3173,7 @@
           tipo: "militantes",
           nombre: d.nombre,
           cedula: d.cedula,
+          telefono: d.telefono || "---",
           detalleRol: `Militante · ${c.nombre}`
         };
       });
@@ -3221,6 +3276,17 @@
       }
     }
 
+    function marcarConfirmacionLlamada(personaKey, valor) {
+      if (!tieneControlTotal()) return;
+      const id = document.getElementById("selectReunionAsistencia").value;
+      const r = reuniones.find(x => x.id === id);
+      if (!r) return;
+      if (!r.confirmaciones) r.confirmaciones = {};
+      r.confirmaciones[personaKey] = r.confirmaciones[personaKey] === valor ? "" : valor;
+      guardarReunionesDB();
+      renderPaseDeLista();
+    }
+
     function marcarAsistencia(personaKey, estado) {
       if (!tieneControlTotal()) return;
       const id = document.getElementById("selectReunionAsistencia").value;
@@ -3301,22 +3367,27 @@
       const convocados = obtenerConvocadosAsistencia();
 
       if (!r) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400 font-semibold">Cree o seleccione una reunión para iniciar el pase de lista.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-slate-400 font-semibold">Cree o seleccione una reunión para iniciar el pase de lista.</td></tr>`;
         document.getElementById("kpiAsisTotal").innerText = "0";
         document.getElementById("kpiAsisPresentes").innerText = "0";
         document.getElementById("kpiAsisTarde").innerText = "0";
         document.getElementById("kpiAsisAusentes").innerText = "0";
+        const kpiConf = document.getElementById("kpiAsisConfirmados");
+        if (kpiConf) kpiConf.innerText = "0";
         document.getElementById("kpiAsisPct").innerText = "0%";
         actualizarGraficosAsistencia();
         return;
       }
 
-      let presentes = 0, tarde = 0, ausentes = 0;
+      if (!r.confirmaciones) r.confirmaciones = {};
+
+      let presentes = 0, tarde = 0, ausentes = 0, confirmadosSi = 0;
       convocados.forEach(p => {
         const est = r.asistencia[p.key] || "ausente";
         if (est === "presente") presentes++;
         else if (est === "tarde") tarde++;
         else ausentes++;
+        if (r.confirmaciones[p.key] === "si") confirmadosSi++;
       });
       const total = convocados.length;
       const pct = total > 0 ? Math.round(((presentes + tarde) / total) * 100) : 0;
@@ -3325,6 +3396,8 @@
       document.getElementById("kpiAsisPresentes").innerText = presentes;
       document.getElementById("kpiAsisTarde").innerText = tarde;
       document.getElementById("kpiAsisAusentes").innerText = ausentes;
+      const kpiConf = document.getElementById("kpiAsisConfirmados");
+      if (kpiConf) kpiConf.innerText = confirmadosSi;
       document.getElementById("kpiAsisPct").innerText = pct + "%";
 
       const texto = (document.getElementById("buscarAsistencia").value || "").toLowerCase();
@@ -3332,46 +3405,63 @@
 
       const filtrados = convocados.filter(p => {
         if (tipoFiltro !== "todos" && p.tipo !== tipoFiltro) return false;
-        if (texto && !p.nombre.toLowerCase().includes(texto) && !p.cedula.toLowerCase().includes(texto)) return false;
+        if (texto && !p.nombre.toLowerCase().includes(texto) && !p.cedula.toLowerCase().includes(texto) && !(p.telefono || "").toLowerCase().includes(texto)) return false;
         return true;
       });
 
       if (filtrados.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400 font-semibold">No se encontraron personas con los filtros aplicados.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-slate-400 font-semibold">No se encontraron personas con los filtros aplicados.</td></tr>`;
         return;
       }
 
       tbody.innerHTML = filtrados.map((p, idx) => {
         const est = r.asistencia[p.key] || "ausente";
+        const conf = r.confirmaciones[p.key] || "";
         const nota = r.notas[p.key] || "";
         const clsPres = est === "presente" ? "bg-emerald-600 text-white shadow" : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100";
         const clsTarde = est === "tarde" ? "bg-amber-500 text-white shadow" : "bg-amber-50 text-amber-700 hover:bg-amber-100";
         const clsAus = est === "ausente" ? "bg-rose-600 text-white shadow" : "bg-rose-50 text-rose-700 hover:bg-rose-100";
+        const clsSi = conf === "si" ? "bg-sky-600 text-white shadow ring-2 ring-sky-300" : "bg-sky-50 text-sky-700 hover:bg-sky-100 border border-sky-200";
+        const clsNo = conf === "no" ? "bg-rose-600 text-white shadow ring-2 ring-rose-300" : "bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200";
+        const telLimpio = (p.telefono || "").replace(/[^0-9+]/g, "");
         const badgeTipo = p.tipo === "coordinadores"
-          ? `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-indigo-100 text-indigo-800">${p.detalleRol}</span>`
-          : `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700">${p.detalleRol}</span>`;
+          ? `<span class="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-indigo-100 text-indigo-800">${p.detalleRol}</span>`
+          : `<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700">${p.detalleRol}</span>`;
 
         return `
           <tr class="hover:bg-slate-50 transition">
             <td class="p-3.5 text-center font-black text-slate-500">${idx + 1}</td>
             <td class="p-3.5 font-bold text-slate-900">${p.nombre}</td>
-            <td class="p-3.5 font-mono text-xs">${p.cedula}</td>
+            <td class="p-3.5 font-mono text-sm">${p.cedula}</td>
             <td class="p-3.5">${badgeTipo}</td>
+            <td class="p-3.5 whitespace-nowrap">
+              ${telLimpio ? `<a href="tel:${telLimpio}" class="inline-flex items-center gap-1.5 font-mono font-bold text-sky-700 hover:text-sky-900 hover:underline"><i class="fa-solid fa-phone text-xs"></i>${p.telefono}</a>` : `<span class="text-slate-400 font-mono">---</span>`}
+            </td>
             <td class="p-3.5 text-center whitespace-nowrap">
               <div class="inline-flex gap-1.5">
-                <button type="button" onclick="marcarAsistencia('${p.key}', 'presente')" class="px-2.5 py-1 rounded-lg text-xs font-extrabold transition ${clsPres}">
+                <button type="button" onclick="marcarConfirmacionLlamada('${p.key}', 'si')" class="px-3 py-1.5 rounded-lg text-sm font-extrabold transition ${clsSi}">
+                  <i class="fa-solid fa-circle-check mr-1"></i>Sí
+                </button>
+                <button type="button" onclick="marcarConfirmacionLlamada('${p.key}', 'no')" class="px-3 py-1.5 rounded-lg text-sm font-extrabold transition ${clsNo}">
+                  <i class="fa-solid fa-circle-xmark mr-1"></i>No
+                </button>
+              </div>
+            </td>
+            <td class="p-3.5 text-center whitespace-nowrap">
+              <div class="inline-flex gap-1.5">
+                <button type="button" onclick="marcarAsistencia('${p.key}', 'presente')" class="px-3 py-1.5 rounded-lg text-sm font-extrabold transition ${clsPres}">
                   <i class="fa-solid fa-check mr-1"></i>Presente
                 </button>
-                <button type="button" onclick="marcarAsistencia('${p.key}', 'tarde')" class="px-2.5 py-1 rounded-lg text-xs font-extrabold transition ${clsTarde}">
+                <button type="button" onclick="marcarAsistencia('${p.key}', 'tarde')" class="px-3 py-1.5 rounded-lg text-sm font-extrabold transition ${clsTarde}">
                   <i class="fa-solid fa-clock mr-1"></i>Tarde/Excusa
                 </button>
-                <button type="button" onclick="marcarAsistencia('${p.key}', 'ausente')" class="px-2.5 py-1 rounded-lg text-xs font-extrabold transition ${clsAus}">
+                <button type="button" onclick="marcarAsistencia('${p.key}', 'ausente')" class="px-3 py-1.5 rounded-lg text-sm font-extrabold transition ${clsAus}">
                   <i class="fa-solid fa-xmark mr-1"></i>Ausente
                 </button>
               </div>
             </td>
             <td class="p-3.5">
-              <input type="text" value="${nota.replace(/"/g, '&quot;')}" onchange="guardarNotaAsistencia('${p.key}', this.value)" placeholder="Observación..." class="w-full px-2.5 py-1.5 text-xs border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+              <input type="text" value="${nota.replace(/"/g, '&quot;')}" onchange="guardarNotaAsistencia('${p.key}', this.value)" placeholder="Observación..." class="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
             </td>
           </tr>
         `;
@@ -3389,7 +3479,9 @@
         "#": idx + 1,
         "Nombre Completo": p.nombre,
         "Cédula": p.cedula,
+        "Celular": p.telefono || "---",
         "Rol / Coordinación": p.detalleRol,
+        "Confirmación de Partido": ((r.confirmaciones && r.confirmaciones[p.key]) || "pendiente").toUpperCase(),
         "Asistencia": (r.asistencia[p.key] || "ausente").toUpperCase(),
         "Observación": r.notas[p.key] || ""
       }));
