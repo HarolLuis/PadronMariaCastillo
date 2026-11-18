@@ -222,10 +222,8 @@
         </div>
 
         <div class="relative z-10 pt-4 mt-4 border-t border-indigo-800/60 flex items-center justify-between text-xs text-indigo-300">
-          <span class="text-[11px] font-medium"><i class="fa-solid fa-shield-halved text-emerald-400 mr-1"></i> Sistema Seguro</span>
-          <span id="dbLoginStatus" class="text-[10px] font-bold text-emerald-300 bg-emerald-950/70 px-2.5 py-1 rounded-full border border-emerald-500/30">
-            <i class="fa-solid fa-database text-emerald-400 mr-1"></i> MySQL Hostinger
-          </span>
+          <span class="text-[11px] font-medium"><i class="fa-solid fa-shield-halved text-emerald-400 mr-1"></i> Sistema Protegido</span>
+          <span class="text-[11px] text-indigo-300">Conexión Segura SSL</span>
         </div>
       </div>
 
