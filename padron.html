@@ -1114,15 +1114,8 @@
             <select id="formCoordinador" class="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:outline-none"></select>
           </div>
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Mes de Afiliación *</label>
-            <select id="formMes" class="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:outline-none">
-              <option value="Ene">Enero</option>
-              <option value="Feb">Febrero</option>
-              <option value="Mar">Marzo</option>
-              <option value="Abr">Abril</option>
-              <option value="May">Mayo</option>
-              <option value="Jun" selected>Junio (Actual)</option>
-            </select>
+            <label class="block font-bold text-slate-700 mb-1">Fecha de Afiliación *</label>
+            <input type="date" id="formFecha" required class="w-full p-3 border border-slate-300 rounded-xl bg-slate-50 font-semibold focus:ring-2 focus:ring-indigo-600 focus:outline-none">
           </div>
         </div>
         <p id="msgCoordBloqueado" class="text-xs text-amber-700 bg-amber-50 p-2.5 rounded-xl border border-amber-200 hidden">
@@ -2575,6 +2568,14 @@
       });
     }
 
+    function obtenerFechaHoyISO() {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    }
+
     function abrirModalNuevo(coordPreseleccionado) {
       document.getElementById("formId").value = "";
       document.getElementById("formCedula").value = "";
@@ -2582,7 +2583,7 @@
       document.getElementById("formTelefono").value = "";
       document.getElementById("formCentroDireccion").value = "";
       document.getElementById("formMesaElectoral").value = "";
-      document.getElementById("formMes").value = "Jun";
+      document.getElementById("formFecha").value = obtenerFechaHoyISO();
       document.getElementById("modalTitulo").innerHTML = `<i class="fa-solid fa-user-plus text-amber-400"></i> Inscribir Miembros (Militante)`;
       if (!tieneControlTotal() && rolActual && rolActual.startsWith("coord_")) {
         document.getElementById("formCoordinador").value = rolActual;
@@ -2607,7 +2608,11 @@
       const coordId = (!tieneControlTotal() && rolActual && rolActual.startsWith("coord_"))
         ? rolActual
         : document.getElementById("formCoordinador").value;
-      const mes = document.getElementById("formMes").value;
+      const fechaISO = document.getElementById("formFecha").value || obtenerFechaHoyISO();
+      const [fAnio, fMes, fDia] = fechaISO.split("-");
+      const mesesCortos = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+      const mes = mesesCortos[Math.max(0, Math.min(11, (parseInt(fMes, 10) || 1) - 1))];
+      const fechaFormateada = `${fDia}/${fMes}/${fAnio}`;
       const operador = usuarioAutenticado ? usuarioAutenticado.username : "Usuario";
       const operadorRol = usuarioAutenticado ? usuarioAutenticado.rolLabel : "Coordinador";
 
@@ -2621,6 +2626,7 @@
           item.mesaElectoral = mesaElectoral;
           item.coordId = coordId;
           item.mes = mes;
+          item.fecha = fechaFormateada;
         }
         if (modoConectado) {
           try {
@@ -2639,7 +2645,6 @@
           }
         }
       } else {
-        const hoy = new Date().toLocaleDateString("es-DO");
         let nuevoAfiliado = {
           id: Date.now(),
           folio: "PAD-2026-" + Math.floor(100 + Math.random() * 900),
@@ -2650,7 +2655,7 @@
           mesaElectoral,
           coordId,
           mes,
-          fecha: hoy
+          fecha: fechaFormateada
         };
 
         if (modoConectado) {
@@ -2697,7 +2702,12 @@
       document.getElementById("formCentroDireccion").value = item.centroDireccion || item.centroVotacion || item.recinto || "";
       document.getElementById("formMesaElectoral").value = item.mesaElectoral || "";
       document.getElementById("formCoordinador").value = item.coordId;
-      document.getElementById("formMes").value = item.mes || "Jun";
+      let fechaEditISO = obtenerFechaHoyISO();
+      if (item.fecha && item.fecha.includes("/")) {
+        const [d, m, y] = item.fecha.split("/");
+        if (d && m && y) fechaEditISO = `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`;
+      }
+      document.getElementById("formFecha").value = fechaEditISO;
       document.getElementById("modalTitulo").innerHTML = `<i class="fa-solid fa-user-pen text-amber-400"></i> Modificar Datos de Persona`;
       document.getElementById("modalForm").classList.remove("hidden");
     }
