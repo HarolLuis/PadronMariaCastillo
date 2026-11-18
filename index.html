@@ -650,14 +650,14 @@
             <table class="w-full text-left text-sm border-collapse">
               <thead>
                 <tr class="surface-sub bg-slate-100 text-slate-700 uppercase font-extrabold text-xs border-b border-slate-200">
-                  <th class="p-4">Folio / Cédula</th>
-                  <th class="p-4">Nombre Completo</th>
-                  <th class="p-4">Teléfono</th>
-                  <th class="p-4">Centro de Votación / Dirección</th>
-                  <th class="p-4">Mesa Electoral</th>
-                  <th class="p-4">Fecha Registro</th>
-                  <th class="p-4">Coordinador Asignado</th>
-                  <th class="p-4 text-right">Acciones</th>
+                  <th class="px-3.5 py-3 whitespace-nowrap min-w-[145px]">Folio / Cédula</th>
+                  <th class="px-3.5 py-3 min-w-[170px]">Nombre Completo</th>
+                  <th class="px-3.5 py-3 whitespace-nowrap min-w-[130px]">Teléfono</th>
+                  <th class="px-3.5 py-3 min-w-[220px]">Centro de Votación / Dirección</th>
+                  <th class="px-3.5 py-3 whitespace-nowrap">Mesa Electoral</th>
+                  <th class="px-3.5 py-3 whitespace-nowrap">Fecha Registro</th>
+                  <th class="px-3.5 py-3 whitespace-nowrap">Coordinador Asignado</th>
+                  <th class="px-3.5 py-3 text-right whitespace-nowrap">Acciones</th>
                 </tr>
               </thead>
               <tbody id="tablaIntegrantes" class="divide-y divide-slate-200/70 text-slate-700"></tbody>
@@ -2555,23 +2555,23 @@
 
         tbody.innerHTML += `
           <tr class="hover:bg-slate-50 transition">
-            <td class="p-4 font-mono font-bold text-slate-900">
-              ${item.folio}
-              <div class="text-xs text-slate-500 font-normal">${item.cedula}</div>
+            <td class="px-3.5 py-3 font-mono font-bold text-slate-900 whitespace-nowrap">
+              <div>${item.folio}</div>
+              <div class="text-xs text-slate-500 font-normal whitespace-nowrap">${item.cedula}</div>
             </td>
-            <td class="p-4 font-bold text-slate-900">${item.nombre}</td>
-            <td class="p-4">${item.telefono}</td>
-            <td class="p-4">
+            <td class="px-3.5 py-3 font-bold text-slate-900">${item.nombre}</td>
+            <td class="px-3.5 py-3 font-mono whitespace-nowrap">${item.telefono}</td>
+            <td class="px-3.5 py-3">
               <div class="font-bold text-slate-800">${item.centroDireccion || item.centroVotacion || item.recinto || "---"}</div>
             </td>
-            <td class="p-4 font-semibold text-indigo-700">${item.mesaElectoral || "---"}</td>
-            <td class="p-4 text-xs font-semibold text-slate-500">${item.fecha || "Jun 2026"}</td>
-            <td class="p-4">
-              <span class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full font-extrabold text-xs">
+            <td class="px-3.5 py-3 font-semibold text-indigo-700 whitespace-nowrap">${item.mesaElectoral || "---"}</td>
+            <td class="px-3.5 py-3 text-xs font-semibold text-slate-500 whitespace-nowrap">${item.fecha || "Jun 2026"}</td>
+            <td class="px-3.5 py-3 whitespace-nowrap">
+              <span class="inline-block bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full font-extrabold text-xs whitespace-nowrap">
                 ${c.nombre}
               </span>
             </td>
-            <td class="p-4 text-right whitespace-nowrap">${botones}</td>
+            <td class="px-3.5 py-3 text-right whitespace-nowrap">${botones}</td>
           </tr>
         `;
       });
