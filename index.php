@@ -196,11 +196,11 @@
   <!-- ===================================================================== -->
   <!-- PANTALLA DE INICIO DE SESIÓN OBLIGATORIO                              -->
   <!-- ===================================================================== -->
-  <div id="loginScreen" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 md:p-8 bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 overflow-y-auto">
+  <div id="loginScreen" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 md:p-8 bg-gradient-to-br from-indigo-700 via-blue-700 to-indigo-800 overflow-y-auto">
     <div class="max-w-4xl w-full grid grid-cols-1 md:grid-cols-12 bg-white rounded-3xl shadow-2xl overflow-hidden border border-white/20 my-auto">
       
       <!-- Panel Izquierdo: Branding Oficial María Castillo (Sin credenciales demo) -->
-      <div class="md:col-span-5 bg-gradient-to-br from-indigo-900 via-indigo-950 to-slate-900 text-white p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
+      <div class="md:col-span-5 bg-gradient-to-br from-indigo-700 via-blue-700 to-indigo-800 text-white p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
         <div class="relative z-10 space-y-4">
           <!-- Logo / Imagen de Campaña -->
           <div class="rounded-2xl overflow-hidden border-2 border-amber-400 shadow-xl bg-white max-w-[240px] md:max-w-full mx-auto">
@@ -370,28 +370,28 @@
               <i id="navDropdownChevron" class="fa-solid fa-chevron-down text-xs transition-transform duration-200"></i>
             </button>
 
-            <nav id="menuNavDropdownPanel" class="hidden absolute left-0 w-[calc(100vw-1.5rem)] max-w-[360px] sm:w-96 max-h-[82vh] overflow-y-auto mt-2 rounded-2xl bg-indigo-950 border border-indigo-700/80 shadow-2xl p-3 z-50 space-y-1">
+            <nav id="menuNavDropdownPanel" class="hidden absolute left-0 w-[calc(100vw-1.5rem)] max-w-[360px] sm:w-96 max-h-[82vh] overflow-y-auto mt-2 rounded-2xl bg-gradient-to-b from-indigo-700 via-blue-700 to-indigo-800 border border-indigo-400/50 shadow-2xl p-3 z-50 space-y-1">
               <button id="navDashboard" onclick="cambiarVista('dashboard')" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition bg-amber-400 text-indigo-950">
                 <i class="fa-solid fa-chart-pie w-5 text-center"></i>
                 <span>Dashboard y Estadísticas</span>
               </button>
-              <button id="navPadron" onclick="cambiarVista('padron')" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition text-indigo-100 hover:bg-indigo-800">
+              <button id="navPadron" onclick="cambiarVista('padron')" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition text-white hover:bg-blue-600/80">
                 <i class="fa-solid fa-users-viewfinder w-5 text-center"></i>
                 <span>Gestión del Padrón Electoral</span>
               </button>
-              <button id="navComparador" onclick="cambiarVista('comparador')" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition text-indigo-100 hover:bg-indigo-800">
+              <button id="navComparador" onclick="cambiarVista('comparador')" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition text-white hover:bg-blue-600/80">
                 <i class="fa-solid fa-scale-balanced w-5 text-center"></i>
                 <span>Comparador de Coordinadores</span>
               </button>
-              <button id="navSeguridad" onclick="cambiarVista('seguridad')" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition text-indigo-100 hover:bg-indigo-800">
+              <button id="navSeguridad" onclick="cambiarVista('seguridad')" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition text-white hover:bg-blue-600/80">
                 <i class="fa-solid fa-user-lock w-5 text-center"></i>
                 <span>Usuarios, Coordinadores y Bitácora</span>
               </button>
-              <button id="navAsistencia" onclick="cambiarVista('asistencia')" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition text-indigo-100 hover:bg-indigo-800 hidden">
+              <button id="navAsistencia" onclick="cambiarVista('asistencia')" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition text-white hover:bg-blue-600/80 hidden">
                 <i class="fa-solid fa-clipboard-check w-5 text-center"></i>
                 <span>Pase de Lista (Reuniones)</span>
               </button>
-              <button id="navMisionVision" onclick="cambiarVista('misionVision')" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition text-indigo-100 hover:bg-indigo-800">
+              <button id="navMisionVision" onclick="cambiarVista('misionVision')" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition text-white hover:bg-blue-600/80">
                 <i class="fa-solid fa-star w-5 text-center"></i>
                 <span>Misión, Visión y Valores</span>
               </button>
@@ -2148,7 +2148,7 @@
           botones[k].className = "w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition bg-amber-400 text-indigo-950" + (estabaOculto ? " hidden" : "");
         } else {
           vistas[k].classList.add("hidden");
-          botones[k].className = "w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition text-indigo-100 hover:bg-indigo-800" + (estabaOculto ? " hidden" : "");
+          botones[k].className = "w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition text-white hover:bg-blue-600/80" + (estabaOculto ? " hidden" : "");
         }
       });
 
