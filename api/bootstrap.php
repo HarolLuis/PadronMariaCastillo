@@ -8,12 +8,18 @@ require_once __DIR__ . '/db.php';
 $db = getDB();
 
 try {
+    // Migración transparente si aún no existen columnas
+    try { $db->exec("ALTER TABLE `coordinadores` ADD COLUMN `tipo` VARCHAR(30) NOT NULL DEFAULT 'sectorial'"); } catch (Exception $e) {}
+    try { $db->exec("ALTER TABLE `coordinadores` ADD COLUMN `sectorial_id` VARCHAR(50) DEFAULT NULL"); } catch (Exception $e) {}
+
     // 1. Coordinadores
-    $stmtCoords = $db->query("SELECT id, nombre, zona, cedula, telefono, es_admin AS esAdmin, activo FROM coordinadores WHERE activo = 1 ORDER BY nombre ASC");
+    $stmtCoords = $db->query("SELECT id, nombre, zona, cedula, telefono, tipo, sectorial_id AS sectorialId, es_admin AS esAdmin, activo FROM coordinadores WHERE activo = 1 ORDER BY nombre ASC");
     $coordsList = $stmtCoords->fetchAll();
     $coordinadores = [];
     foreach ($coordsList as $c) {
         $c['esAdmin'] = (bool)$c['esAdmin'];
+        $c['tipo'] = !empty($c['tipo']) ? $c['tipo'] : 'sectorial';
+        $c['sectorialId'] = $c['sectorialId'] ?? null;
         $coordinadores[$c['id']] = $c;
     }
 

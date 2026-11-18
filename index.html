@@ -1163,33 +1163,48 @@
       </div>
       <form onsubmit="guardarCoordinador(event)" class="p-6 space-y-4 text-sm">
         <input type="hidden" id="coordFormId">
+        <input type="hidden" id="coordFormSectorialId">
+
+        <div id="wrapCoordTipo">
+          <label class="block font-bold text-slate-700 mb-1">Nivel / Rol de Coordinador *</label>
+          <select id="coordFormTipo" onchange="cambiarTipoCoordinadorForm()" class="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:outline-none font-bold bg-slate-50 text-slate-800">
+            <option value="sectorial">Nivel 2: Coordinador Sectorial (Mando Medio - Visibilidad Global)</option>
+            <option value="operativo">Nivel 3: Coordinador (Operativo - Solo su Equipo)</option>
+          </select>
+          <p id="descCoordTipo" class="text-[11px] text-slate-500 mt-1">El Coordinador Sectorial tiene visibilidad global, pase de lista y asigna coordinadores en su sector.</p>
+        </div>
+
         <div>
           <label class="block font-bold text-slate-700 mb-1">Nombre y Apellido del Coordinador *</label>
           <input type="text" id="coordFormNombre" required placeholder="Ej: Luis Alberto Ramírez" class="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:outline-none">
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Zona / Demarcación *</label>
-            <input type="text" id="coordFormZona" required placeholder="Ej: Zona Oeste / Distrito 1" class="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:outline-none">
+            <label class="block font-bold text-slate-700 mb-1">Zona / Sector Demarcación *</label>
+            <input type="text" id="coordFormZona" required placeholder="Ej: Zona Norte / Ensanche La Fe" class="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:outline-none">
           </div>
           <div>
             <label class="block font-bold text-slate-700 mb-1">Cédula de Identidad *</label>
-            <input type="text" id="coordFormCedula" required minlength="4" oninput="actualizarPreviewClaveCoord()" placeholder="001-3344556-9" class="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:outline-none">
+            <input type="text" id="coordFormCedula" required minlength="4" placeholder="001-3344556-9" class="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:outline-none">
           </div>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Teléfono / WhatsApp (Opcional)</label>
+          <input type="text" id="coordFormTelefono" placeholder="809-555-0101" class="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:outline-none">
         </div>
         <div class="p-3.5 rounded-2xl bg-indigo-50 border border-indigo-200 text-xs text-indigo-950 flex items-center justify-between">
           <div>
             <span class="font-extrabold block"><i class="fa-solid fa-key text-indigo-600 mr-1"></i> Credencial de Acceso Automática:</span>
-            <span>La contraseña inicial serán los últimos 4 dígitos de su cédula.</span>
+            <span>Contraseña provisional asignada (requiere cambio en primer ingreso).</span>
           </div>
-          <span id="previewClaveCoord" class="font-mono font-black text-base bg-amber-400 text-indigo-950 px-3 py-1 rounded-xl">----</span>
+          <span id="previewClaveCoord" class="font-mono font-black text-sm bg-amber-400 text-indigo-950 px-3 py-1 rounded-xl">12345678</span>
         </div>
         <div id="wrapPermisoAdminCoord" class="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-between gap-3">
           <div>
             <label for="coordFormEsAdmin" class="font-extrabold text-slate-900 text-xs block cursor-pointer">
               <i class="fa-solid fa-shield-halved text-amber-600 mr-1"></i> Otorgar Permiso de Administrador
             </label>
-            <span class="text-[11px] text-slate-600">Si se activa, este coordinador tendrá acceso total (Pase de Lista, Dashboard y gestión).</span>
+            <span class="text-[11px] text-slate-600">Si se activa, este coordinador tendrá acceso total en el sistema.</span>
           </div>
           <input type="checkbox" id="coordFormEsAdmin" class="w-5 h-5 accent-indigo-600 cursor-pointer shrink-0">
         </div>
@@ -1358,12 +1373,32 @@
       return soloDigitos.slice(-4) || "0000";
     }
 
-    // Verificar si el rol actual tiene privilegios ejecutivos totales (Administrador, Directora María Castillo, Coordinador de Campaña o Coordinador con permiso de Admin)
+    // Roles y Niveles de la Matriz Oficial
+    function esAltaDireccion() {
+      return rolActual === "admin" || rolActual === "directora" || rolActual === "campana";
+    }
+
+    function esCoordinadorSectorial() {
+      if (esAltaDireccion()) return false;
+      const c = coordinadores[rolActual];
+      return Boolean(c && (c.tipo === "sectorial" || !c.tipo));
+    }
+
+    function esCoordinadorOperativo() {
+      if (esAltaDireccion()) return false;
+      const c = coordinadores[rolActual];
+      return Boolean(c && c.tipo === "operativo");
+    }
+
     function tieneControlTotal() {
-      if (rolActual === "admin" || rolActual === "directora" || rolActual === "campana") return true;
+      if (esAltaDireccion()) return true;
       if (rolActual && coordinadores[rolActual] && coordinadores[rolActual].esAdmin) return true;
       if (usuarioAutenticado && usuarioAutenticado.esAdmin) return true;
       return false;
+    }
+
+    function puedeVerTodoElPadron() {
+      return esAltaDireccion() || esCoordinadorSectorial() || tieneControlTotal();
     }
 
     const usuariosDefault = [
@@ -1805,31 +1840,72 @@
     // =========================================================================
     // GESTIÓN DE COORDINADORES (Directora María Castillo y Administrador)
     // =========================================================================
+    function cambiarTipoCoordinadorForm() {
+      const tipo = document.getElementById("coordFormTipo").value;
+      const desc = document.getElementById("descCoordTipo");
+      if (desc) {
+        if (tipo === "sectorial") {
+          desc.innerText = "Nivel 2 (Mando Medio): Visibilidad global, pase de lista de reuniones y asigna coordinadores en su sector.";
+        } else {
+          desc.innerText = "Nivel 3 (Operativo): Gestión exclusiva de su equipo local asignado.";
+        }
+      }
+    }
+
     function abrirModalNuevoCoordinador() {
-      if (!tieneControlTotal()) {
-        alert("Solo la Directora María Castillo, el Coordinador de Campaña y el Administrador pueden agregar nuevos coordinadores.");
+      if (!esAltaDireccion() && !esCoordinadorSectorial() && !tieneControlTotal()) {
+        alert("No tiene permisos para agregar nuevos coordinadores.");
         return;
       }
       document.getElementById("coordFormId").value = "";
       document.getElementById("coordFormNombre").value = "";
       document.getElementById("coordFormZona").value = "";
       document.getElementById("coordFormCedula").value = "";
+      if (document.getElementById("coordFormTelefono")) document.getElementById("coordFormTelefono").value = "";
       document.getElementById("coordFormEsAdmin").checked = false;
-      document.getElementById("previewClaveCoord").innerText = "----";
-      document.getElementById("modalCoordTitulo").innerHTML = `<i class="fa-solid fa-user-tie text-amber-400"></i> Registrar Nuevo Coordinador`;
+      document.getElementById("previewClaveCoord").innerText = "12345678";
+
+      const wrapTipo = document.getElementById("wrapCoordTipo");
+      const tipoSelect = document.getElementById("coordFormTipo");
+      const wrapEsAdmin = document.getElementById("wrapPermisoAdminCoord");
+      const inputZona = document.getElementById("coordFormZona");
+      const inputSectorialId = document.getElementById("coordFormSectorialId");
+
+      if (esCoordinadorSectorial()) {
+        const cSect = coordinadores[rolActual] || {};
+        if (wrapTipo) wrapTipo.classList.add("hidden");
+        if (tipoSelect) tipoSelect.value = "operativo";
+        if (wrapEsAdmin) wrapEsAdmin.classList.add("hidden");
+        inputZona.value = cSect.zona || "";
+        inputSectorialId.value = rolActual;
+        document.getElementById("modalCoordTitulo").innerHTML = `<i class="fa-solid fa-user-plus text-amber-400"></i> Asignar Coordinador de Equipo (${cSect.zona || "Mi Sector"})`;
+      } else {
+        if (wrapTipo) wrapTipo.classList.remove("hidden");
+        if (tipoSelect) tipoSelect.value = "sectorial";
+        if (wrapEsAdmin) wrapEsAdmin.classList.remove("hidden");
+        inputZona.value = "";
+        inputSectorialId.value = "";
+        document.getElementById("modalCoordTitulo").innerHTML = `<i class="fa-solid fa-user-tie text-amber-400"></i> Registrar Nuevo Coordinador`;
+      }
+
       document.getElementById("modalCoordinador").classList.remove("hidden");
     }
 
     function editarCoordinador(coordId) {
-      if (!tieneControlTotal()) return;
+      if (!tieneControlTotal() && !esAltaDireccion()) {
+        alert("Solo la Alta Dirección puede editar a otros coordinadores.");
+        return;
+      }
       const c = coordinadores[coordId];
       if (!c) return;
       document.getElementById("coordFormId").value = c.id;
       document.getElementById("coordFormNombre").value = c.nombre;
       document.getElementById("coordFormZona").value = c.zona;
       document.getElementById("coordFormCedula").value = c.cedula || "";
+      if (document.getElementById("coordFormTelefono")) document.getElementById("coordFormTelefono").value = c.telefono || "";
+      if (document.getElementById("coordFormTipo")) document.getElementById("coordFormTipo").value = c.tipo || "sectorial";
       document.getElementById("coordFormEsAdmin").checked = Boolean(c.esAdmin);
-      actualizarPreviewClaveCoord();
+      document.getElementById("previewClaveCoord").innerText = "12345678";
       document.getElementById("modalCoordTitulo").innerHTML = `<i class="fa-solid fa-user-pen text-amber-400"></i> Modificar Coordinador`;
       document.getElementById("modalCoordinador").classList.remove("hidden");
     }
@@ -1839,21 +1915,22 @@
     }
 
     function actualizarPreviewClaveCoord() {
-      const ced = document.getElementById("coordFormCedula").value;
-      const digitos = (ced || "").replace(/\D/g, "");
-      document.getElementById("previewClaveCoord").innerText = digitos.length >= 4 ? digitos.slice(-4) : "----";
+      document.getElementById("previewClaveCoord").innerText = "12345678";
     }
 
     async function guardarCoordinador(e) {
       e.preventDefault();
-      if (!tieneControlTotal()) return;
+      if (!tieneControlTotal() && !esCoordinadorSectorial() && !esAltaDireccion()) return;
 
       const idExistente = document.getElementById("coordFormId").value;
       const nombre = document.getElementById("coordFormNombre").value.trim();
       const zona = document.getElementById("coordFormZona").value.trim();
       const cedula = document.getElementById("coordFormCedula").value.trim();
-      const esAdmin = document.getElementById("coordFormEsAdmin").checked;
-      const claveInicial = obtenerUltimos4Cedula(cedula);
+      const telefono = document.getElementById("coordFormTelefono") ? document.getElementById("coordFormTelefono").value.trim() : "";
+      const tipo = esCoordinadorSectorial() ? "operativo" : (document.getElementById("coordFormTipo") ? document.getElementById("coordFormTipo").value : "sectorial");
+      const sectorialId = esCoordinadorSectorial() ? rolActual : (document.getElementById("coordFormSectorialId") ? document.getElementById("coordFormSectorialId").value : null);
+      const esAdmin = esAltaDireccion() ? document.getElementById("coordFormEsAdmin").checked : false;
+      const claveInicial = "12345678";
       const operador = usuarioAutenticado ? usuarioAutenticado.username : "Admin";
       const operadorRol = usuarioAutenticado ? usuarioAutenticado.rolLabel : "Administrador";
 
@@ -1861,15 +1938,18 @@
         coordinadores[idExistente].nombre = nombre;
         coordinadores[idExistente].zona = zona;
         coordinadores[idExistente].cedula = cedula;
+        coordinadores[idExistente].telefono = telefono;
+        coordinadores[idExistente].tipo = tipo;
         coordinadores[idExistente].esAdmin = esAdmin;
 
         const uAsociado = usuarios.find(u => u.rol === idExistente);
         if (uAsociado) {
+          const rolLabel = (tipo === "sectorial") ? "Coordinador Sectorial" : "Coordinador";
           uAsociado.username = nombre;
-          uAsociado.nombreCompleto = `${nombre} (Coordinador ${zona})`;
+          uAsociado.nombreCompleto = `${nombre} (${rolLabel} ${zona})`;
           uAsociado.cedula = cedula;
           uAsociado.esAdmin = esAdmin;
-          uAsociado.rolLabel = esAdmin ? "Coordinador (Admin)" : "Coordinador";
+          uAsociado.rolLabel = esAdmin ? `${rolLabel} (Admin)` : rolLabel;
           uAsociado.aliases = [nombre.toLowerCase(), idExistente];
         }
 
@@ -1881,7 +1961,7 @@
               body: JSON.stringify({
                 action: "update",
                 id: idExistente,
-                nombre, zona, cedula, esAdmin,
+                nombre, zona, cedula, telefono, tipo, esAdmin,
                 operador, operadorRol
               })
             });
@@ -1889,24 +1969,28 @@
             console.error("Error sincronizando coordinador:", err);
           }
         }
-        registrarEventoBitacora(operador, operadorRol, `Modificó coordinador: ${nombre} (${zona})${esAdmin ? " [Permiso Admin]" : ""}`);
+        registrarEventoBitacora(operador, operadorRol, `Modificó coordinador: ${nombre} (${zona})`);
       } else {
         const nuevoId = "coord_" + Date.now();
+        const rolLabel = (tipo === "sectorial") ? "Coordinador Sectorial" : "Coordinador";
         coordinadores[nuevoId] = {
           id: nuevoId,
           nombre,
           zona,
           cedula,
+          telefono,
+          tipo,
+          sectorialId,
           esAdmin
         };
 
         usuarios.push({
           id: "u_" + nuevoId,
           username: nombre,
-          aliases: [nombre.toLowerCase(), nuevoId],
-          nombreCompleto: `${nombre} (Coordinador ${zona})`,
+          aliases: [nombre.toLowerCase(), nuevoId, (cedula || "").replace(/\D/g, "")],
+          nombreCompleto: `${nombre} (${rolLabel} ${zona})`,
           rol: nuevoId,
-          rolLabel: esAdmin ? "Coordinador (Admin)" : "Coordinador",
+          rolLabel: esAdmin ? `${rolLabel} (Admin)` : rolLabel,
           esAdmin,
           cedula,
           password: claveInicial,
@@ -1917,24 +2001,21 @@
 
         if (modoConectado) {
           try {
-            const res = await fetch(`${API_BASE}/coordinadores.php`, {
+            await fetch(`${API_BASE}/coordinadores.php`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 action: "create",
-                nombre, zona, cedula, esAdmin,
+                nombre, zona, cedula, telefono, tipo, sectorialId, esAdmin,
                 operador, operadorRol
               })
             });
-            const json = await res.json();
-            if (json.success && json.data && json.data.id) {
-              coordinadores[json.data.id] = { id: json.data.id, nombre, zona, cedula, esAdmin };
-            }
           } catch (err) {
             console.error("Error creando coordinador en servidor:", err);
           }
         }
-        registrarEventoBitacora(operador, operadorRol, `Agregó nuevo coordinador: ${nombre} (${zona})${esAdmin ? " [Permiso Admin]" : ""}`);
+        registrarEventoBitacora(operador, operadorRol, `Creó nuevo ${rolLabel}: ${nombre} (${zona})`);
+        alert(`¡${rolLabel} registrado con éxito!\n\nUsuario: ${nombre}\nCédula: ${cedula}\nContraseña Provisional: 12345678\n(El sistema le solicitará cambiarla al iniciar sesión).`);
       }
 
       guardarCoordinadoresDB();
@@ -1942,6 +2023,91 @@
       actualizarSelectoresCoordinadores();
       cerrarModalCoordinador();
       actualizarTodoElSistema();
+    }
+
+    // Promover militante a Coordinador de Equipo (Nivel 3)
+    async function promoverAfiliadoACoordinador(afiliadoId) {
+      if (!afiliadoId) return;
+      const a = datos.find(d => d.id === afiliadoId);
+      if (!a) return;
+
+      if (!esAltaDireccion() && !esCoordinadorSectorial() && !tieneControlTotal()) {
+        alert("Solo la Alta Dirección y los Coordinadores Sectoriales pueden asignar coordinadores de equipo.");
+        return;
+      }
+
+      const sectorialActual = esCoordinadorSectorial() ? (coordinadores[rolActual] || {}) : null;
+      const sectorZona = sectorialActual ? (sectorialActual.zona || "Mi Sector") : (a.centroDireccion || "Sector Asignado");
+      const sectorialId = sectorialActual ? rolActual : (a.coordId || null);
+
+      const confirmMsg = `¿Desea promover a "${a.nombre}" (Cédula: ${a.cedula}) como COORDINADOR DE EQUIPO (Nivel 3)?\n\n` +
+        `• Nivel: Coordinador Operativo / de Grupo\n` +
+        `• Sector: ${sectorZona}\n` +
+        `• Contraseña Provisional: 12345678\n` +
+        `• Podrá armar y gestionar su propio equipo de militantes.`;
+
+      if (!confirm(confirmMsg)) return;
+
+      const nuevoId = "coord_" + Date.now();
+      const nuevoCoord = {
+        id: nuevoId,
+        nombre: a.nombre,
+        zona: sectorZona,
+        cedula: a.cedula,
+        telefono: a.telefono || "",
+        tipo: "operativo",
+        sectorialId: sectorialId,
+        esAdmin: false
+      };
+
+      coordinadores[nuevoId] = nuevoCoord;
+      guardarCoordinadoresDB();
+
+      const nuevoUser = {
+        id: "u_" + nuevoId,
+        username: a.nombre,
+        aliases: [a.nombre.toLowerCase(), nuevoId, (a.cedula || "").replace(/\D/g, "")],
+        nombreCompleto: `${a.nombre} (Coord. Equipo ${sectorZona})`,
+        rol: nuevoId,
+        rolLabel: "Coordinador",
+        cedula: a.cedula,
+        password: "12345678",
+        intentosFallidos: 0,
+        bloqueado: false,
+        primerLogin: true,
+        esAdmin: false
+      };
+      usuarios.push(nuevoUser);
+      guardarUsuarios();
+
+      // Reasignar el militante para que sea el titular de su nuevo equipo
+      a.coordId = nuevoId;
+      localStorage.setItem("padron_partido_db", JSON.stringify(datos));
+
+      if (modoConectado) {
+        try {
+          await fetch(`${API_BASE}/coordinadores.php`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              action: "promote_member",
+              afiliadoId: a.id,
+              sectorialId: sectorialId,
+              zona: sectorZona,
+              operador: usuarioAutenticado ? usuarioAutenticado.username : "Coordinador Sectorial",
+              operadorRol: usuarioAutenticado ? usuarioAutenticado.rolLabel : "Coordinador Sectorial"
+            })
+          });
+        } catch (err) {
+          console.warn("Error notificando promoción de coordinador a servidor:", err);
+        }
+      }
+
+      registrarEventoBitacora(usuarioAutenticado ? usuarioAutenticado.username : "Sistema", usuarioAutenticado ? usuarioAutenticado.rolLabel : "Coordinador Sectorial", `Promovió a ${a.nombre} como Coordinador de Equipo (${sectorZona})`);
+      actualizarSelectoresCoordinadores();
+      actualizarTodoElSistema();
+
+      alert(`¡Militante promovido exitosamente!\n\n"${a.nombre}" ha sido registrado como COORDINADOR DE EQUIPO (Nivel 3).\n\n• Usuario: ${a.nombre}\n• Cédula: ${a.cedula}\n• Contraseña Provisional: 12345678\n\nYa puede iniciar sesión para registrar a los miembros de su equipo.`);
     }
 
     async function eliminarCoordinador(coordId) {
@@ -2026,28 +2192,31 @@
       const panelExportaciones = document.getElementById("panelExportacionesEjecutivas");
       const btnVerMiForm = document.getElementById("btnPadronVerMiFormulario");
 
-      if (tieneControlTotal()) {
+      // NIVEL 1: ALTA DIRECCIÓN (Control Total Global)
+      if (esAltaDireccion() || tieneControlTotal()) {
         if (badge) {
           if (rolActual === "campana") {
-            badge.innerText = "Rol: Coordinador de Campaña (Control Total)";
+            badge.innerText = "Nivel 1: Coordinador de Campaña (Alta Dirección - Control Total)";
           } else if (rolActual === "directora") {
-            badge.innerText = "Rol: Directora Ejecutiva (Control Total)";
+            badge.innerText = "Nivel 1: Directora Ejecutiva (Alta Dirección - Control Total)";
           } else if (rolActual === "admin") {
-            badge.innerText = "Rol: Administrador Total";
+            badge.innerText = "Nivel 1: Administrador General (Alta Dirección - Control Total)";
           } else {
-            badge.innerText = "Rol: Coordinador con Permiso de Administrador";
+            badge.innerText = "Nivel 1: Permiso de Administrador General";
           }
         }
         if (lblNombre) lblNombre.innerText = usuarioAutenticado.nombreCompleto;
-        if (lblDesc) lblDesc.innerText = "Acceso total al sistema: Dashboard, padrón general, pase de lista por reuniones, agregar/modificar coordinadores, formularios y reportes.";
+        if (lblDesc) lblDesc.innerText = "Acceso global: Dashboard, padrón general, pase de lista por reuniones, gestión y asignación de todos los roles.";
         wrapFiltro.classList.remove("hidden");
         selectCoord.disabled = false;
         msgBloqueo.classList.add("hidden");
         btnNuevoTop.classList.remove("hidden");
         btnNuevoCoordTop.classList.remove("hidden");
+        btnNuevoCoordTop.innerHTML = '<i class="fa-solid fa-user-tie"></i> <span>Agregar Coordinador</span>';
         btnDashCoord.classList.remove("hidden");
         btnPadronNuevo.classList.remove("hidden");
         btnPadronNuevoCoord.classList.remove("hidden");
+        btnPadronNuevoCoord.innerHTML = '<i class="fa-solid fa-user-tie"></i> <span>Agregar Coordinador</span>';
         btnVerMiForm.classList.add("hidden");
         panelAdminUsers.classList.remove("hidden");
         panelGestionCoords.classList.remove("hidden");
@@ -2060,11 +2229,42 @@
         navMisionVision.classList.remove("hidden");
         document.getElementById("filtroCoordinador").value = "todos";
         cambiarVista("dashboard");
-      } else {
-        const c = coordinadores[rolActual] || { nombre: usuarioAutenticado.username, zona: "Zona Asignada" };
-        if (badge) badge.innerText = "Rol: Coordinador Territorial";
+      }
+      // NIVEL 2: MANDO MEDIO (Coordinador Sectorial)
+      else if (esCoordinadorSectorial()) {
+        const c = coordinadores[rolActual] || { nombre: usuarioAutenticado.username, zona: "Zona Sectorial" };
+        if (badge) badge.innerText = "Nivel 2: Coordinador Sectorial (Mando Medio - Visibilidad Global)";
         if (lblNombre) lblNombre.innerText = `${c.nombre} (${c.zona})`;
-        if (lblDesc) lblDesc.innerText = "Puede agregar sus militantes nuevos y consultar cuántos y cuáles militantes tiene registrados en su formulario.";
+        if (lblDesc) lblDesc.innerText = "Visibilidad global, pase de lista de reuniones, creación de miembros y asignación de coordinadores de equipo.";
+        wrapFiltro.classList.remove("hidden");
+        selectCoord.disabled = false;
+        msgBloqueo.classList.add("hidden");
+        btnNuevoTop.classList.remove("hidden");
+        btnNuevoCoordTop.classList.remove("hidden");
+        btnNuevoCoordTop.innerHTML = '<i class="fa-solid fa-user-plus"></i> <span>Asignar Coord. Equipo</span>';
+        btnDashCoord.classList.add("hidden");
+        btnPadronNuevo.classList.remove("hidden");
+        btnPadronNuevoCoord.classList.remove("hidden");
+        btnPadronNuevoCoord.innerHTML = '<i class="fa-solid fa-user-plus"></i> <span>Asignar Coord. Equipo</span>';
+        btnVerMiForm.classList.remove("hidden");
+        panelAdminUsers.classList.add("hidden");
+        panelGestionCoords.classList.remove("hidden");
+        btnLimpiarBit.classList.add("hidden");
+        panelExportaciones.classList.remove("hidden");
+        navDashboard.classList.remove("hidden");
+        navComparador.classList.remove("hidden");
+        navSeguridad.classList.add("hidden");
+        navAsistencia.classList.remove("hidden");
+        navMisionVision.classList.remove("hidden");
+        document.getElementById("filtroCoordinador").value = "todos";
+        cambiarVista("dashboard");
+      }
+      // NIVEL 3: OPERATIVO (Coordinador de Equipo)
+      else {
+        const c = coordinadores[rolActual] || { nombre: usuarioAutenticado.username, zona: "Zona Asignada" };
+        if (badge) badge.innerText = "Nivel 3: Coordinador de Equipo (Operativo - Restringido Local)";
+        if (lblNombre) lblNombre.innerText = `${c.nombre} (${c.zona})`;
+        if (lblDesc) lblDesc.innerText = "Gestión exclusiva de los miembros asignados a su equipo.";
         wrapFiltro.classList.add("hidden");
         selectCoord.value = rolActual;
         selectCoord.disabled = true;
@@ -2508,29 +2708,53 @@
       if (sel) {
         lbl.innerHTML = `Seleccionado: <span class="text-indigo-700 font-extrabold">${sel.nombre}</span> <span class="text-xs text-slate-500 font-mono">(${sel.folio})</span>`;
       } else {
-        lbl.innerText = "Selecciona un miembro con el check circular para Editar, Eliminar o Constancia";
+        lbl.innerText = "Selecciona un miembro con el check circular para gestionar";
       }
 
       const dis = !sel ? "disabled opacity-45 cursor-not-allowed" : "";
-      if (tieneControlTotal()) {
-        grupo.innerHTML = `
-          <button type="button" ${!sel ? "disabled" : ""} onclick="if(afiliadoSeleccionadoId) imprimirConstancia(afiliadoSeleccionadoId)" class="btn-action text-indigo-700 bg-indigo-100 hover:bg-indigo-200 ${dis}">
-            <i class="fa-solid fa-print"></i> Constancia
-          </button>
+
+      let htmlBotones = `
+        <button type="button" ${!sel ? "disabled" : ""} onclick="if(afiliadoSeleccionadoId) imprimirConstancia(afiliadoSeleccionadoId)" class="btn-action text-indigo-700 bg-indigo-100 hover:bg-indigo-200 ${dis}">
+          <i class="fa-solid fa-print"></i> Constancia
+        </button>
+      `;
+
+      // Editar: Alta Dirección, Coordinador Sectorial o titular de su propio equipo
+      const puedeEditar = tieneControlTotal() || esCoordinadorSectorial() || (sel && sel.coordId === rolActual);
+      if (puedeEditar) {
+        htmlBotones += `
           <button type="button" ${!sel ? "disabled" : ""} onclick="if(afiliadoSeleccionadoId) editar(afiliadoSeleccionadoId)" class="btn-action text-amber-800 bg-amber-100 hover:bg-amber-200 ${dis}">
             <i class="fa-solid fa-pen"></i> Editar
           </button>
+        `;
+      }
+
+      // ASIGNAR / PROMOVER A COORDINADOR DE EQUIPO (NIVEL 3):
+      // Disponible para Alta Dirección y Coordinadores Sectoriales
+      if (esAltaDireccion() || esCoordinadorSectorial() || tieneControlTotal()) {
+        htmlBotones += `
+          <button type="button" ${!sel ? "disabled" : ""} onclick="if(afiliadoSeleccionadoId) promoverAfiliadoACoordinador(afiliadoSeleccionadoId)" class="btn-action text-amber-950 bg-amber-400 hover:bg-amber-300 font-extrabold shadow-sm ${dis}" title="Asignar a este militante como Coordinador de Equipo para su grupo">
+            <i class="fa-solid fa-user-plus mr-1"></i> Asignar Coordinador
+          </button>
+        `;
+      }
+
+      // Eliminar: Alta Dirección y Coordinador Sectorial
+      if (tieneControlTotal() || esCoordinadorSectorial()) {
+        htmlBotones += `
           <button type="button" ${!sel ? "disabled" : ""} onclick="if(afiliadoSeleccionadoId) eliminar(afiliadoSeleccionadoId)" class="btn-action text-rose-700 bg-rose-100 hover:bg-rose-200 ${dis}">
             <i class="fa-solid fa-trash"></i> Eliminar
           </button>
         `;
       } else {
-        grupo.innerHTML = `
+        htmlBotones += `
           <button type="button" ${!sel ? "disabled" : ""} onclick="const s=datos.find(x=>x.id===afiliadoSeleccionadoId); if(s) verFormularioCoordinador(s.coordId)" class="btn-action text-indigo-700 bg-indigo-100 hover:bg-indigo-200 ${dis}">
             <i class="fa-solid fa-clipboard-list"></i> Ver Formulario
           </button>
         `;
       }
+
+      grupo.innerHTML = htmlBotones;
     }
 
     function renderPadron() {
@@ -2540,8 +2764,8 @@
       tbody.innerHTML = "";
 
       let filtrados = datos.filter(item => {
-        if (!tieneControlTotal() && rolActual && rolActual.startsWith("coord_") && item.coordId !== rolActual) return false;
-        if (tieneControlTotal() && fCoord !== "todos" && item.coordId !== fCoord) return false;
+        if (!puedeVerTodoElPadron() && item.coordId !== rolActual) return false;
+        if (puedeVerTodoElPadron() && fCoord !== "todos" && item.coordId !== fCoord) return false;
         if (texto) {
           const matchNom = item.nombre.toLowerCase().includes(texto);
           const matchCed = item.cedula.toLowerCase().includes(texto);
@@ -2558,9 +2782,9 @@
       }
       actualizarBarraAccionesPadron();
 
-      if (!tieneControlTotal() && rolActual && rolActual.startsWith("coord_")) {
+      if (!puedeVerTodoElPadron()) {
         const totalPropios = datos.filter(d => d.coordId === rolActual).length;
-        document.getElementById("lblConteo").innerText = `Mostrando ${filtrados.length} de ${totalPropios} miembros de su coordinación`;
+        document.getElementById("lblConteo").innerText = `Mostrando ${filtrados.length} de ${totalPropios} miembros de su equipo`;
       } else {
         document.getElementById("lblConteo").innerText = `Mostrando ${filtrados.length} afiliados de un total general de ${datos.length} registrados`;
       }
@@ -2785,28 +3009,45 @@
       // Tabla de Coordinadores en la pestaña Seguridad/Coordinadores
       const tbodyCoords = document.getElementById("tablaCoordinadoresGestion");
       if (tbodyCoords) {
-        tbodyCoords.innerHTML = Object.values(coordinadores).map(c => {
+        let listaMostrar = Object.values(coordinadores);
+        if (esCoordinadorSectorial()) {
+          listaMostrar = listaMostrar.filter(c => c.id === rolActual || c.sectorialId === rolActual || c.zona === (coordinadores[rolActual] || {}).zona);
+        }
+        tbodyCoords.innerHTML = listaMostrar.map(c => {
           const cant = datos.filter(d => d.coordId === c.id).length;
+          const esSect = c.tipo === "sectorial" || !c.tipo;
+          const badgeTipo = esSect
+            ? `<span class="ml-2 px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-indigo-600 text-white">Sectorial (Nivel 2)</span>`
+            : `<span class="ml-2 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-amber-500/20 text-amber-900 border border-amber-400">Equipo (Nivel 3)</span>`;
           const badgePermiso = c.esAdmin
-            ? `<span class="ml-2 px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-amber-400 text-indigo-950">Admin</span>`
-            : `<span class="ml-2 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-slate-200 text-slate-700">Estándar</span>`;
+            ? `<span class="ml-1 px-1.5 py-0.5 rounded-full text-[9px] font-black uppercase bg-amber-400 text-indigo-950">Admin</span>`
+            : "";
+
+          let accionesBtns = `
+            <button onclick="event.stopPropagation(); verFormularioCoordinador('${c.id}')" class="btn-action bg-indigo-100 hover:bg-indigo-200 text-indigo-800 mr-1" title="Ver Formulario de Miembros">
+              <i class="fa-solid fa-clipboard-list"></i> Formulario
+            </button>
+          `;
+
+          // Solo la Alta Dirección puede editar/eliminar coordinadores (el sectorial no edita a otros coordinadores)
+          if (esAltaDireccion() || tieneControlTotal()) {
+            accionesBtns += `
+              <button onclick="event.stopPropagation(); editarCoordinador('${c.id}')" class="btn-action bg-amber-100 hover:bg-amber-200 text-amber-800 mr-1" title="Modificar Datos">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <button onclick="event.stopPropagation(); eliminarCoordinador('${c.id}')" class="btn-action bg-rose-100 hover:bg-rose-200 text-rose-700" title="Eliminar Coordinador">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            `;
+          }
+
           return `
             <tr onclick="verFormularioCoordinador('${c.id}')" class="hover:bg-indigo-50/70 cursor-pointer transition">
-              <td class="p-3.5 font-extrabold text-indigo-900 underline decoration-indigo-300">${c.nombre}${badgePermiso}</td>
+              <td class="p-3.5 font-extrabold text-indigo-900 underline decoration-indigo-300">${c.nombre}${badgeTipo}${badgePermiso}</td>
               <td class="p-3.5">${c.zona}</td>
               <td class="p-3.5 font-mono text-xs">${c.cedula || "---"}</td>
               <td class="p-3.5 font-bold text-indigo-600">${cant} afiliados</td>
-              <td class="p-3.5 text-right whitespace-nowrap">
-                <button onclick="event.stopPropagation(); verFormularioCoordinador('${c.id}')" class="btn-action bg-indigo-100 hover:bg-indigo-200 text-indigo-800 mr-1" title="Ver Formulario de Miembros">
-                  <i class="fa-solid fa-clipboard-list"></i> Formulario
-                </button>
-                <button onclick="event.stopPropagation(); editarCoordinador('${c.id}')" class="btn-action bg-amber-100 hover:bg-amber-200 text-amber-800 mr-1">
-                  <i class="fa-solid fa-pen"></i> Editar
-                </button>
-                <button onclick="event.stopPropagation(); eliminarCoordinador('${c.id}')" class="btn-action bg-rose-100 hover:bg-rose-200 text-rose-700">
-                  <i class="fa-solid fa-trash"></i> Eliminar
-                </button>
-              </td>
+              <td class="p-3.5 text-right whitespace-nowrap">${accionesBtns}</td>
             </tr>
           `;
         }).join("");

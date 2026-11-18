@@ -17,13 +17,17 @@ CREATE TABLE IF NOT EXISTS `coordinadores` (
   `zona` VARCHAR(100) NOT NULL,
   `cedula` VARCHAR(25) NOT NULL,
   `telefono` VARCHAR(30) DEFAULT '',
+  `tipo` VARCHAR(30) NOT NULL DEFAULT 'sectorial',
+  `sectorial_id` VARCHAR(50) DEFAULT NULL,
   `es_admin` TINYINT(1) NOT NULL DEFAULT 0,
   `activo` TINYINT(1) NOT NULL DEFAULT 1,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `idx_coord_zona` (`zona`),
-  INDEX `idx_coord_cedula` (`cedula`)
+  INDEX `idx_coord_cedula` (`cedula`),
+  INDEX `idx_coord_tipo` (`tipo`),
+  INDEX `idx_coord_sectorial` (`sectorial_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -----------------------------------------------------------------------------
