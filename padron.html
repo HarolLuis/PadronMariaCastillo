@@ -1216,7 +1216,7 @@
       </div>
       <form onsubmit="guardarNuevaPassword(event)" class="p-6 space-y-4 text-sm">
         <div id="bannerPrimerInicio" class="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs leading-relaxed">
-          <strong><i class="fa-solid fa-shield-halved mr-1"></i> Primer inicio de sesión detectado:</strong> Su contraseña actual corresponde a los últimos 4 dígitos de su cédula. Por seguridad, puede personalizar su contraseña ahora o conservarla.
+          <strong><i class="fa-solid fa-shield-halved mr-1"></i> Primer inicio de sesión detectado:</strong> Ha ingresado con la contraseña provisional (12345678). Por seguridad, por favor defina su nueva contraseña personal para continuar.
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">Nueva Contraseña *</label>
@@ -1375,7 +1375,7 @@
         rol: "admin",
         rolLabel: "Administrador",
         cedula: "001-1234567-8",
-        password: obtenerUltimos4Cedula("001-1234567-8"), // 5678
+        password: "12345678", // Contraseña provisional para primer acceso
         intentosFallidos: 0,
         bloqueado: false,
         primerLogin: true
@@ -1388,7 +1388,7 @@
         rol: "directora",
         rolLabel: "Directora Maria Castillo",
         cedula: "001-4567890-2",
-        password: obtenerUltimos4Cedula("001-4567890-2"), // 8902
+        password: "12345678", // Contraseña provisional para primer acceso
         intentosFallidos: 0,
         bloqueado: false,
         primerLogin: true
@@ -1401,7 +1401,7 @@
         rol: "campana",
         rolLabel: "Coordinador de Campaña",
         cedula: "001-7788990-5",
-        password: obtenerUltimos4Cedula("001-7788990-5"), // 8905
+        password: "12345678", // Contraseña provisional para primer acceso
         intentosFallidos: 0,
         bloqueado: false,
         primerLogin: true
@@ -1416,16 +1416,22 @@
       usuarios[legacyIdx] = { ...usuarios[legacyIdx], ...defDir, password: usuarios[legacyIdx].password || defDir.password };
       usuarios = usuarios.filter((u, i) => !(u.id === "u_directora" && i !== legacyIdx));
     }
-    // Asegurar que nuevos roles por defecto (como Coordinador de Campaña y Directora) se agreguen o actualicen si ya existía localStorage
+    // Sincronizar perfiles principales y asignar clave provisional 12345678 si no ha sido cambiada por el usuario
     usuariosDefault.forEach(defUser => {
       const idx = usuarios.findIndex(u => u.id === defUser.id);
       if (idx === -1) {
         usuarios.push(defUser);
-      } else if (defUser.id === "u_campana" || defUser.id === "u_directora") {
+      } else {
         usuarios[idx].username = defUser.username;
         usuarios[idx].nombreCompleto = defUser.nombreCompleto;
         usuarios[idx].aliases = defUser.aliases;
         usuarios[idx].rolLabel = defUser.rolLabel;
+        if (!usuarios[idx].passwordModificada) {
+          usuarios[idx].password = "12345678";
+          usuarios[idx].primerLogin = true;
+          usuarios[idx].intentosFallidos = 0;
+          usuarios[idx].bloqueado = false;
+        }
       }
     });
     // Purgar cuentas demo eliminadas si persisten en cache
@@ -1733,7 +1739,7 @@
       document.getElementById("modalCambiarPass").classList.add("hidden");
     }
 
-    function guardarNuevaPassword(e) {
+    async function guardarNuevaPassword(e) {
       e.preventDefault();
       const nueva = document.getElementById("inputNuevaPass").value.trim();
       const confirmar = document.getElementById("inputConfirmarPass").value.trim();
@@ -1741,32 +1747,56 @@
         alert("Las contraseñas ingresadas no coinciden. Por favor verifique.");
         return;
       }
+      if (nueva.length < 4) {
+        alert("La contraseña debe tener al menos 4 caracteres.");
+        return;
+      }
       if (usuarioAutenticado) {
         const idx = usuarios.findIndex(u => u.id === usuarioAutenticado.id);
         if (idx !== -1) {
           usuarios[idx].password = nueva;
           usuarios[idx].primerLogin = false;
+          usuarios[idx].passwordModificada = true;
           usuarioAutenticado = usuarios[idx];
           guardarUsuarios();
           registrarEventoBitacora(usuarioAutenticado.username, usuarioAutenticado.rolLabel, "Cambió su contraseña personal");
           renderSeguridadYBitacora();
         }
+        if (modoConectado) {
+          try {
+            await fetch(`${API_BASE}/auth.php`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ action: "change_password", userId: usuarioAutenticado.id, newPassword: nueva })
+            });
+          } catch (err) {
+            console.warn("Error enviando actualización de contraseña a MySQL:", err);
+          }
+        }
       }
       document.getElementById("modalCambiarPass").classList.add("hidden");
-      alert("Su contraseña ha sido actualizada exitosamente.");
+      alert("¡Su contraseña ha sido actualizada exitosamente! A partir de ahora use su nueva clave para iniciar sesión.");
     }
 
     function adminRestablecerPassword(userId) {
       if (!tieneControlTotal()) return;
       const u = usuarios.find(x => x.id === userId);
       if (!u) return;
-      const claveInicial = obtenerUltimos4Cedula(u.cedula);
-      if (confirm(`¿Restablecer la contraseña de "${u.username}" a los últimos 4 dígitos de su cédula (${claveInicial}) y desbloquear su cuenta?`)) {
+      const claveInicial = ["u_admin", "u_directora", "u_campana"].includes(u.id) ? "12345678" : obtenerUltimos4Cedula(u.cedula);
+      if (confirm(`¿Restablecer la contraseña de "${u.username}" a la provisional (${claveInicial}) y desbloquear su cuenta?`)) {
         u.password = claveInicial;
         u.intentosFallidos = 0;
         u.bloqueado = false;
         u.primerLogin = true;
+        u.passwordModificada = false;
         guardarUsuarios();
+        if (modoConectado) {
+          fetch(`${API_BASE}/auth.php`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "change_password", userId: u.id, newPassword: claveInicial })
+          }).catch(console.error);
+        }
         registrarEventoBitacora(usuarioAutenticado.username, usuarioAutenticado.rolLabel, `Restableció clave de ${u.username} a ${claveInicial}`);
         renderSeguridadYBitacora();
       }
@@ -2785,7 +2815,7 @@
       const tbodyUsers = document.getElementById("tablaUsuariosSeguridad");
       if (tbodyUsers) {
         tbodyUsers.innerHTML = usuarios.map(u => {
-          const claveInicial = obtenerUltimos4Cedula(u.cedula);
+          const claveInicial = ["u_admin", "u_directora", "u_campana"].includes(u.id) ? "12345678" : obtenerUltimos4Cedula(u.cedula);
           const estadoBadge = u.bloqueado
             ? `<span class="px-2.5 py-1 rounded-full text-xs font-extrabold bg-rose-100 text-rose-800">Bloqueado (${u.intentosFallidos}/3)</span>`
             : `<span class="px-2.5 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800">Activo (${u.intentosFallidos}/3 fallos)</span>`;

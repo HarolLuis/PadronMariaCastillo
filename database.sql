@@ -118,12 +118,12 @@ CREATE TABLE IF NOT EXISTS `configuracion` (
 -- Coordinadores territoriales: Iniciará limpio para nuevos registros
 -- (Los coordinadores oficiales se crean directamente desde la aplicación)
 
--- Usuarios ejecutivos del sistema con acceso por roles
+-- Usuarios ejecutivos del sistema con acceso por roles (Contraseña provisional: 12345678 con cambio en primer login)
 INSERT INTO `usuarios` (`id`, `username`, `aliases`, `nombre_completo`, `rol`, `rol_label`, `cedula`, `password`, `intentos_fallidos`, `bloqueado`, `primer_login`, `ultimo_acceso`) VALUES
-('u_admin', 'Administrador', '["admin", "administrador"]', 'Administrador General del Sistema', 'admin', 'Administrador', '001-1234567-8', '5678', 0, 0, 0, NULL),
-('u_directora', 'Directora Maria Castillo', '["directora", "directora maria castillo", "directora maría castillo", "maria castillo", "maría castillo", "maria", "alcaldesa", "arcardesa"]', 'Directora Maria Castillo', 'directora', 'Directora Maria Castillo', '001-4567890-2', '8902', 0, 0, 0, NULL),
-('u_campana', 'Robert Ritz M. Roque Rivas', '["robert", "robert rivas", "robert ritz", "roque rivas", "robert ritz m. roque rivas", "robert ritz.m roque rivas", "coordinador de campaña", "campana"]', 'Robert Ritz M. Roque Rivas', 'campana', 'Coordinador de Campaña', '001-7788990-5', '8905', 0, 0, 0, NULL)
-ON DUPLICATE KEY UPDATE `nombre_completo`=VALUES(`nombre_completo`), `rol_label`=VALUES(`rol_label`);
+('u_admin', 'Administrador', '["admin", "administrador"]', 'Administrador General del Sistema', 'admin', 'Administrador', '001-1234567-8', '12345678', 0, 0, 1, NULL),
+('u_directora', 'Directora Maria Castillo', '["directora", "directora maria castillo", "directora maría castillo", "maria castillo", "maría castillo", "maria", "alcaldesa", "arcardesa"]', 'Directora Maria Castillo', 'directora', 'Directora Maria Castillo', '001-4567890-2', '12345678', 0, 0, 1, NULL),
+('u_campana', 'Robert Ritz M. Roque Rivas', '["robert", "robert rivas", "robert ritz", "roque rivas", "robert ritz m. roque rivas", "robert ritz.m roque rivas", "coordinador de campaña", "campana"]', 'Robert Ritz M. Roque Rivas', 'campana', 'Coordinador de Campaña', '001-7788990-5', '12345678', 0, 0, 1, NULL)
+ON DUPLICATE KEY UPDATE `password`=VALUES(`password`), `primer_login`=VALUES(`primer_login`), `nombre_completo`=VALUES(`nombre_completo`), `rol_label`=VALUES(`rol_label`);
 
 -- Afiliados iniciales: Padrón limpio para afiliaciones reales
 -- (Los militantes se registran desde el formulario público o por los coordinadores)
