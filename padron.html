@@ -1339,14 +1339,15 @@
     const API_BASE = "api";
     let modoConectado = false;
 
-    // Coordinadores iniciales por defecto
-    const coordinadoresDefault = {
-      coord_1: { id: "coord_1", nombre: "Carlos Santana", zona: "Zona Norte", cedula: "402-9876543-1" },
-      coord_2: { id: "coord_2", nombre: "Rosa Gómez", zona: "Zona Sur", cedula: "001-2345678-9" },
-      coord_3: { id: "coord_3", nombre: "Roberto Almonte", zona: "Zona Este", cedula: "001-8765432-4" }
-    };
+    // Coordinadores territoriales por defecto (inicia limpio para coordinadores reales)
+    const coordinadoresDefault = {};
 
     let coordinadores = JSON.parse(localStorage.getItem("padron_coordinadores_v2")) || coordinadoresDefault;
+    // Purgar coordinadores demo eliminados si persisten en cache
+    if (coordinadores.coord_1) delete coordinadores.coord_1;
+    if (coordinadores.coord_2) delete coordinadores.coord_2;
+    if (coordinadores.coord_3) delete coordinadores.coord_3;
+    localStorage.setItem("padron_coordinadores_v2", JSON.stringify(coordinadores));
 
     function guardarCoordinadoresDB() {
       localStorage.setItem("padron_coordinadores_v2", JSON.stringify(coordinadores));
@@ -1405,45 +1406,6 @@
         bloqueado: false,
         primerLogin: true
       },
-      {
-        id: "u_coord1",
-        username: "Coordinador",
-        aliases: ["coordinador", "carlos santana", "carlos", "coord_1"],
-        nombreCompleto: "Carlos Santana (Coordinador Zona Norte)",
-        rol: "coord_1",
-        rolLabel: "Coordinador",
-        cedula: "402-9876543-1",
-        password: obtenerUltimos4Cedula("402-9876543-1"), // 5431
-        intentosFallidos: 0,
-        bloqueado: false,
-        primerLogin: true
-      },
-      {
-        id: "u_coord2",
-        username: "Rosa Gomez",
-        aliases: ["rosa gomez", "rosa gómez", "rosa", "coord_2"],
-        nombreCompleto: "Rosa Gómez (Coordinadora Zona Sur)",
-        rol: "coord_2",
-        rolLabel: "Coordinador",
-        cedula: "001-2345678-9",
-        password: obtenerUltimos4Cedula("001-2345678-9"), // 6789
-        intentosFallidos: 0,
-        bloqueado: false,
-        primerLogin: true
-      },
-      {
-        id: "u_coord3",
-        username: "Roberto Almonte",
-        aliases: ["roberto almonte", "roberto", "coord_3"],
-        nombreCompleto: "Roberto Almonte (Coordinador Zona Este)",
-        rol: "coord_3",
-        rolLabel: "Coordinador",
-        cedula: "001-8765432-4",
-        password: obtenerUltimos4Cedula("001-8765432-4"), // 4324
-        intentosFallidos: 0,
-        bloqueado: false,
-        primerLogin: true
-      }
     ];
 
     let usuarios = JSON.parse(localStorage.getItem("padron_usuarios_v2")) || usuariosDefault;
@@ -1466,25 +1428,19 @@
         usuarios[idx].rolLabel = defUser.rolLabel;
       }
     });
+    // Purgar cuentas demo eliminadas si persisten en cache
+    usuarios = usuarios.filter(u => !["u_coord1", "u_coord2", "u_coord3"].includes(u.id) && !["coord_1", "coord_2", "coord_3"].includes(u.rol));
     localStorage.setItem("padron_usuarios_v2", JSON.stringify(usuarios));
     let bitacoraAccesos = JSON.parse(localStorage.getItem("padron_bitacora_v2")) || [];
     let usuarioAutenticado = null;
     let rolActual = null;
 
-    const datosIniciales = [
-      { id: 101, folio: "PAD-2026-101", cedula: "001-1458923-1", nombre: "Alberto Mejía Díaz", telefono: "809-555-1201", recinto: "Escuela Central", centroVotacion: "Escuela Primaria Central", direccionCentro: "Calle Principal #12, Zona Norte", mesaElectoral: "Mesa 01", coordId: "coord_1", mes: "Ene", fecha: "15/01/2026" },
-      { id: 102, folio: "PAD-2026-102", cedula: "001-2093847-5", nombre: "Carmen Lidia Tavárez", telefono: "809-555-4321", recinto: "Colegio San Judas", centroVotacion: "Colegio San Judas Tadeo", direccionCentro: "Av. Libertad #45, Zona Norte", mesaElectoral: "Mesa 03", coordId: "coord_1", mes: "Feb", fecha: "10/02/2026" },
-      { id: 103, folio: "PAD-2026-103", cedula: "001-0892711-2", nombre: "Marcos Aurelio Guzmán", telefono: "829-555-8899", recinto: "Liceo Unión", centroVotacion: "Liceo Unión Panamericana", direccionCentro: "Calle Duarte #88, Zona Sur", mesaElectoral: "Mesa 02", coordId: "coord_2", mes: "Feb", fecha: "18/02/2026" },
-      { id: 104, folio: "PAD-2026-104", cedula: "001-4492019-3", nombre: "Darío José Fernández", telefono: "809-555-7766", recinto: "Club San Carlos", centroVotacion: "Club Deportivo San Carlos", direccionCentro: "Av. México #101, Zona Este", mesaElectoral: "Mesa 05", coordId: "coord_3", mes: "Mar", fecha: "05/03/2026" },
-      { id: 105, folio: "PAD-2026-105", cedula: "001-7748291-4", nombre: "Lucía Mercedes Peña", telefono: "809-555-9012", recinto: "Escuela Central", centroVotacion: "Escuela Primaria Central", direccionCentro: "Calle Principal #12, Zona Norte", mesaElectoral: "Mesa 01", coordId: "coord_1", mes: "Mar", fecha: "22/03/2026" },
-      { id: 106, folio: "PAD-2026-106", cedula: "402-3319284-7", nombre: "Héctor Rafael Domínguez", telefono: "829-555-3412", recinto: "Politécnico Norte", centroVotacion: "Politécnico del Norte", direccionCentro: "Carretera Vieja Km 4, Zona Norte", mesaElectoral: "Mesa 04", coordId: "coord_1", mes: "Abr", fecha: "11/04/2026" },
-      { id: 107, folio: "PAD-2026-107", cedula: "001-9928172-6", nombre: "Valeria Sofía Reyes", telefono: "849-555-6633", recinto: "Liceo Unión", centroVotacion: "Liceo Unión Panamericana", direccionCentro: "Calle Duarte #88, Zona Sur", mesaElectoral: "Mesa 02", coordId: "coord_2", mes: "May", fecha: "04/05/2026" },
-      { id: 108, folio: "PAD-2026-108", cedula: "001-6619283-0", nombre: "Fernando Emilio Castro", telefono: "809-555-3190", recinto: "Escuela Central", centroVotacion: "Escuela Primaria Central", direccionCentro: "Calle Principal #12, Zona Norte", mesaElectoral: "Mesa 03", coordId: "coord_1", mes: "Jun", fecha: "02/06/2026" },
-      { id: 109, folio: "PAD-2026-109", cedula: "402-5581920-8", nombre: "Patricia Elena Vargas", telefono: "829-555-7122", recinto: "Liceo Unión", centroVotacion: "Liceo Unión Panamericana", direccionCentro: "Calle Duarte #88, Zona Sur", mesaElectoral: "Mesa 06", coordId: "coord_2", mes: "Jun", fecha: "09/06/2026" },
-      { id: 110, folio: "PAD-2026-110", cedula: "001-3194827-2", nombre: "Gabriel Antonio Mora", telefono: "809-555-8411", recinto: "Club San Carlos", centroVotacion: "Club Deportivo San Carlos", direccionCentro: "Av. México #101, Zona Este", mesaElectoral: "Mesa 05", coordId: "coord_3", mes: "Jun", fecha: "12/06/2026" }
-    ];
+    const datosIniciales = [];
 
     let datos = JSON.parse(localStorage.getItem("padron_partido_db")) || datosIniciales;
+    // Purgar afiliados demo vinculados a los coordinadores demo eliminados
+    datos = datos.filter(d => !["coord_1", "coord_2", "coord_3"].includes(d.coordId));
+    localStorage.setItem("padron_partido_db", JSON.stringify(datos));
     datos = datos.map(d => {
       const centroDir = d.centroDireccion || [d.centroVotacion || d.recinto, d.direccionCentro].filter(Boolean).join(" — ");
       return {
@@ -3812,7 +3768,7 @@
 
         if (json.success && json.data) {
           modoConectado = true;
-          if (json.data.coordinadores && Object.keys(json.data.coordinadores).length > 0) {
+          if (json.data.coordinadores !== undefined) {
             coordinadores = json.data.coordinadores;
           }
           if (json.data.usuarios && json.data.usuarios.length > 0) {
