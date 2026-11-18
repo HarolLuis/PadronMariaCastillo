@@ -291,7 +291,31 @@
           </button>
         </form>
 
-        <p class="text-center text-[11px] text-slate-400 mt-6">
+        <!-- ENLACE PÚBLICO DIRECTO PARA INSCRIPCIÓN SIN INICIO DE SESIÓN -->
+        <div class="mt-5 p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-xs font-extrabold text-emerald-900 flex items-center gap-1.5">
+              <i class="fa-solid fa-user-plus text-emerald-600"></i>
+              Link Directo de Inscripción (Sin Iniciar Sesión)
+            </span>
+            <button type="button" onclick="abrirModalPublicoInscripcion()" class="text-[11px] font-bold text-indigo-700 hover:underline">
+              Abrir formulario <i class="fa-solid fa-arrow-up-right-from-square ml-0.5"></i>
+            </button>
+          </div>
+          <p class="text-[11px] text-emerald-700">
+            Copia y envía este enlace a los miembros que deseen inscribirse directamente:
+          </p>
+          <div class="flex items-center gap-2">
+            <input type="text" id="inputPublicInviteLink" readonly
+              class="flex-1 px-3 py-2 text-xs font-mono bg-white border border-emerald-300 rounded-xl text-slate-700 focus:outline-none">
+            <button type="button" id="btnCopiarLinkInscripcion" onclick="copiarLinkInscripcion()"
+              class="btn-action shrink-0 bg-emerald-600 hover:bg-emerald-700 text-white !py-2 !px-3.5 !text-xs">
+              <i class="fa-regular fa-copy"></i> Copiar Link
+            </button>
+          </div>
+        </div>
+
+        <p class="text-center text-[11px] text-slate-400 mt-5">
           Plataforma Institucional Oficial · Campaña 2028 - 2032
         </p>
       </div>
@@ -1052,7 +1076,7 @@
   <!-- ===================================================================== -->
   <!-- MODAL: INSCRIBIR / EDITAR PERSONA (AFILIADO) EN EL PADRÓN             -->
   <!-- ===================================================================== -->
-  <div id="modalForm" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+  <div id="modalForm" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white text-slate-800 rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200 my-auto">
       <div class="bg-indigo-950 text-white px-6 py-4 flex justify-between items-center">
         <h4 id="modalTitulo" class="text-base font-extrabold flex items-center gap-2">
@@ -2652,6 +2676,10 @@
       }
       localStorage.setItem("padron_partido_db", JSON.stringify(datos));
       cerrarModal();
+      if (!usuarioAutenticado) {
+        alert(`✅ ¡Inscripción completada exitosamente!\n\nNombre: ${nombre}\nFolio asignado: ${nuevoAfiliado.folio}\n\nGracias por sumarte al Padrón de María Castillo.`);
+        return;
+      }
       actualizarTodoElSistema();
       if (!document.getElementById("modalFormularioMiembros").classList.contains("hidden")) {
         refrescarFormularioMiembrosAbierto();
@@ -3775,11 +3803,51 @@
       return false;
     }
 
+    function obtenerLinkPublicoInscripcion() {
+      const base = window.location.origin + window.location.pathname;
+      return `${base}?inscripcion=1`;
+    }
+
+    function copiarLinkInscripcion() {
+      const input = document.getElementById("inputPublicInviteLink");
+      const btn = document.getElementById("btnCopiarLinkInscripcion");
+      const url = input ? input.value : obtenerLinkPublicoInscripcion();
+      const confirmar = () => {
+        if (btn) {
+          btn.innerHTML = `<i class="fa-solid fa-check"></i> ¡Copiado!`;
+          setTimeout(() => {
+            btn.innerHTML = `<i class="fa-regular fa-copy"></i> Copiar Link`;
+          }, 2200);
+        }
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(confirmar).catch(() => {
+          if (input) { input.select(); document.execCommand("copy"); confirmar(); }
+        });
+      } else if (input) {
+        input.select();
+        document.execCommand("copy");
+        confirmar();
+      }
+    }
+
+    function abrirModalPublicoInscripcion() {
+      actualizarSelectoresCoordinadores();
+      abrirModalNuevo();
+    }
+
     window.addEventListener("DOMContentLoaded", async () => {
       aplicarColorFondoGuardado();
       renderCredencialesLogin();
       actualizarSelectoresCoordinadores();
+      const linkInput = document.getElementById("inputPublicInviteLink");
+      if (linkInput) linkInput.value = obtenerLinkPublicoInscripcion();
       await inicializarConexionServidor();
+      actualizarSelectoresCoordinadores();
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("inscripcion") === "1") {
+        abrirModalPublicoInscripcion();
+      }
     });
 
   </script>
