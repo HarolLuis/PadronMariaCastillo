@@ -285,23 +285,25 @@
 
     <!-- CABECERA EJECUTIVA RESPONSIVA -->
     <header class="bg-indigo-950 text-white shadow-xl sticky top-0 z-40 no-print border-b border-indigo-800">
-      <div class="max-w-[1680px] mx-auto px-3 sm:px-5 py-2.5 sm:py-3.5 flex flex-wrap justify-between items-center gap-3">
-        
-        <div class="flex items-center space-x-2.5 sm:space-x-3.5 min-w-0">
-          <img src="formulario-maria-castillo.jpg" alt="Yo Estoy con la Profesora María Castillo 2028/2032 PRM" class="h-10 sm:h-12 w-20 sm:w-28 rounded-xl object-cover object-left border-2 border-amber-400 shadow-md shrink-0 bg-white">
-          <div class="min-w-0">
-            <h1 class="text-xs sm:text-base md:text-lg font-extrabold tracking-tight leading-tight truncate sm:whitespace-normal">PADRÓN ELECTORAL · MARÍA CASTILLO</h1>
-            <p class="text-[10px] sm:text-xs text-amber-300 font-semibold truncate sm:whitespace-normal">«Aprender También es Crecer» · 2028 - 2032</p>
+      <div class="max-w-[1680px] mx-auto px-3 sm:px-5 py-2.5 sm:py-3.5 space-y-2.5">
+        <!-- FILA 1: LOGO + TÍTULO + BOTÓN SALIR EN ESQUINA SUPERIOR DERECHA -->
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex items-center space-x-2.5 sm:space-x-3.5 min-w-0">
+            <img src="formulario-maria-castillo.jpg" alt="Yo Estoy con la Profesora María Castillo 2028/2032 PRM" class="h-10 sm:h-12 w-20 sm:w-28 rounded-xl object-cover object-left border-2 border-amber-400 shadow-md shrink-0 bg-white">
+            <div class="min-w-0">
+              <h1 class="text-xs sm:text-base md:text-lg font-extrabold tracking-tight leading-tight truncate sm:whitespace-normal">PADRÓN ELECTORAL · MARÍA CASTILLO</h1>
+              <p class="text-[10px] sm:text-xs text-amber-300 font-semibold truncate sm:whitespace-normal">«Aprender También es Crecer» · 2028 - 2032</p>
+            </div>
           </div>
+
+          <button onclick="cerrarSesion()" class="btn-modern shrink-0 bg-rose-600 hover:bg-rose-700 text-white !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-xs">
+            <i class="fa-solid fa-power-off"></i>
+            <span>Salir</span>
+          </button>
         </div>
 
+        <!-- FILA 2: COLOR DE FONDO + USUARIO + AGREGAR COORDINADOR + INSCRIBIR MIEMBRO -->
         <div class="flex flex-wrap items-center gap-2 sm:gap-3">
-          <!-- Indicador de Base de Datos MySQL Hostinger -->
-          <div id="dbStatusBadge" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl text-[11px] sm:text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span id="dbStatusText">MySQL Hostinger</span>
-          </div>
-
           <!-- Selector de Tema / Color de Fondo -->
           <div class="relative">
             <button onclick="toggleMenuColores()" class="btn-modern bg-indigo-900 hover:bg-indigo-800 text-white border border-indigo-700 !py-2 sm:!py-2.5 !px-2.5 sm:!px-4 !text-xs">
@@ -309,7 +311,7 @@
               <span class="hidden sm:inline">Color de Fondo</span>
               <i class="fa-solid fa-chevron-down text-[10px]"></i>
             </button>
-            <div id="menuColores" class="hidden absolute right-0 mt-2 w-60 bg-white text-slate-800 rounded-2xl shadow-2xl border border-slate-200 p-3 z-50">
+            <div id="menuColores" class="hidden absolute left-0 sm:right-0 sm:left-auto mt-2 w-60 bg-white text-slate-800 rounded-2xl shadow-2xl border border-slate-200 p-3 z-50">
               <p class="text-xs font-extrabold uppercase text-slate-500 mb-2 px-1">Personalizar Fondo</p>
               <div class="grid grid-cols-2 gap-2 text-xs font-bold">
                 <button onclick="cambiarColorFondo('azul')" class="flex items-center gap-2 p-2 rounded-xl hover:bg-slate-100 border border-slate-200 transition">
@@ -334,16 +336,13 @@
             </div>
           </div>
 
-          <!-- Usuario Autenticado -->
+          <!-- Usuario Autenticado (sin badge amarillo) -->
           <div class="flex items-center gap-2 sm:gap-3 bg-indigo-900/90 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-2xl border border-indigo-700">
             <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-400 text-indigo-950 flex items-center justify-center font-black text-xs sm:text-sm shrink-0">
               <i id="headerUserIcon" class="fa-solid fa-user-shield"></i>
             </div>
             <div class="text-left min-w-0">
-              <div class="flex items-center gap-1.5 sm:gap-2">
-                <span id="headerUserName" class="text-xs sm:text-sm font-bold text-white leading-none truncate max-w-[100px] sm:max-w-none">Usuario</span>
-                <span id="headerUserRoleBadge" class="text-[9px] sm:text-[10px] font-black uppercase px-1.5 sm:px-2 py-0.5 rounded bg-amber-400 text-indigo-950 shrink-0">ROL</span>
-              </div>
+              <span id="headerUserName" class="text-xs sm:text-sm font-bold text-white leading-none block truncate max-w-[140px] sm:max-w-none">Usuario</span>
               <p id="headerUserMeta" class="text-[10px] sm:text-[11px] text-indigo-300 mt-0.5 hidden sm:block">Cédula: ---</p>
             </div>
           </div>
@@ -356,16 +355,6 @@
           <button id="btnTopNuevoAfiliado" onclick="abrirModalNuevo()" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-[11px] sm:!text-xs bg-emerald-600 hover:bg-emerald-500 text-white whitespace-nowrap">
             <i class="fa-solid fa-user-plus"></i>
             <span>Inscribir Miembro</span>
-          </button>
-
-          <button onclick="abrirModalCambiarPass(false)" class="btn-modern bg-indigo-800 hover:bg-indigo-700 text-amber-300 border border-indigo-600 !py-2 sm:!py-2.5 !px-2.5 sm:!px-3.5 !text-xs" title="Cambiar mi contraseña">
-            <i class="fa-solid fa-key"></i>
-            <span class="hidden md:inline">Clave</span>
-          </button>
-
-          <button onclick="cerrarSesion()" class="btn-modern bg-rose-600 hover:bg-rose-700 text-white !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-xs">
-            <i class="fa-solid fa-power-off"></i>
-            <span class="hidden sm:inline">Salir</span>
           </button>
         </div>
       </div>
@@ -382,7 +371,7 @@
               <i id="navDropdownChevron" class="fa-solid fa-chevron-down text-xs transition-transform duration-200"></i>
             </button>
 
-            <nav id="menuNavDropdownPanel" class="hidden absolute left-0 right-0 sm:right-auto sm:w-80 mt-2 rounded-2xl bg-indigo-950 border border-indigo-700/80 shadow-2xl p-2 z-50 space-y-1">
+            <nav id="menuNavDropdownPanel" class="hidden absolute left-0 w-[calc(100vw-1.5rem)] max-w-[340px] sm:w-80 mt-2 rounded-2xl bg-indigo-950 border border-indigo-700/80 shadow-2xl p-2.5 z-50 space-y-1">
               <button id="navDashboard" onclick="cambiarVista('dashboard')" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition bg-amber-400 text-indigo-950">
                 <i class="fa-solid fa-chart-pie w-5 text-center"></i>
                 <span>Dashboard y Estadísticas</span>
@@ -407,6 +396,12 @@
                 <i class="fa-solid fa-star w-5 text-center"></i>
                 <span>Misión, Visión y Valores</span>
               </button>
+              <div class="border-t border-indigo-800/80 my-1 pt-1">
+                <button type="button" onclick="abrirModalCambiarPass(false); toggleNavMenu(false);" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition text-amber-300 hover:bg-indigo-800">
+                  <i class="fa-solid fa-key w-5 text-center"></i>
+                  <span>Cambiar Clave</span>
+                </button>
+              </div>
             </nav>
           </div>
         </div>
@@ -566,22 +561,6 @@
             <div class="relative h-72 w-full">
               <canvas id="chartBarCoordinadores"></canvas>
             </div>
-          </div>
-        </div>
-
-        <!-- GRÁFICO DE TENDENCIAS MENSUAL -->
-        <div class="surface-card bg-white rounded-2xl border border-slate-200 p-6 shadow-md">
-          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-            <div>
-              <h4 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
-                <i class="fa-solid fa-chart-area text-purple-600"></i> Evolución y Crecimiento Mensual del Padrón
-              </h4>
-              <p class="text-xs text-slate-500">Tendencia histórica y actual de afiliaciones registradas por coordinación territorial.</p>
-            </div>
-            <span class="text-xs font-bold px-3 py-1 rounded-lg bg-purple-50 text-purple-700">Gráfico de Tendencias</span>
-          </div>
-          <div class="relative h-64 w-full">
-            <canvas id="chartTrendMeses"></canvas>
           </div>
         </div>
       </section>
@@ -1981,7 +1960,8 @@
       actualizarSelectoresCoordinadores();
 
       document.getElementById("headerUserName").innerText = usuarioAutenticado.username;
-      document.getElementById("headerUserRoleBadge").innerText = usuarioAutenticado.rolLabel;
+      const roleBadgeEl = document.getElementById("headerUserRoleBadge");
+      if (roleBadgeEl) roleBadgeEl.innerText = usuarioAutenticado.rolLabel;
       document.getElementById("headerUserMeta").innerText = `Cédula: ${usuarioAutenticado.cedula}`;
       document.getElementById("lblUltimoAcceso").innerHTML = `<i class="fa-regular fa-clock mr-1"></i>Ingreso: ${usuarioAutenticado.ultimoAcceso || "Ahora"}`;
 
@@ -2370,8 +2350,10 @@
         }
       });
 
+      const trendCanvas = document.getElementById("chartTrendMeses");
+      if (!trendCanvas) return;
       const mesesOrden = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"];
-      const ctxTrend = document.getElementById("chartTrendMeses").getContext("2d");
+      const ctxTrend = trendCanvas.getContext("2d");
       if (chartTrendInstance) chartTrendInstance.destroy();
 
       const datasetsTrend = stats.lista.map((c, i) => {
