@@ -328,31 +328,39 @@
   <div id="appContainer" class="hidden flex-1 flex flex-col">
 
     <!-- CABECERA EJECUTIVA RESPONSIVA -->
-    <header class="bg-indigo-950 text-white shadow-xl sticky top-0 z-40 no-print border-b border-indigo-800">
-      <div class="max-w-[1680px] mx-auto px-3 sm:px-5 py-2.5 sm:py-3.5 space-y-2.5">
-        <!-- FILA 1: LOGO + TÍTULO + FECHA DE INGRESO + SALIR -->
-        <div class="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
-          <div class="flex items-center space-x-2.5 sm:space-x-3.5 min-w-0">
-            <img src="formulario-maria-castillo.jpg" alt="Yo Estoy con la Profesora María Castillo 2028/2032 PRM" class="h-10 sm:h-12 w-20 sm:w-28 rounded-xl object-cover object-left border-2 border-amber-400 shadow-md shrink-0 bg-white">
+    <header class="bg-gradient-to-r from-indigo-700 via-blue-700 to-indigo-800 text-white shadow-xl sticky top-0 z-40 no-print border-b border-indigo-500/60">
+      <div class="max-w-[1680px] mx-auto px-3 sm:px-5 py-2.5 flex flex-col sm:flex-row sm:items-center gap-3">
+        <!-- FOTO MÁS GRANDE OCUPANDO LA ALTURA DE AMBAS FILAS SIN AGRANDAR EL MARCO -->
+        <div class="flex items-center justify-between sm:justify-start gap-3 shrink-0">
+          <img src="formulario-maria-castillo.jpg" alt="Yo Estoy con la Profesora María Castillo 2028/2032 PRM" class="h-14 sm:h-20 lg:h-24 w-auto max-w-[190px] sm:max-w-[230px] rounded-xl object-contain border-2 border-amber-400 shadow-lg shrink-0 bg-white">
+          <button onclick="cerrarSesion()" class="sm:hidden btn-modern shrink-0 bg-rose-600 hover:bg-rose-700 text-white !py-2 !px-3 !text-xs">
+            <i class="fa-solid fa-power-off"></i>
+            <span>Salir</span>
+          </button>
+        </div>
+
+        <!-- CONTENIDO DERECHO EN 2 FILAS BIEN DISTRIBUIDAS -->
+        <div class="flex-1 min-w-0 space-y-2">
+          <!-- FILA 1: TÍTULO + FECHA DE INGRESO + SALIR -->
+          <div class="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
             <div class="min-w-0">
-              <h1 class="text-xs sm:text-base md:text-lg font-extrabold tracking-tight leading-tight truncate sm:whitespace-normal">PADRÓN ELECTORAL · MARÍA CASTILLO</h1>
-              <p class="text-[10px] sm:text-xs text-amber-300 font-semibold truncate sm:whitespace-normal">«Aprender También es Crecer» · 2028 - 2032</p>
+              <h1 class="text-sm sm:text-base md:text-lg font-extrabold tracking-tight leading-tight truncate sm:whitespace-normal">PADRÓN ELECTORAL · MARÍA CASTILLO</h1>
+              <p class="text-[11px] sm:text-xs text-amber-300 font-semibold truncate sm:whitespace-normal">«Aprender También es Crecer» · 2028 - 2032</p>
+            </div>
+
+            <div class="hidden sm:flex items-center gap-2 sm:gap-3 shrink-0 ml-auto">
+              <span id="lblUltimoAcceso" class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-indigo-100 bg-indigo-900/50 border border-indigo-500/60 px-2.5 py-1.5 rounded-xl">
+                <i class="fa-regular fa-clock text-amber-400"></i> Sesión activa
+              </span>
+              <button onclick="cerrarSesion()" class="btn-modern shrink-0 bg-rose-600 hover:bg-rose-700 text-white !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-xs">
+                <i class="fa-solid fa-power-off"></i>
+                <span>Salir</span>
+              </button>
             </div>
           </div>
 
-          <div class="flex items-center gap-2 sm:gap-3 shrink-0 ml-auto">
-            <span id="lblUltimoAcceso" class="hidden sm:inline-flex items-center gap-1.5 text-[11px] font-semibold text-indigo-200 bg-indigo-900/80 border border-indigo-700/80 px-2.5 py-1.5 rounded-xl">
-              <i class="fa-regular fa-clock text-amber-400"></i> Sesión activa
-            </span>
-            <button onclick="cerrarSesion()" class="btn-modern shrink-0 bg-rose-600 hover:bg-rose-700 text-white !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-xs">
-              <i class="fa-solid fa-power-off"></i>
-              <span>Salir</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- FILA 2: MENÚ DESPLEGABLE (DONDE ESTABA COLOR DE FONDO) + USUARIO + AGREGAR COORDINADOR + INSCRIBIR MIEMBRO -->
-        <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+          <!-- FILA 2: MENÚ DESPLEGABLE + USUARIO + AGREGAR COORDINADOR + INSCRIBIR MIEMBRO -->
+          <div class="flex flex-wrap items-center gap-2 sm:gap-3">
           <!-- Menú Desplegable Unificado -->
           <div class="relative shrink-0" id="navDropdownWrapper">
             <button id="menuNavDropdownBtn" type="button" onclick="toggleNavMenu()" class="btn-modern !py-2 sm:!py-2.5 !px-3.5 sm:!px-4 !text-xs bg-amber-400 hover:bg-amber-300 text-indigo-950 whitespace-nowrap">
@@ -474,6 +482,7 @@
             <i class="fa-solid fa-user-plus"></i>
             <span>Inscribir Miembro</span>
           </button>
+          </div>
         </div>
       </div>
     </header>
