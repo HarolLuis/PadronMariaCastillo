@@ -121,6 +121,26 @@
       background-image: radial-gradient(at 0% 0%, #e9d5ff 0px, transparent 50%), radial-gradient(at 100% 100%, #fae8ff 0px, transparent 50%);
       color: #1e293b;
     }
+    body.theme-celeste {
+      background-color: #e0f2fe;
+      background-image: radial-gradient(at 0% 0%, #bae6fd 0px, transparent 50%), radial-gradient(at 100% 100%, #cffafe 0px, transparent 50%);
+      color: #1e293b;
+    }
+    body.theme-dorado {
+      background-color: #fef3c7;
+      background-image: radial-gradient(at 0% 0%, #fde68a 0px, transparent 50%), radial-gradient(at 100% 100%, #fef9c3 0px, transparent 50%);
+      color: #1e293b;
+    }
+    body.theme-rosa {
+      background-color: #fce7f3;
+      background-image: radial-gradient(at 0% 0%, #fbcfe8 0px, transparent 50%), radial-gradient(at 100% 100%, #ffe4e6 0px, transparent 50%);
+      color: #1e293b;
+    }
+    body.theme-naranja {
+      background-color: #ffedd5;
+      background-image: radial-gradient(at 0% 0%, #fed7aa 0px, transparent 50%), radial-gradient(at 100% 100%, #fef3c7 0px, transparent 50%);
+      color: #1e293b;
+    }
     body.theme-negro {
       background-color: #0f172a;
       background-image: radial-gradient(at 0% 0%, #1e293b 0px, transparent 50%), radial-gradient(at 100% 100%, #090d16 0px, transparent 50%);
@@ -286,8 +306,8 @@
     <!-- CABECERA EJECUTIVA RESPONSIVA -->
     <header class="bg-indigo-950 text-white shadow-xl sticky top-0 z-40 no-print border-b border-indigo-800">
       <div class="max-w-[1680px] mx-auto px-3 sm:px-5 py-2.5 sm:py-3.5 space-y-2.5">
-        <!-- FILA 1: LOGO + TÍTULO + BOTÓN SALIR EN ESQUINA SUPERIOR DERECHA -->
-        <div class="flex items-center justify-between gap-3">
+        <!-- FILA 1: LOGO + TÍTULO + FECHA DE INGRESO + SALIR -->
+        <div class="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
           <div class="flex items-center space-x-2.5 sm:space-x-3.5 min-w-0">
             <img src="formulario-maria-castillo.jpg" alt="Yo Estoy con la Profesora María Castillo 2028/2032 PRM" class="h-10 sm:h-12 w-20 sm:w-28 rounded-xl object-cover object-left border-2 border-amber-400 shadow-md shrink-0 bg-white">
             <div class="min-w-0">
@@ -296,82 +316,29 @@
             </div>
           </div>
 
-          <button onclick="cerrarSesion()" class="btn-modern shrink-0 bg-rose-600 hover:bg-rose-700 text-white !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-xs">
-            <i class="fa-solid fa-power-off"></i>
-            <span>Salir</span>
-          </button>
-        </div>
-
-        <!-- FILA 2: COLOR DE FONDO + USUARIO + AGREGAR COORDINADOR + INSCRIBIR MIEMBRO -->
-        <div class="flex flex-wrap items-center gap-2 sm:gap-3">
-          <!-- Selector de Tema / Color de Fondo -->
-          <div class="relative">
-            <button onclick="toggleMenuColores()" class="btn-modern bg-indigo-900 hover:bg-indigo-800 text-white border border-indigo-700 !py-2 sm:!py-2.5 !px-2.5 sm:!px-4 !text-xs">
-              <i class="fa-solid fa-palette text-amber-400 text-sm"></i>
-              <span class="hidden sm:inline">Color de Fondo</span>
-              <i class="fa-solid fa-chevron-down text-[10px]"></i>
+          <div class="flex items-center gap-2 sm:gap-3 shrink-0 ml-auto">
+            <span id="lblUltimoAcceso" class="hidden sm:inline-flex items-center gap-1.5 text-[11px] font-semibold text-indigo-200 bg-indigo-900/80 border border-indigo-700/80 px-2.5 py-1.5 rounded-xl">
+              <i class="fa-regular fa-clock text-amber-400"></i> Sesión activa
+            </span>
+            <button onclick="cerrarSesion()" class="btn-modern shrink-0 bg-rose-600 hover:bg-rose-700 text-white !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-xs">
+              <i class="fa-solid fa-power-off"></i>
+              <span>Salir</span>
             </button>
-            <div id="menuColores" class="hidden absolute left-0 sm:right-0 sm:left-auto mt-2 w-60 bg-white text-slate-800 rounded-2xl shadow-2xl border border-slate-200 p-3 z-50">
-              <p class="text-xs font-extrabold uppercase text-slate-500 mb-2 px-1">Personalizar Fondo</p>
-              <div class="grid grid-cols-2 gap-2 text-xs font-bold">
-                <button onclick="cambiarColorFondo('azul')" class="flex items-center gap-2 p-2 rounded-xl hover:bg-slate-100 border border-slate-200 transition">
-                  <span class="w-5 h-5 rounded-full bg-blue-500 border border-blue-700 shadow-inner"></span> Azul
-                </button>
-                <button onclick="cambiarColorFondo('verde')" class="flex items-center gap-2 p-2 rounded-xl hover:bg-slate-100 border border-slate-200 transition">
-                  <span class="w-5 h-5 rounded-full bg-emerald-500 border border-emerald-700 shadow-inner"></span> Verde
-                </button>
-                <button onclick="cambiarColorFondo('gris')" class="flex items-center gap-2 p-2 rounded-xl hover:bg-slate-100 border border-slate-200 transition">
-                  <span class="w-5 h-5 rounded-full bg-slate-400 border border-slate-600 shadow-inner"></span> Gris
-                </button>
-                <button onclick="cambiarColorFondo('blanco')" class="flex items-center gap-2 p-2 rounded-xl hover:bg-slate-100 border border-slate-200 transition">
-                  <span class="w-5 h-5 rounded-full bg-white border-2 border-slate-400 shadow-inner"></span> Blanco
-                </button>
-                <button onclick="cambiarColorFondo('negro')" class="flex items-center gap-2 p-2 rounded-xl hover:bg-slate-100 border border-slate-200 transition">
-                  <span class="w-5 h-5 rounded-full bg-slate-900 border border-black shadow-inner"></span> Negro
-                </button>
-                <button onclick="cambiarColorFondo('morado')" class="flex items-center gap-2 p-2 rounded-xl hover:bg-slate-100 border border-slate-200 transition">
-                  <span class="w-5 h-5 rounded-full bg-purple-600 border border-purple-800 shadow-inner"></span> Morado
-                </button>
-              </div>
-            </div>
           </div>
-
-          <!-- Usuario Autenticado (sin badge amarillo) -->
-          <div class="flex items-center gap-2 sm:gap-3 bg-indigo-900/90 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-2xl border border-indigo-700">
-            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-400 text-indigo-950 flex items-center justify-center font-black text-xs sm:text-sm shrink-0">
-              <i id="headerUserIcon" class="fa-solid fa-user-shield"></i>
-            </div>
-            <div class="text-left min-w-0">
-              <span id="headerUserName" class="text-xs sm:text-sm font-bold text-white leading-none block truncate max-w-[140px] sm:max-w-none">Usuario</span>
-              <p id="headerUserMeta" class="text-[10px] sm:text-[11px] text-indigo-300 mt-0.5 hidden sm:block">Cédula: ---</p>
-            </div>
-          </div>
-
-          <!-- Botones de Acción Rápida al lado de Administrador -->
-          <button id="btnTopNuevoCoordinador" onclick="abrirModalNuevoCoordinador()" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-[11px] sm:!text-xs bg-amber-400 hover:bg-amber-300 text-indigo-950 whitespace-nowrap">
-            <i class="fa-solid fa-user-tie"></i>
-            <span>Agregar Coordinador</span>
-          </button>
-          <button id="btnTopNuevoAfiliado" onclick="abrirModalNuevo()" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-[11px] sm:!text-xs bg-emerald-600 hover:bg-emerald-500 text-white whitespace-nowrap">
-            <i class="fa-solid fa-user-plus"></i>
-            <span>Inscribir Miembro</span>
-          </button>
         </div>
-      </div>
 
-      <!-- MENÚ DESPLEGABLE DE NAVEGACIÓN -->
-      <div class="bg-indigo-900/90 border-t border-indigo-800/80">
-        <div class="max-w-[1680px] mx-auto px-3 sm:px-5 py-2 flex flex-row items-center justify-start gap-3">
-          <!-- Menú Desplegable -->
+        <!-- FILA 2: MENÚ DESPLEGABLE (DONDE ESTABA COLOR DE FONDO) + USUARIO + AGREGAR COORDINADOR + INSCRIBIR MIEMBRO -->
+        <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+          <!-- Menú Desplegable Unificado -->
           <div class="relative shrink-0" id="navDropdownWrapper">
-            <button id="menuNavDropdownBtn" type="button" onclick="toggleNavMenu()" class="btn-modern !py-2 !px-3.5 sm:!py-2.5 sm:!px-4 !text-xs bg-amber-400 hover:bg-amber-300 text-indigo-950 whitespace-nowrap">
+            <button id="menuNavDropdownBtn" type="button" onclick="toggleNavMenu()" class="btn-modern !py-2 sm:!py-2.5 !px-3.5 sm:!px-4 !text-xs bg-amber-400 hover:bg-amber-300 text-indigo-950 whitespace-nowrap">
               <i class="fa-solid fa-bars text-sm"></i>
               <span>Menú</span>
               <span id="activeNavLabel" class="hidden sm:inline text-[11px] font-extrabold opacity-80">· Dashboard y Estadísticas</span>
               <i id="navDropdownChevron" class="fa-solid fa-chevron-down text-xs transition-transform duration-200"></i>
             </button>
 
-            <nav id="menuNavDropdownPanel" class="hidden absolute left-0 w-[calc(100vw-1.5rem)] max-w-[340px] sm:w-80 mt-2 rounded-2xl bg-indigo-950 border border-indigo-700/80 shadow-2xl p-2.5 z-50 space-y-1">
+            <nav id="menuNavDropdownPanel" class="hidden absolute left-0 w-[calc(100vw-1.5rem)] max-w-[360px] sm:w-96 max-h-[82vh] overflow-y-auto mt-2 rounded-2xl bg-indigo-950 border border-indigo-700/80 shadow-2xl p-3 z-50 space-y-1">
               <button id="navDashboard" onclick="cambiarVista('dashboard')" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition bg-amber-400 text-indigo-950">
                 <i class="fa-solid fa-chart-pie w-5 text-center"></i>
                 <span>Dashboard y Estadísticas</span>
@@ -396,6 +363,64 @@
                 <i class="fa-solid fa-star w-5 text-center"></i>
                 <span>Misión, Visión y Valores</span>
               </button>
+
+              <!-- Exportaciones e Impresión integradas al Menú -->
+              <div id="panelExportacionesEjecutivas" class="border-t border-indigo-800/80 my-1.5 pt-2 space-y-1">
+                <p class="px-2 text-[10px] font-extrabold uppercase tracking-wider text-indigo-300">Reportes y Exportación</p>
+                <div class="grid grid-cols-3 gap-1.5">
+                  <button type="button" onclick="exportarExcelCompleto(); toggleNavMenu(false);" class="flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold">
+                    <i class="fa-solid fa-file-excel"></i><span>Excel</span>
+                  </button>
+                  <button type="button" onclick="exportarReportePDF(); toggleNavMenu(false);" class="flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold">
+                    <i class="fa-solid fa-file-pdf"></i><span>PDF</span>
+                  </button>
+                  <button type="button" onclick="imprimirReporteEstadistico(); toggleNavMenu(false);" class="flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold">
+                    <i class="fa-solid fa-print"></i><span>Imprimir</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Color de Fondo integrado al Menú (10 colores, sin cortarse) -->
+              <div class="border-t border-indigo-800/80 my-1.5 pt-2">
+                <button type="button" onclick="toggleMenuColores()" class="w-full flex items-center justify-between px-3 py-2 text-left text-xs font-extrabold uppercase tracking-wider text-amber-300 hover:bg-indigo-900 rounded-xl transition">
+                  <span><i class="fa-solid fa-palette mr-2"></i>Color de Fondo (10)</span>
+                  <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                </button>
+                <div id="menuColores" class="mt-2 grid grid-cols-2 gap-1.5 text-xs font-bold text-slate-800 bg-white rounded-xl p-2">
+                  <button type="button" onclick="cambiarColorFondo('azul')" class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-100 border border-slate-200 transition">
+                    <span class="w-4 h-4 rounded-full bg-blue-500 border border-blue-700 shrink-0"></span> Azul
+                  </button>
+                  <button type="button" onclick="cambiarColorFondo('verde')" class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-100 border border-slate-200 transition">
+                    <span class="w-4 h-4 rounded-full bg-emerald-500 border border-emerald-700 shrink-0"></span> Verde
+                  </button>
+                  <button type="button" onclick="cambiarColorFondo('celeste')" class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-100 border border-slate-200 transition">
+                    <span class="w-4 h-4 rounded-full bg-sky-400 border border-sky-600 shrink-0"></span> Celeste
+                  </button>
+                  <button type="button" onclick="cambiarColorFondo('dorado')" class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-100 border border-slate-200 transition">
+                    <span class="w-4 h-4 rounded-full bg-amber-400 border border-amber-600 shrink-0"></span> Dorado
+                  </button>
+                  <button type="button" onclick="cambiarColorFondo('rosa')" class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-100 border border-slate-200 transition">
+                    <span class="w-4 h-4 rounded-full bg-pink-400 border border-pink-600 shrink-0"></span> Rosa
+                  </button>
+                  <button type="button" onclick="cambiarColorFondo('naranja')" class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-100 border border-slate-200 transition">
+                    <span class="w-4 h-4 rounded-full bg-orange-400 border border-orange-600 shrink-0"></span> Naranja
+                  </button>
+                  <button type="button" onclick="cambiarColorFondo('morado')" class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-100 border border-slate-200 transition">
+                    <span class="w-4 h-4 rounded-full bg-purple-600 border border-purple-800 shrink-0"></span> Morado
+                  </button>
+                  <button type="button" onclick="cambiarColorFondo('gris')" class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-100 border border-slate-200 transition">
+                    <span class="w-4 h-4 rounded-full bg-slate-400 border border-slate-600 shrink-0"></span> Gris
+                  </button>
+                  <button type="button" onclick="cambiarColorFondo('blanco')" class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-100 border border-slate-200 transition">
+                    <span class="w-4 h-4 rounded-full bg-white border-2 border-slate-400 shrink-0"></span> Blanco
+                  </button>
+                  <button type="button" onclick="cambiarColorFondo('negro')" class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-100 border border-slate-200 transition">
+                    <span class="w-4 h-4 rounded-full bg-slate-900 border border-black shrink-0"></span> Negro
+                  </button>
+                </div>
+              </div>
+
+              <!-- Cambiar Clave -->
               <div class="border-t border-indigo-800/80 my-1 pt-1">
                 <button type="button" onclick="abrirModalCambiarPass(false); toggleNavMenu(false);" class="w-full flex items-center gap-3 px-3.5 py-2.5 text-left text-sm font-bold rounded-xl transition text-amber-300 hover:bg-indigo-800">
                   <i class="fa-solid fa-key w-5 text-center"></i>
@@ -404,39 +429,33 @@
               </div>
             </nav>
           </div>
+
+          <!-- Usuario Autenticado -->
+          <div class="flex items-center gap-2 sm:gap-3 bg-indigo-900/90 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-2xl border border-indigo-700">
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-400 text-indigo-950 flex items-center justify-center font-black text-xs sm:text-sm shrink-0">
+              <i id="headerUserIcon" class="fa-solid fa-user-shield"></i>
+            </div>
+            <div class="text-left min-w-0">
+              <span id="headerUserName" class="text-xs sm:text-sm font-bold text-white leading-none block truncate max-w-[140px] sm:max-w-none">Usuario</span>
+              <p id="headerUserMeta" class="text-[10px] sm:text-[11px] text-indigo-300 mt-0.5 hidden sm:block">Cédula: ---</p>
+            </div>
+          </div>
+
+          <!-- Botones de Acción Rápida al lado de Administrador -->
+          <button id="btnTopNuevoCoordinador" onclick="abrirModalNuevoCoordinador()" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-[11px] sm:!text-xs bg-amber-400 hover:bg-amber-300 text-indigo-950 whitespace-nowrap">
+            <i class="fa-solid fa-user-tie"></i>
+            <span>Agregar Coordinador</span>
+          </button>
+          <button id="btnTopNuevoAfiliado" onclick="abrirModalNuevo()" class="btn-modern !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-[11px] sm:!text-xs bg-emerald-600 hover:bg-emerald-500 text-white whitespace-nowrap">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>Inscribir Miembro</span>
+          </button>
         </div>
       </div>
     </header>
 
     <!-- CONTENEDOR PRINCIPAL RESPONSIVO -->
     <main class="max-w-[1680px] mx-auto px-3 sm:px-5 md:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6 flex-1 w-full no-print">
-
-      <!-- BANNER DEL ROL AUTENTICADO -->
-      <div class="surface-card bg-white border-l-8 border-indigo-600 p-5 rounded-2xl shadow-md flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-        <div>
-          <div class="flex items-center gap-2">
-            <span id="roleBadge" class="px-3 py-1 rounded-full text-xs font-extrabold uppercase bg-indigo-100 text-indigo-800">Rol Activo</span>
-            <span id="lblUltimoAcceso" class="text-xs text-slate-500 font-medium"><i class="fa-regular fa-clock mr-1"></i>Sesión activa</span>
-          </div>
-          <h2 id="roleUserName" class="text-xl font-extrabold text-slate-900 mt-1">Nombre del Usuario</h2>
-          <p id="roleUserDesc" class="text-sm text-slate-600 mt-0.5">Descripción de permisos del rol.</p>
-        </div>
-
-        <div id="panelExportacionesEjecutivas" class="flex flex-wrap items-center gap-2 sm:gap-2.5 w-full lg:w-auto">
-          <button onclick="exportarExcelCompleto()" class="btn-modern flex-1 sm:flex-initial !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-xs bg-emerald-600 hover:bg-emerald-700 text-white whitespace-nowrap">
-            <i class="fa-solid fa-file-excel text-sm"></i>
-            <span>Excel (.xlsx)</span>
-          </button>
-          <button onclick="exportarReportePDF()" class="btn-modern flex-1 sm:flex-initial !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-xs bg-rose-600 hover:bg-rose-700 text-white whitespace-nowrap">
-            <i class="fa-solid fa-file-pdf text-sm"></i>
-            <span>Dashboard PDF</span>
-          </button>
-          <button onclick="imprimirReporteEstadistico()" class="btn-modern flex-1 sm:flex-initial !py-2 sm:!py-2.5 !px-3 sm:!px-4 !text-xs bg-slate-800 hover:bg-slate-900 text-white whitespace-nowrap">
-            <i class="fa-solid fa-print text-sm"></i>
-            <span>Imprimir</span>
-          </button>
-        </div>
-      </div>
 
       <!-- VISTA 1: DASHBOARD DE ESTADÍSTICAS Y GRÁFICOS -->
       <section id="vistaDashboard" class="space-y-6">
@@ -1505,12 +1524,12 @@
     }
 
     function cambiarColorFondo(color, cerrarMenu = true) {
-      const clasesTema = ["theme-azul", "theme-verde", "theme-gris", "theme-blanco", "theme-negro", "theme-morado"];
+      const clasesTema = ["theme-azul", "theme-verde", "theme-gris", "theme-blanco", "theme-negro", "theme-morado", "theme-celeste", "theme-dorado", "theme-rosa", "theme-naranja"];
       document.body.classList.remove(...clasesTema);
       document.body.classList.add("theme-" + color);
       localStorage.setItem("padron_bg_theme", color);
       if (cerrarMenu) {
-        document.getElementById("menuColores").classList.add("hidden");
+        toggleNavMenu(false);
       }
       if (usuarioAutenticado) {
         actualizarGraficos();
@@ -1988,17 +2007,19 @@
       const btnVerMiForm = document.getElementById("btnPadronVerMiFormulario");
 
       if (tieneControlTotal()) {
-        if (rolActual === "campana") {
-          badge.innerText = "Rol: Coordinador de Campaña (Control Total)";
-        } else if (rolActual === "directora") {
-          badge.innerText = "Rol: Directora Ejecutiva (Control Total)";
-        } else if (rolActual === "admin") {
-          badge.innerText = "Rol: Administrador Total";
-        } else {
-          badge.innerText = "Rol: Coordinador con Permiso de Administrador";
+        if (badge) {
+          if (rolActual === "campana") {
+            badge.innerText = "Rol: Coordinador de Campaña (Control Total)";
+          } else if (rolActual === "directora") {
+            badge.innerText = "Rol: Directora Ejecutiva (Control Total)";
+          } else if (rolActual === "admin") {
+            badge.innerText = "Rol: Administrador Total";
+          } else {
+            badge.innerText = "Rol: Coordinador con Permiso de Administrador";
+          }
         }
-        lblNombre.innerText = usuarioAutenticado.nombreCompleto;
-        lblDesc.innerText = "Acceso total al sistema: Dashboard, padrón general, pase de lista por reuniones, agregar/modificar coordinadores, formularios y reportes.";
+        if (lblNombre) lblNombre.innerText = usuarioAutenticado.nombreCompleto;
+        if (lblDesc) lblDesc.innerText = "Acceso total al sistema: Dashboard, padrón general, pase de lista por reuniones, agregar/modificar coordinadores, formularios y reportes.";
         wrapFiltro.classList.remove("hidden");
         selectCoord.disabled = false;
         msgBloqueo.classList.add("hidden");
@@ -2021,9 +2042,9 @@
         cambiarVista("dashboard");
       } else {
         const c = coordinadores[rolActual] || { nombre: usuarioAutenticado.username, zona: "Zona Asignada" };
-        badge.innerText = "Rol: Coordinador Territorial";
-        lblNombre.innerText = `${c.nombre} (${c.zona})`;
-        lblDesc.innerText = "Puede agregar sus militantes nuevos y consultar cuántos y cuáles militantes tiene registrados en su formulario.";
+        if (badge) badge.innerText = "Rol: Coordinador Territorial";
+        if (lblNombre) lblNombre.innerText = `${c.nombre} (${c.zona})`;
+        if (lblDesc) lblDesc.innerText = "Puede agregar sus militantes nuevos y consultar cuántos y cuáles militantes tiene registrados en su formulario.";
         wrapFiltro.classList.add("hidden");
         selectCoord.value = rolActual;
         selectCoord.disabled = true;
