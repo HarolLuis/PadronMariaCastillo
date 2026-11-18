@@ -646,18 +646,28 @@
             </div>
           </div>
 
+          <!-- BARRA ÚNICA DE ACCIONES PARA EL MIEMBRO SELECCIONADO -->
+          <div id="barraAccionesPadron" class="px-3 sm:px-4 py-2.5 bg-indigo-50/70 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2.5">
+            <div class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-700 min-w-0">
+              <span class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[11px] shrink-0">
+                <i class="fa-solid fa-check"></i>
+              </span>
+              <span id="lblAfiliadoSeleccionado" class="truncate">Selecciona un miembro con el check circular para Editar, Eliminar o Constancia</span>
+            </div>
+            <div id="grupoBotonesAccionPadron" class="flex flex-wrap items-center gap-2"></div>
+          </div>
+
           <div class="overflow-x-auto touch-scroll">
             <table class="w-full text-left text-sm border-collapse">
               <thead>
                 <tr class="surface-sub bg-slate-100 text-slate-700 uppercase font-extrabold text-xs border-b border-slate-200">
                   <th class="px-3.5 py-3 whitespace-nowrap min-w-[145px]">Folio / Cédula</th>
-                  <th class="px-3.5 py-3 min-w-[170px]">Nombre Completo</th>
+                  <th class="px-3.5 py-3 min-w-[200px]">Nombre Completo</th>
                   <th class="px-3.5 py-3 whitespace-nowrap min-w-[130px]">Teléfono</th>
                   <th class="px-3.5 py-3 min-w-[220px]">Centro de Votación / Dirección</th>
                   <th class="px-3.5 py-3 whitespace-nowrap">Mesa Electoral</th>
                   <th class="px-3.5 py-3 whitespace-nowrap">Fecha Registro</th>
                   <th class="px-3.5 py-3 whitespace-nowrap">Coordinador Asignado</th>
-                  <th class="px-3.5 py-3 text-right whitespace-nowrap">Acciones</th>
                 </tr>
               </thead>
               <tbody id="tablaIntegrantes" class="divide-y divide-slate-200/70 text-slate-700"></tbody>
@@ -2498,6 +2508,47 @@
       });
     }
 
+    let afiliadoSeleccionadoId = null;
+
+    function seleccionarAfiliadoPadron(id) {
+      afiliadoSeleccionadoId = (afiliadoSeleccionadoId === id) ? null : id;
+      renderPadron();
+    }
+
+    function actualizarBarraAccionesPadron() {
+      const lbl = document.getElementById("lblAfiliadoSeleccionado");
+      const grupo = document.getElementById("grupoBotonesAccionPadron");
+      if (!lbl || !grupo) return;
+
+      const sel = datos.find(d => d.id === afiliadoSeleccionadoId);
+      if (sel) {
+        lbl.innerHTML = `Seleccionado: <span class="text-indigo-700 font-extrabold">${sel.nombre}</span> <span class="text-xs text-slate-500 font-mono">(${sel.folio})</span>`;
+      } else {
+        lbl.innerText = "Selecciona un miembro con el check circular para Editar, Eliminar o Constancia";
+      }
+
+      const dis = !sel ? "disabled opacity-45 cursor-not-allowed" : "";
+      if (tieneControlTotal()) {
+        grupo.innerHTML = `
+          <button type="button" ${!sel ? "disabled" : ""} onclick="if(afiliadoSeleccionadoId) imprimirConstancia(afiliadoSeleccionadoId)" class="btn-action text-indigo-700 bg-indigo-100 hover:bg-indigo-200 ${dis}">
+            <i class="fa-solid fa-print"></i> Constancia
+          </button>
+          <button type="button" ${!sel ? "disabled" : ""} onclick="if(afiliadoSeleccionadoId) editar(afiliadoSeleccionadoId)" class="btn-action text-amber-800 bg-amber-100 hover:bg-amber-200 ${dis}">
+            <i class="fa-solid fa-pen"></i> Editar
+          </button>
+          <button type="button" ${!sel ? "disabled" : ""} onclick="if(afiliadoSeleccionadoId) eliminar(afiliadoSeleccionadoId)" class="btn-action text-rose-700 bg-rose-100 hover:bg-rose-200 ${dis}">
+            <i class="fa-solid fa-trash"></i> Eliminar
+          </button>
+        `;
+      } else {
+        grupo.innerHTML = `
+          <button type="button" ${!sel ? "disabled" : ""} onclick="const s=datos.find(x=>x.id===afiliadoSeleccionadoId); if(s) verFormularioCoordinador(s.coordId)" class="btn-action text-indigo-700 bg-indigo-100 hover:bg-indigo-200 ${dis}">
+            <i class="fa-solid fa-clipboard-list"></i> Ver Formulario
+          </button>
+        `;
+      }
+    }
+
     function renderPadron() {
       const tbody = document.getElementById("tablaIntegrantes");
       const texto = (document.getElementById("inputBuscar").value || "").toLowerCase();
@@ -2518,6 +2569,11 @@
         return true;
       });
 
+      if (afiliadoSeleccionadoId && !filtrados.some(x => x.id === afiliadoSeleccionadoId)) {
+        afiliadoSeleccionadoId = null;
+      }
+      actualizarBarraAccionesPadron();
+
       if (!tieneControlTotal() && rolActual && rolActual.startsWith("coord_")) {
         const totalPropios = datos.filter(d => d.coordId === rolActual).length;
         document.getElementById("lblConteo").innerText = `Mostrando ${filtrados.length} de ${totalPropios} miembros de su coordinación`;
@@ -2526,40 +2582,29 @@
       }
 
       if (filtrados.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-slate-400 font-semibold">No se encontraron afiliados con los criterios seleccionados.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-slate-400 font-semibold">No se encontraron afiliados con los criterios seleccionados.</td></tr>`;
         return;
       }
 
       filtrados.forEach(item => {
         const c = coordinadores[item.coordId] || { nombre: "Sin Asignar", zona: "" };
-        let botones = "";
-        if (tieneControlTotal()) {
-          botones = `
-            <button onclick="imprimirConstancia(${item.id})" class="btn-action text-indigo-700 bg-indigo-100 hover:bg-indigo-200 mr-1.5" title="Emitir Constancia Oficial">
-              <i class="fa-solid fa-print"></i> Constancia
-            </button>
-            <button onclick="editar(${item.id})" class="btn-action text-amber-800 bg-amber-100 hover:bg-amber-200 mr-1.5" title="Editar Afiliado">
-              <i class="fa-solid fa-pen"></i> Editar
-            </button>
-            <button onclick="eliminar(${item.id})" class="btn-action text-rose-700 bg-rose-100 hover:bg-rose-200" title="Eliminar del Padrón">
-              <i class="fa-solid fa-trash"></i> Eliminar
-            </button>
-          `;
-        } else {
-          botones = `
-            <button onclick="verFormularioCoordinador('${item.coordId}')" class="btn-action text-indigo-700 bg-indigo-100 hover:bg-indigo-200" title="Ver en Formulario">
-              <i class="fa-solid fa-clipboard-list"></i> Ver Formulario
-            </button>
-          `;
-        }
+        const isSel = item.id === afiliadoSeleccionadoId;
+        const checkHtml = isSel
+          ? `<span class="w-5 h-5 rounded-full border-2 border-indigo-600 bg-indigo-600 text-white flex items-center justify-center text-[10px] shrink-0 shadow-sm"><i class="fa-solid fa-check"></i></span>`
+          : `<span class="w-5 h-5 rounded-full border-2 border-slate-300 bg-white flex items-center justify-center shrink-0"></span>`;
 
         tbody.innerHTML += `
-          <tr class="hover:bg-slate-50 transition">
+          <tr onclick="seleccionarAfiliadoPadron(${item.id})" class="cursor-pointer transition ${isSel ? 'bg-indigo-50/90 ring-1 ring-inset ring-indigo-300' : 'hover:bg-slate-50'}">
             <td class="px-3.5 py-3 font-mono font-bold text-slate-900 whitespace-nowrap">
               <div>${item.folio}</div>
               <div class="text-xs text-slate-500 font-normal whitespace-nowrap">${item.cedula}</div>
             </td>
-            <td class="px-3.5 py-3 font-bold text-slate-900">${item.nombre}</td>
+            <td class="px-3.5 py-3 font-bold text-slate-900">
+              <div class="flex items-center gap-2.5">
+                ${checkHtml}
+                <span>${item.nombre}</span>
+              </div>
+            </td>
             <td class="px-3.5 py-3 font-mono whitespace-nowrap">${item.telefono}</td>
             <td class="px-3.5 py-3">
               <div class="font-bold text-slate-800">${item.centroDireccion || item.centroVotacion || item.recinto || "---"}</div>
@@ -2571,7 +2616,6 @@
                 ${c.nombre}
               </span>
             </td>
-            <td class="px-3.5 py-3 text-right whitespace-nowrap">${botones}</td>
           </tr>
         `;
       });
