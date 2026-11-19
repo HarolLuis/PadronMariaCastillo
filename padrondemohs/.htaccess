@@ -1,0 +1,22 @@
+# =============================================================================
+# Configuración Apache / LiteSpeed para Subdominio Demo (padrondemohs)
+# =============================================================================
+
+# Prioridad de carga: index.php e index.html primero
+DirectoryIndex index.php index.html default.php
+
+# Proteger archivos sensibles
+<FilesMatch "^(database_demo\.sql|config\.php|\.env|\.git)">
+    Require all denied
+</FilesMatch>
+
+# Forzar codificación UTF-8
+AddDefaultCharset UTF-8
+AddCharset UTF-8 .html .css .js .json .php
+
+# Compresión Gzip
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json
+</IfModule>
+
+Options -Indexes
