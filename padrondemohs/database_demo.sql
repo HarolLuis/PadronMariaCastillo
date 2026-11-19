@@ -1,5 +1,5 @@
 -- =============================================================================
--- SISTEMA DE PADRÓN ELECTORAL - PROFESORA MARÍA CASTILLO (MODO DEMO)
+-- SISTEMA DE PADRÓN ELECTORAL - MI PARTIDO (MODO DEMO)
 -- Base de Datos Oficial Demo: u122945382_PadronDemo
 -- =============================================================================
 
@@ -143,7 +143,7 @@ INSERT INTO `coordinadores` (`id`, `nombre`, `zona`, `cedula`, `telefono`, `tipo
 -- 2. Usuarios del Sistema (Todos con clave: 12345678)
 INSERT INTO `usuarios` (`id`, `username`, `aliases`, `nombre_completo`, `rol`, `rol_label`, `cedula`, `password`, `intentos_fallidos`, `bloqueado`, `primer_login`, `ultimo_acceso`) VALUES
 ('u_admin', 'Administrador', '["admin", "administrador"]', 'Administrador General del Sistema', 'admin', 'Administrador', '001-1234567-8', '12345678', 0, 0, 0, NULL),
-('u_directora', 'Directora Maria Castillo', '["directora", "directora maria castillo", "maria castillo", "maria"]', 'Directora Maria Castillo', 'directora', 'Directora Maria Castillo', '001-4567890-2', '12345678', 0, 0, 0, NULL),
+('u_directora', 'Directora Ejecutiva', '["directora", "directora ejecutiva", "ejecutiva"]', 'Directora Ejecutiva del Partido', 'directora', 'Directora Ejecutiva', '001-4567890-2', '12345678', 0, 0, 0, NULL),
 ('u_campana', 'Robert Ritz M. Roque Rivas', '["robert", "robert rivas", "campana"]', 'Robert Ritz M. Roque Rivas', 'campana', 'Coordinador de Campaña', '001-7788990-5', '12345678', 0, 0, 0, NULL),
 ('u_carlos', 'Carlos Santana', '["carlos", "carlos santana"]', 'Carlos Santana', 'sectorial', 'Coordinador Sectorial', '001-0987654-3', '12345678', 0, 0, 0, NULL),
 ('u_rosa', 'Rosa Gomez', '["rosa", "rosa gomez"]', 'Rosa Gómez', 'sectorial', 'Coordinadora Sectorial', '001-8765432-1', '12345678', 0, 0, 0, NULL),
@@ -191,20 +191,20 @@ INSERT INTO `afiliados` (`folio`, `cedula`, `nombre`, `telefono`, `centro_direcc
 INSERT INTO `reuniones` (`id`, `titulo`, `fecha`, `hora`, `lugar`, `asistencia_json`, `notas_json`) VALUES
 ('reu_demo_1', 'Lanzamiento y Juramentación de Coordinadores Barriales', '2026-02-15', '18:00', 'Comando Central de Campaña', '{"coord_1":true,"coord_2":true,"coord_3":true}', '{"general":"Juramentación de los 3 coordinadores sectoriales y definición de metas iniciales."}'),
 ('reu_demo_2', 'Taller de Capacitación en Validación y Registro de Militantes', '2026-03-20', '19:00', 'Club Los Mina', '{"coord_1":true,"coord_2":true,"coord_3":true,"coord_4":true,"coord_5":true}', '{"general":"Capacitación sobre el uso del sistema digital y cumplimiento del registro electoral."}'),
-('reu_demo_3', 'Asamblea General de Evaluación del Padrón y Proyección 2028', '2026-05-15', '17:30', 'Hotel Crowne Plaza', '{"coord_1":true,"coord_2":true,"coord_3":true,"coord_4":true,"coord_5":true,"coord_6":true}', '{"general":"Presentación de avances con la Profesora María Castillo y el equipo de Alta Dirección."}');
+('reu_demo_3', 'Asamblea General de Evaluación del Padrón y Proyección 2028', '2026-05-15', '17:30', 'Hotel Crowne Plaza', '{"coord_1":true,"coord_2":true,"coord_3":true,"coord_4":true,"coord_5":true,"coord_6":true}', '{"general":"Presentación de avances con la Dirección Ejecutiva y el equipo de Alta Dirección."}');
 
 -- 5. Bitácora de Auditoría
 INSERT INTO `bitacora` (`fecha_hora`, `username`, `rol_label`, `estado`, `ip_address`) VALUES
 ('15/02/2026 10:00:00 AM', 'Administrador', 'Administrador', 'Creación de coordinadores sectoriales Zona Norte, Sur y Este', '127.0.0.1'),
 ('20/03/2026 03:15:20 PM', 'Carlos Santana', 'Coordinador Sectorial', 'Registro y validación de militantes de Zona Norte', '127.0.0.1'),
-('10/05/2026 06:40:12 PM', 'Directora Maria Castillo', 'Directora Maria Castillo', 'Supervisión ejecutiva del Padrón General', '127.0.0.1'),
+('10/05/2026 06:40:12 PM', 'Directora Ejecutiva', 'Directora Ejecutiva', 'Supervisión ejecutiva del Padrón General', '127.0.0.1'),
 ('15/06/2026 09:30:00 AM', 'Sistema', 'Instalación', 'Entorno de demostración inicializado con éxito', '127.0.0.1');
 
 -- 6. Configuración General
 INSERT INTO `configuracion` (`clave`, `valor`) VALUES
 ('tema_fondo', 'gris'),
 ('titulo_sistema', 'Sistema de Padrón Electoral (MODO DEMO)'),
-('candidato_nombre', 'Profesora María Castillo'),
+('candidato_nombre', 'Mi Partido'),
 ('periodo_campana', '2028 - 2032');
 
 SET foreign_key_checks = 1;

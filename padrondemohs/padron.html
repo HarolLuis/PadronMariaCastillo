@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-  <title>Sistema de Padrón Electoral (MODO DEMO) · Profesora María Castillo</title>
-  <!-- Favicon / Ícono oficial en pestaña del navegador (PRM) -->
+  <title>Sistema de Padrón Electoral · MI PARTIDO (DEMO)</title>
+  <!-- Favicon Oficial Demo (Mi Partido) -->
   <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="icon" type="image/jpeg" href="logo-prm.jpg">
+  <link rel="icon" type="image/jpeg" href="logo-demo.jpg">
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" href="logo-prm.png">
+  <link rel="apple-touch-icon" href="logo-demo.png">
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome Icons -->
@@ -204,19 +204,19 @@
   <div id="loginScreen" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 md:p-8 bg-gradient-to-br from-indigo-700 via-blue-700 to-indigo-800 overflow-y-auto">
     <div class="max-w-4xl w-full grid grid-cols-1 md:grid-cols-12 bg-white rounded-3xl shadow-2xl overflow-hidden border border-white/20 my-auto">
       
-      <!-- Panel Izquierdo: Branding Oficial María Castillo (Sin credenciales demo) -->
+      <!-- Panel Izquierdo: Branding Oficial Demo (Mi Partido) -->
       <div class="md:col-span-5 bg-gradient-to-br from-indigo-700 via-blue-700 to-indigo-800 text-white p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
         <div class="relative z-10 space-y-4">
           <!-- Logo / Imagen de Campaña -->
           <div class="rounded-2xl overflow-hidden border-2 border-amber-400 shadow-xl bg-white max-w-[240px] md:max-w-full mx-auto">
-            <img src="formulario-maria-castillo.jpg" alt="Yo Estoy con la Profesora María Castillo 2028/2032 PRM" class="w-full h-auto object-contain">
+            <img src="logo-demo.png" alt="MI PARTIDO - Unity. Progress. Future." class="w-full h-auto object-contain rounded-2xl shadow-xl">
           </div>
           
           <div class="text-center md:text-left pt-1">
             <h2 class="text-lg sm:text-xl font-black text-white leading-tight">
               PADRÓN ELECTORAL Y GESTIÓN POLÍTICA
             </h2>
-            <p class="text-xs text-amber-300 font-semibold mt-1">«Aprender También es Crecer»</p>
+            <p class="text-xs text-amber-300 font-semibold mt-1">«Unidad · Progreso · Futuro»</p>
           </div>
 
           <div class="hidden sm:block p-3.5 rounded-2xl bg-white/10 border border-amber-400/30 text-indigo-100 text-xs leading-relaxed italic">
@@ -246,7 +246,7 @@
               Ingrese credenciales o use los accesos rápidos de prueba.
             </p>
           </div>
-          <img src="logo-prm.png" alt="Partido Revolucionario Moderno PRM" class="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-contain border-2 border-amber-400 shadow-md bg-white p-0.5 shrink-0">
+          <img src="logo-demo.png" alt="MI PARTIDO" class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl object-contain border-2 border-amber-400 shadow-md bg-white p-1 shrink-0">
         </div>
 
         <!-- Quick Demo Credentials Box -->
@@ -269,8 +269,8 @@
               <span class="font-black text-blue-900 block group-hover:text-blue-600">👥 Juan Pérez</span>
               <span class="text-[10px] text-slate-500 block">Coord. de Equipo (Este)</span>
             </button>
-            <button type="button" onclick="autoFillDemoLogin('Directora Maria Castillo', '12345678')" class="p-2 bg-white rounded-xl border border-amber-200 text-left hover:border-rose-500 hover:shadow-md transition group">
-              <span class="font-black text-rose-900 block group-hover:text-rose-600">🏛️ Maria Castillo</span>
+            <button type="button" onclick="autoFillDemoLogin('Directora Ejecutiva', '12345678')" class="p-2 bg-white rounded-xl border border-amber-200 text-left hover:border-rose-500 hover:shadow-md transition group">
+              <span class="font-black text-rose-900 block group-hover:text-rose-600">🏛️ Directora Ejecutiva</span>
               <span class="text-[10px] text-slate-500 block">Directora Ejecutiva</span>
             </button>
           </div>
@@ -366,8 +366,7 @@
       <div class="max-w-[1680px] mx-auto px-3 sm:px-5 py-2.5 flex flex-col sm:flex-row sm:items-center gap-3">
         <!-- FOTO MÁS GRANDE OCUPANDO LA ALTURA DE AMBAS FILAS SIN AGRANDAR EL MARCO -->
         <div class="flex items-center justify-between sm:justify-start gap-2 sm:gap-3 shrink-0">
-          <img src="formulario-maria-castillo.jpg" alt="Yo Estoy con la Profesora María Castillo 2028/2032 PRM" class="h-14 sm:h-20 lg:h-24 w-auto max-w-[170px] sm:max-w-[220px] rounded-xl object-contain border-2 border-amber-400 shadow-lg shrink-0 bg-white">
-          <img src="logo-prm.png" alt="PRM - Partido Revolucionario Moderno" class="h-12 sm:h-16 lg:h-20 w-auto rounded-full object-contain border-2 border-amber-400 shadow-lg shrink-0 bg-white p-0.5">
+          <img src="logo-demo.png" alt="MI PARTIDO - Unity. Progress. Future." class="h-14 sm:h-20 lg:h-24 w-auto max-w-[180px] sm:max-w-[230px] rounded-2xl object-contain border-2 border-amber-400 shadow-lg shrink-0 bg-white p-1">
           <button onclick="cerrarSesion()" class="sm:hidden btn-modern shrink-0 bg-rose-600 hover:bg-rose-700 text-white !py-2 !px-3 !text-xs">
             <i class="fa-solid fa-power-off"></i>
             <span>Salir</span>
@@ -385,8 +384,8 @@
                 </span>
                 <span class="text-[11px] font-semibold text-amber-200">padrondemohs</span>
               </div>
-              <h1 class="text-sm sm:text-base md:text-lg font-extrabold tracking-tight leading-tight truncate sm:whitespace-normal">PADRÓN ELECTORAL · MARÍA CASTILLO</h1>
-              <p class="text-[11px] sm:text-xs text-amber-300 font-semibold truncate sm:whitespace-normal">«Aprender También es Crecer» · 2028 - 2032</p>
+              <h1 class="text-sm sm:text-base md:text-lg font-extrabold tracking-tight leading-tight truncate sm:whitespace-normal">PADRÓN ELECTORAL · MI PARTIDO</h1>
+              <p class="text-[11px] sm:text-xs text-amber-300 font-semibold truncate sm:whitespace-normal">«Unidad · Progreso · Futuro» · Campaña 2028 - 2032</p>
             </div>
 
             <div class="hidden sm:flex items-center gap-2 sm:gap-3 shrink-0 ml-auto">
@@ -778,7 +777,7 @@
             <div>
               <span class="text-xs font-extrabold uppercase tracking-wider text-indigo-600">Dirección Ejecutiva y Administración</span>
               <h3 class="text-lg font-extrabold text-slate-900">Directorio de Coordinadores Territoriales</h3>
-              <p class="text-xs text-slate-500">La Directora María Castillo y el Administrador pueden agregar, modificar o dar de baja coordinadores.</p>
+              <p class="text-xs text-slate-500">La La Directora Ejecutiva y el Administrador pueden agregar, modificar o dar de baja coordinadores.</p>
             </div>
             <button onclick="abrirModalNuevoCoordinador()" class="btn-modern bg-indigo-600 hover:bg-indigo-700 text-white">
               <i class="fa-solid fa-user-tie"></i> Agregar Nuevo Coordinador
@@ -1036,16 +1035,16 @@
       <section id="vistaMisionVision" class="space-y-6 hidden">
         <!-- Hero Institucional con Imagen Oficial -->
         <div class="rounded-3xl bg-gradient-to-br from-indigo-950 via-blue-900 to-sky-900 text-white p-6 sm:p-8 shadow-xl border border-amber-400/30 flex flex-col lg:flex-row items-center gap-6">
-          <img src="formulario-maria-castillo.jpg" alt="Yo Estoy con la Profesora María Castillo 2028/2032 PRM" class="w-full lg:w-80 h-auto rounded-2xl object-contain border-4 border-amber-400 shadow-2xl shrink-0 bg-white">
+          <img src="logo-demo.png" alt="MI PARTIDO - Unity. Progress. Future." class="w-full lg:w-80 h-auto rounded-2xl object-contain border-4 border-amber-400 shadow-2xl shrink-0 bg-white">
           <div class="space-y-3 text-center lg:text-left">
             <span class="inline-block px-3 py-1 rounded-full bg-amber-400 text-indigo-950 text-xs font-black uppercase tracking-wider">
-              <i class="fa-solid fa-landmark mr-1"></i> Identidad del Padrón Electoral · María Castillo (La Profe)
+              <i class="fa-solid fa-landmark mr-1"></i> Identidad y Valores del Padrón Electoral · Mi Partido
             </span>
             <h2 class="text-2xl sm:text-3xl font-black leading-tight">
               Misión, Visión y Valores del Equipo Electoral
             </h2>
             <p class="text-sm sm:text-base text-sky-100 leading-relaxed max-w-3xl">
-              Bajo el lema <strong>«Aprender También es Crecer»</strong>, nuestro padrón electoral no es solo una base de datos: es una red viva de compromiso ciudadano, organización territorial y servicio transparente para construir comunidades más preparadas, unidas y participativas.
+              Bajo el lema <strong>«Unidad · Progreso · Futuro»</strong>, nuestro padrón electoral no es solo una base de datos: es una red viva de compromiso ciudadano, organización territorial y servicio transparente para construir comunidades más preparadas, unidas y participativas.
             </p>
           </div>
         </div>
@@ -1078,7 +1077,7 @@
               </div>
             </div>
             <p class="text-sm text-slate-600 leading-relaxed">
-              Consolidar un padrón electoral modelo, íntegro y en crecimiento sostenido, reconocido por su excelencia organizativa, la fuerza de sus coordinaciones territoriales y el liderazgo humano de <strong>María Castillo (La Profe)</strong>, transformando la participación ciudadana en bienestar, educación y progreso real para todos.
+              Consolidar un padrón electoral modelo, íntegro y en crecimiento sostenido, reconocido por su excelencia organizativa, la fuerza de sus coordinaciones territoriales y el liderazgo ético de la <strong>Dirección Ejecutiva</strong>, transformando la participación ciudadana en bienestar, educación y progreso real para todos.
             </p>
           </div>
         </div>
@@ -1326,7 +1325,7 @@
       <div id="formularioMiembrosContenido" class="p-4 sm:p-6 space-y-3 bg-white max-h-[82vh] overflow-y-auto">
         <!-- Encabezado gráfico con la imagen oficial -->
         <div class="rounded-2xl overflow-hidden border-2 border-blue-900 shadow-sm bg-gradient-to-b from-sky-100 to-white">
-          <img src="formulario-maria-castillo.jpg" alt="Yo Estoy con la Profesora María Castillo 2028/2032 PRM" class="w-full h-auto object-contain">
+          <img src="logo-demo.png" alt="MI PARTIDO - Unity. Progress. Future." class="w-full h-auto object-contain rounded-2xl shadow-xl">
         </div>
 
         <!-- Franja: DATOS DEL COORDINADOR/A DEL EQUIPO -->
@@ -1460,11 +1459,11 @@
       },
       {
         id: "u_directora",
-        username: "Directora Maria Castillo",
-        aliases: ["directora", "directora maria castillo", "directora maría castillo", "maria castillo", "maría castillo", "maria", "alcaldesa", "arcardesa"],
-        nombreCompleto: "Directora Maria Castillo",
+        username: "Directora Ejecutiva",
+        aliases: ["directora", "directora ejecutiva", "ejecutiva"],
+        nombreCompleto: "Directora Ejecutiva",
         rol: "directora",
-        rolLabel: "Directora Maria Castillo",
+        rolLabel: "Directora Ejecutiva",
         cedula: "001-4567890-2",
         password: "12345678", // Contraseña provisional para primer acceso
         intentosFallidos: 0,
@@ -1487,7 +1486,7 @@
     ];
 
     let usuarios = JSON.parse(localStorage.getItem("padron_usuarios_v2")) || usuariosDefault;
-    // Migrar perfil legado "Alcaldesa" / "u_alcaldesa" -> "u_directora" (Directora Maria Castillo)
+    // Migrar perfil legado "Alcaldesa" / "u_alcaldesa" -> "u_directora" (Directora Ejecutiva)
     const legacyIdx = usuarios.findIndex(u => u.id === "u_alcaldesa" || u.username === "Alcaldesa" || (u.cedula === "001-4567890-2" && u.id !== "u_directora"));
     if (legacyIdx !== -1) {
       const defDir = usuariosDefault.find(d => d.id === "u_directora");
@@ -1881,7 +1880,7 @@
     }
 
     // =========================================================================
-    // GESTIÓN DE COORDINADORES (Directora María Castillo y Administrador)
+    // GESTIÓN DE COORDINADORES (Directora Ejecutiva y Administrador)
     // =========================================================================
     function cambiarTipoCoordinadorForm() {
       const tipo = document.getElementById("coordFormTipo").value;
@@ -2986,7 +2985,7 @@
       localStorage.setItem("padron_partido_db", JSON.stringify(datos));
       cerrarModal();
       if (!usuarioAutenticado) {
-        alert(`✅ ¡Inscripción completada exitosamente!\n\nNombre: ${nombre}\nFolio asignado: ${nuevoAfiliado.folio}\n\nGracias por sumarte al Padrón de María Castillo.`);
+        alert(`✅ ¡Inscripción completada exitosamente!\n\nNombre: ${nombre}\nFolio asignado: ${nuevoAfiliado.folio}\n\nGracias por sumarte al Padrón Oficial.`);
         return;
       }
       actualizarTodoElSistema();
@@ -3254,13 +3253,13 @@
       printArea.innerHTML = `
         <div class="max-w-2xl mx-auto p-8 border-4 border-double border-indigo-900 rounded-2xl bg-white text-slate-800 my-6">
           <div class="flex items-center justify-between border-b-2 border-indigo-900 pb-4 mb-6 gap-3">
-            <img src="logo-prm.png" alt="PRM" class="w-16 h-16 object-contain rounded-full border border-amber-400 p-0.5 shrink-0">
+            <img src="logo-demo.png" alt="MI PARTIDO" class="w-16 h-16 object-contain rounded-2xl border border-amber-400 p-0.5 shrink-0">
             <div class="text-center flex-1">
-              <h2 class="text-xl font-black text-indigo-950 uppercase">PARTIDO REVOLUCIONARIO MODERNO (PRM)</h2>
+              <h2 class="text-xl font-black text-indigo-950 uppercase">PARTIDO POLÍTICO INSTITUCIONAL (MI PARTIDO)</h2>
               <h3 class="text-xs font-bold text-slate-600 mt-0.5">SISTEMA OFICIAL DE PADRÓN ELECTORAL Y MILITANCIA</h3>
-              <p class="text-[11px] font-semibold text-amber-600">Profesora María Castillo · 2028 - 2032</p>
+              <p class="text-[11px] font-semibold text-amber-600">Unidad · Progreso · Futuro · 2028 - 2032</p>
             </div>
-            <img src="formulario-maria-castillo.jpg" alt="María Castillo" class="h-16 w-auto object-contain rounded-xl border border-amber-400 shrink-0">
+            <img src="logo-demo.png" alt="MI PARTIDO" class="w-16 h-16 object-contain rounded-2xl border border-amber-400 p-0.5 shrink-0">
           </div>
           <div class="text-center mb-6">
             <span class="bg-indigo-50 border border-indigo-200 text-indigo-900 font-bold text-xs px-4 py-1.5 rounded-full uppercase">
@@ -3279,8 +3278,8 @@
           </div>
           <div class="grid grid-cols-2 gap-8 text-center pt-8 border-t border-slate-300 text-xs mt-10">
             <div>
-              <p class="font-serif italic font-bold text-base text-indigo-900">María Castillo</p>
-              <p class="font-bold border-t border-slate-400 mt-1 pt-1">Licda. María Castillo</p>
+              <p class="font-serif italic font-bold text-base text-indigo-900">Dirección Ejecutiva</p>
+              <p class="font-bold border-t border-slate-400 mt-1 pt-1">Dirección de Organización</p>
               <p class="text-[11px] text-slate-500">Directora Ejecutiva de Padrón</p>
             </div>
             <div>

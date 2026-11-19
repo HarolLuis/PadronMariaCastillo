@@ -75,7 +75,7 @@ if ($step === 'execute') {
     
     <div class="bg-gradient-to-r from-indigo-950 via-indigo-900 to-indigo-950 text-white p-6 border-b border-indigo-900">
       <div class="flex items-center gap-3">
-        <img src="logo-prm.png" alt="PRM" class="w-12 h-12 rounded-full border-2 border-amber-400 bg-white p-0.5 object-contain">
+        <img src="logo-demo.png" alt="MI PARTIDO" class="w-12 h-12 rounded-full border-2 border-amber-400 bg-white p-0.5 object-contain">
         <div>
           <div class="flex items-center gap-2">
             <span class="bg-amber-400 text-slate-950 text-[10px] font-black uppercase px-2 py-0.5 rounded-full">ENTORNO DEMO</span>
