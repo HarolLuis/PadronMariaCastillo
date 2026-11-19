@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
   <title>Sistema de Padrón Electoral y Estadísticas Ejecutivas</title>
+  <!-- Favicon / Ícono oficial en pestaña del navegador (PRM) -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="icon" type="image/jpeg" href="logo-prm.jpg">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="logo-prm.png">
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome Icons -->
@@ -229,15 +234,18 @@
 
       <!-- Panel Derecho: Formulario de Autenticación para Todos los Usuarios -->
       <div class="md:col-span-7 p-6 sm:p-8 md:p-10 flex flex-col justify-center bg-white text-slate-800">
-        <div class="mb-6">
-          <div class="flex items-center gap-2 mb-1.5">
-            <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
-            <span class="text-xs font-black uppercase tracking-widest text-indigo-600">Acceso Autorizado</span>
+        <div class="mb-6 flex items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1.5">
+              <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
+              <span class="text-xs font-black uppercase tracking-widest text-indigo-600">Acceso Autorizado</span>
+            </div>
+            <h3 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Iniciar Sesión</h3>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1">
+              Ingrese sus credenciales de usuario o cédula asignada.
+            </p>
           </div>
-          <h3 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Iniciar Sesión</h3>
-          <p class="text-xs sm:text-sm text-slate-500 mt-1">
-            Ingrese sus credenciales de usuario o cédula asignada para acceder al sistema.
-          </p>
+          <img src="logo-prm.png" alt="Partido Revolucionario Moderno PRM" class="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-contain border-2 border-amber-400 shadow-md bg-white p-0.5 shrink-0">
         </div>
 
         <div id="loginErrorBox" class="hidden mb-5 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-sm flex items-start gap-3">
@@ -329,8 +337,9 @@
     <header class="bg-gradient-to-r from-indigo-700 via-blue-700 to-indigo-800 text-white shadow-xl sticky top-0 z-40 no-print border-b border-indigo-500/60">
       <div class="max-w-[1680px] mx-auto px-3 sm:px-5 py-2.5 flex flex-col sm:flex-row sm:items-center gap-3">
         <!-- FOTO MÁS GRANDE OCUPANDO LA ALTURA DE AMBAS FILAS SIN AGRANDAR EL MARCO -->
-        <div class="flex items-center justify-between sm:justify-start gap-3 shrink-0">
-          <img src="formulario-maria-castillo.jpg" alt="Yo Estoy con la Profesora María Castillo 2028/2032 PRM" class="h-14 sm:h-20 lg:h-24 w-auto max-w-[190px] sm:max-w-[230px] rounded-xl object-contain border-2 border-amber-400 shadow-lg shrink-0 bg-white">
+        <div class="flex items-center justify-between sm:justify-start gap-2 sm:gap-3 shrink-0">
+          <img src="formulario-maria-castillo.jpg" alt="Yo Estoy con la Profesora María Castillo 2028/2032 PRM" class="h-14 sm:h-20 lg:h-24 w-auto max-w-[170px] sm:max-w-[220px] rounded-xl object-contain border-2 border-amber-400 shadow-lg shrink-0 bg-white">
+          <img src="logo-prm.png" alt="PRM - Partido Revolucionario Moderno" class="h-12 sm:h-16 lg:h-20 w-auto rounded-full object-contain border-2 border-amber-400 shadow-lg shrink-0 bg-white p-0.5">
           <button onclick="cerrarSesion()" class="sm:hidden btn-modern shrink-0 bg-rose-600 hover:bg-rose-700 text-white !py-2 !px-3 !text-xs">
             <i class="fa-solid fa-power-off"></i>
             <span>Salir</span>
@@ -3210,9 +3219,14 @@
 
       printArea.innerHTML = `
         <div class="max-w-2xl mx-auto p-8 border-4 border-double border-indigo-900 rounded-2xl bg-white text-slate-800 my-6">
-          <div class="text-center border-b-2 border-indigo-900 pb-4 mb-6">
-            <h2 class="text-2xl font-black text-indigo-950 uppercase">PARTIDO POLÍTICO INSTITUCIONAL</h2>
-            <h3 class="text-xs font-bold text-slate-600 mt-1">DIRECCIÓN NACIONAL DE ORGANIZACIÓN Y PADRÓN ELECTORAL</h3>
+          <div class="flex items-center justify-between border-b-2 border-indigo-900 pb-4 mb-6 gap-3">
+            <img src="logo-prm.png" alt="PRM" class="w-16 h-16 object-contain rounded-full border border-amber-400 p-0.5 shrink-0">
+            <div class="text-center flex-1">
+              <h2 class="text-xl font-black text-indigo-950 uppercase">PARTIDO REVOLUCIONARIO MODERNO (PRM)</h2>
+              <h3 class="text-xs font-bold text-slate-600 mt-0.5">SISTEMA OFICIAL DE PADRÓN ELECTORAL Y MILITANCIA</h3>
+              <p class="text-[11px] font-semibold text-amber-600">Profesora María Castillo · 2028 - 2032</p>
+            </div>
+            <img src="formulario-maria-castillo.jpg" alt="María Castillo" class="h-16 w-auto object-contain rounded-xl border border-amber-400 shrink-0">
           </div>
           <div class="text-center mb-6">
             <span class="bg-indigo-50 border border-indigo-200 text-indigo-900 font-bold text-xs px-4 py-1.5 rounded-full uppercase">
