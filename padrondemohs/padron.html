@@ -312,7 +312,7 @@
 
           <div class="flex items-center justify-between text-[11px] sm:text-xs text-slate-500 pt-1">
             <span class="flex items-center gap-1">
-              <i class="fa-solid fa-shield-halved text-emerald-600"></i> Límite de seguridad: <strong>3 intentos</strong>
+              <i class="fa-solid fa-unlock-keyhole text-emerald-600"></i> Entorno Demo: <strong>Intentos Ilimitados (Sin bloqueo)</strong>
             </span>
             <button type="button" onclick="desbloquearEmergencia()" class="text-indigo-600 hover:underline font-semibold">
               Restablecer claves
@@ -817,7 +817,7 @@
                   <th class="p-3.5">Nombre Completo / Rol</th>
                   <th class="p-3.5">Cédula</th>
                   <th class="p-3.5">Clave Inicial (4 dígitos)</th>
-                  <th class="p-3.5">Estado / Intentos</th>
+                  <th class="p-3.5">Estado (Demo)</th>
                   <th class="p-3.5 text-right">Acciones de Seguridad</th>
                 </tr>
               </thead>
@@ -1706,36 +1706,17 @@
         return;
       }
 
-      if (userObj.bloqueado || userObj.intentosFallidos >= 3) {
-        userObj.bloqueado = true;
-        guardarUsuarios();
-        registrarEventoBitacora(userObj.username, userObj.rolLabel, "Bloqueado: Superó los 3 intentos fallidos");
-        mostrarErrorLogin(
-          "Cuenta Bloqueada por Seguridad",
-          `El usuario "${userObj.username}" ha superado el límite máximo de 3 intentos fallidos. Solicite a la Directora o al Administrador restablecer su contraseña.`
-        );
-        return;
-      }
+      // ENTORNO DEMO: Los usuarios NUNCA se bloquean por intentos fallidos
+      userObj.bloqueado = false;
+      userObj.intentosFallidos = 0;
 
       if (userObj.password !== inputPass) {
-        userObj.intentosFallidos += 1;
-        const restantes = 3 - userObj.intentosFallidos;
-        if (restantes <= 0) {
-          userObj.bloqueado = true;
-          guardarUsuarios();
-          registrarEventoBitacora(userObj.username, userObj.rolLabel, "Cuenta bloqueada tras 3er intento fallido");
-          mostrarErrorLogin(
-            "Cuenta Bloqueada (3/3 intentos fallidos)",
-            `Ha agotado los 3 intentos permitidos para "${userObj.username}". El acceso ha sido bloqueado por seguridad.`
-          );
-        } else {
-          guardarUsuarios();
-          registrarEventoBitacora(userObj.username, userObj.rolLabel, `Contraseña incorrecta (${userObj.intentosFallidos}/3 intentos)`);
-          mostrarErrorLogin(
-            "Contraseña Incorrecta",
-            `Las credenciales no coinciden. Le quedan ${restantes} intento(s) antes del bloqueo de seguridad.`
-          );
-        }
+        guardarUsuarios();
+        registrarEventoBitacora(userObj.username, userObj.rolLabel, "Contraseña incorrecta (Intento fallido en Demo)");
+        mostrarErrorLogin(
+          "Contraseña Incorrecta",
+          `La contraseña no coincide. Recuerde que en la Demo la clave de todos los usuarios es: 12345678`
+        );
         return;
       }
 
@@ -3101,7 +3082,7 @@
           const claveInicial = ["u_admin", "u_directora", "u_campana"].includes(u.id) ? "12345678" : obtenerUltimos4Cedula(u.cedula);
           const estadoBadge = u.bloqueado
             ? `<span class="px-2.5 py-1 rounded-full text-xs font-extrabold bg-rose-100 text-rose-800">Bloqueado (${u.intentosFallidos}/3)</span>`
-            : `<span class="px-2.5 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800">Activo (${u.intentosFallidos}/3 fallos)</span>`;
+            : `<span class="px-2.5 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800">Activo (Sin bloqueo)</span>`;
           return `
             <tr onclick="verFormularioUsuario('${u.id}')" class="hover:bg-indigo-50/70 cursor-pointer transition">
               <td class="p-3.5 font-extrabold text-indigo-900 underline decoration-indigo-300">${u.username}</td>

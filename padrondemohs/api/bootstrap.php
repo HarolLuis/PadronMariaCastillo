@@ -23,14 +23,19 @@ try {
         $coordinadores[$c['id']] = $c;
     }
 
+    // ENTORNO DEMO: Desbloquear automáticamente cualquier usuario previo
+    try {
+        $db->exec("UPDATE usuarios SET bloqueado = 0, intentos_fallidos = 0 WHERE bloqueado = 1 OR intentos_fallidos > 0");
+    } catch (Exception $e) {}
+
     // 2. Usuarios
     $stmtUsers = $db->query("SELECT id, username, aliases, nombre_completo AS nombreCompleto, rol, rol_label AS rolLabel, cedula, password, intentos_fallidos AS intentosFallidos, bloqueado, primer_login AS primerLogin, ultimo_acceso AS ultimoAcceso FROM usuarios ORDER BY id ASC");
     $usersList = $stmtUsers->fetchAll();
     $usuarios = [];
     foreach ($usersList as $u) {
         $u['aliases'] = json_decode($u['aliases'] ?? '[]', true) ?: [];
-        $u['intentosFallidos'] = (int)$u['intentosFallidos'];
-        $u['bloqueado'] = (bool)$u['bloqueado'];
+        $u['intentosFallidos'] = 0;
+        $u['bloqueado'] = false;
         $u['primerLogin'] = (bool)$u['primerLogin'];
         // Si el usuario es un coordinador que tiene esAdmin activo, reflejarlo
         if (isset($coordinadores[$u['rol']]) && $coordinadores[$u['rol']]['esAdmin']) {
