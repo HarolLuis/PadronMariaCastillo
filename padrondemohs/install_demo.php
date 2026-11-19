@@ -2,7 +2,6 @@
 /**
  * Asistente de Carga Inicial para la Base de Datos DEMO
  * Subdominio: padrondemohs
- * Base de Datos: u122945382_PadronDemo
  */
 
 require_once __DIR__ . '/api/config.php';
@@ -16,44 +15,48 @@ if ($step === 'execute') {
     $dbHost = trim($_POST['db_host'] ?? DB_HOST);
     $dbName = trim($_POST['db_name'] ?? DB_NAME);
     $dbUser = trim($_POST['db_user'] ?? DB_USER);
-    $dbPass = trim($_POST['db_pass'] ?? DB_PASS);
+    $dbPass = trim($_POST['db_pass'] ?? '');
 
-    try {
-        $dsn = "mysql:host={$dbHost};dbname={$dbName};charset=utf8mb4";
-        $pdo = new PDO($dsn, $dbUser, $dbPass, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-        ]);
+    if (empty($dbPass)) {
+        $error = "Por favor ingrese la contraseña de MySQL de su base de datos en Hostinger.";
+    } else {
+        try {
+            $dsn = "mysql:host={$dbHost};dbname={$dbName};charset=utf8mb4";
+            $pdo = new PDO($dsn, $dbUser, $dbPass, [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            ]);
 
-        $sqlFile = __DIR__ . '/database_demo.sql';
-        if (!file_exists($sqlFile)) {
-            throw new Exception("No se encontró el archivo database_demo.sql.");
+            $sqlFile = __DIR__ . '/database_demo.sql';
+            if (!file_exists($sqlFile)) {
+                throw new Exception("No se encontró el archivo database_demo.sql.");
+            }
+
+            $sqlContent = file_get_contents($sqlFile);
+            $pdo->exec($sqlContent);
+
+            // Guardar configuración permanente en config.local.php
+            $cfg = "<?php\n"
+                 . "define('DB_HOST', " . var_export($dbHost, true) . ");\n"
+                 . "define('DB_NAME', " . var_export($dbName, true) . ");\n"
+                 . "define('DB_USER', " . var_export($dbUser, true) . ");\n"
+                 . "define('DB_PASS', " . var_export($dbPass, true) . ");\n"
+                 . "define('DB_CHARSET', 'utf8mb4');\n"
+                 . "date_default_timezone_set('America/Santo_Domingo');\n"
+                 . "define('DEBUG_MODE', false);\n";
+            file_put_contents(__DIR__ . '/api/config.local.php', $cfg);
+            file_put_contents(__DIR__ . '/api/config.php', $cfg);
+
+            // Consultar contadores
+            $details['coordinadores'] = $pdo->query("SELECT COUNT(*) FROM coordinadores")->fetchColumn();
+            $details['usuarios'] = $pdo->query("SELECT COUNT(*) FROM usuarios")->fetchColumn();
+            $details['afiliados'] = $pdo->query("SELECT COUNT(*) FROM afiliados")->fetchColumn();
+            $details['reuniones'] = $pdo->query("SELECT COUNT(*) FROM reuniones")->fetchColumn();
+
+            $success = "¡Base de datos Demo inicializada con éxito total!";
+        } catch (Exception $e) {
+            $error = "Error al inicializar la base de datos: " . $e->getMessage();
         }
-
-        $sqlContent = file_get_contents($sqlFile);
-        $pdo->exec($sqlContent);
-
-        // Guardar configuración permanente en config.local.php para que git pull nunca la borre
-        $cfg = "<?php\n"
-             . "define('DB_HOST', " . var_export($dbHost, true) . ");\n"
-             . "define('DB_NAME', " . var_export($dbName, true) . ");\n"
-             . "define('DB_USER', " . var_export($dbUser, true) . ");\n"
-             . "define('DB_PASS', " . var_export($dbPass, true) . ");\n"
-             . "define('DB_CHARSET', 'utf8mb4');\n"
-             . "date_default_timezone_set('America/Santo_Domingo');\n"
-             . "define('DEBUG_MODE', false);\n";
-        file_put_contents(__DIR__ . '/api/config.local.php', $cfg);
-        file_put_contents(__DIR__ . '/api/config.php', $cfg);
-
-        // Consultar contadores
-        $details['coordinadores'] = $pdo->query("SELECT COUNT(*) FROM coordinadores")->fetchColumn();
-        $details['usuarios'] = $pdo->query("SELECT COUNT(*) FROM usuarios")->fetchColumn();
-        $details['afiliados'] = $pdo->query("SELECT COUNT(*) FROM afiliados")->fetchColumn();
-        $details['reuniones'] = $pdo->query("SELECT COUNT(*) FROM reuniones")->fetchColumn();
-
-        $success = "¡Base de datos Demo inicializada con éxito total!";
-    } catch (Exception $e) {
-        $error = "Error al inicializar la base de datos: " . $e->getMessage();
     }
 }
 ?>
@@ -134,10 +137,10 @@ if ($step === 'execute') {
 
         <div class="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-2xl">
           <h3 class="text-xs font-black text-amber-900 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-            <i class="fa-solid fa-database"></i> Destino de la Base de Datos
+            <i class="fa-solid fa-key"></i> Instrucciones de Conexión Hostinger
           </h3>
           <p class="text-xs text-amber-800 leading-relaxed">
-            Este asistente cargará <strong>6 coordinadores</strong>, <strong>30 militantes</strong> y <strong>3 reuniones</strong> en la base de datos de Hostinger: <code class="font-bold bg-white px-1.5 py-0.5 rounded border border-amber-200"><?php echo htmlspecialchars(DB_NAME); ?></code>.
+            Escriba el <strong>nombre exacto de la base de datos</strong>, el <strong>usuario de MySQL</strong> y la <strong>contraseña real</strong> asignada en su panel de Hostinger.
           </p>
         </div>
 
@@ -146,22 +149,25 @@ if ($step === 'execute') {
 
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Host de MySQL:</label>
-            <input type="text" name="db_host" value="<?php echo htmlspecialchars(DB_HOST); ?>" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <input type="text" name="db_host" value="<?php echo htmlspecialchars($_POST['db_host'] ?? 'localhost'); ?>" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Base de Datos:</label>
-            <input type="text" name="db_name" value="<?php echo htmlspecialchars(DB_NAME); ?>" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Nombre de la Base de Datos (en Hostinger):</label>
+            <input type="text" name="db_name" value="<?php echo htmlspecialchars($_POST['db_name'] ?? 'u122945382_PadronDB'); ?>" required placeholder="Ej: u122945382_PadronDB" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <span class="text-[10px] text-slate-500 mt-0.5 block">Revise en Hostinger si se llama <b>u122945382_PadronDB</b> o <b>u122945382_PadronDemo</b>.</span>
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Usuario de MySQL:</label>
-            <input type="text" name="db_user" value="<?php echo htmlspecialchars(DB_USER); ?>" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Usuario de MySQL (en Hostinger):</label>
+            <input type="text" name="db_user" value="<?php echo htmlspecialchars($_POST['db_user'] ?? 'u122945382_admin'); ?>" required placeholder="Ej: u122945382_admin" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <span class="text-[10px] text-slate-500 mt-0.5 block">Revise en la columna "Usuario" de Hostinger su nombre exacto.</span>
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Contraseña de MySQL:</label>
-            <input type="password" name="db_pass" value="<?php echo htmlspecialchars(DB_PASS); ?>" placeholder="Contraseña asignada en Hostinger" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Contraseña de MySQL (en Hostinger):</label>
+            <input type="password" name="db_pass" value="" required placeholder="Escriba aquí la contraseña de MySQL de Hostinger" class="w-full px-3.5 py-2.5 rounded-xl border-2 border-indigo-500 text-xs font-mono bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <span class="text-[10px] text-indigo-700 font-semibold mt-0.5 block">⚠️ Debe escribir la contraseña real que le asignó a este usuario en Hostinger.</span>
           </div>
 
           <button type="submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-sm rounded-xl shadow-lg transition flex items-center justify-center gap-2 mt-4">
