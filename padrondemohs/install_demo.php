@@ -33,26 +33,17 @@ if ($step === 'execute') {
         $sqlContent = file_get_contents($sqlFile);
         $pdo->exec($sqlContent);
 
-        // Guardar configuración si cambió
-        if ($dbUser !== DB_USER || $dbPass !== DB_PASS || $dbName !== DB_NAME) {
-            $cfg = "<?php
-"
-                 . "define('DB_HOST', " . var_export($dbHost, true) . ");
-"
-                 . "define('DB_NAME', " . var_export($dbName, true) . ");
-"
-                 . "define('DB_USER', " . var_export($dbUser, true) . ");
-"
-                 . "define('DB_PASS', " . var_export($dbPass, true) . ");
-"
-                 . "define('DB_CHARSET', 'utf8mb4');
-"
-                 . "date_default_timezone_set('America/Santo_Domingo');
-"
-                 . "define('DEBUG_MODE', false);
-";
-            file_put_contents(__DIR__ . '/api/config.php', $cfg);
-        }
+        // Guardar configuración permanente en config.local.php para que git pull nunca la borre
+        $cfg = "<?php\n"
+             . "define('DB_HOST', " . var_export($dbHost, true) . ");\n"
+             . "define('DB_NAME', " . var_export($dbName, true) . ");\n"
+             . "define('DB_USER', " . var_export($dbUser, true) . ");\n"
+             . "define('DB_PASS', " . var_export($dbPass, true) . ");\n"
+             . "define('DB_CHARSET', 'utf8mb4');\n"
+             . "date_default_timezone_set('America/Santo_Domingo');\n"
+             . "define('DEBUG_MODE', false);\n";
+        file_put_contents(__DIR__ . '/api/config.local.php', $cfg);
+        file_put_contents(__DIR__ . '/api/config.php', $cfg);
 
         // Consultar contadores
         $details['coordinadores'] = $pdo->query("SELECT COUNT(*) FROM coordinadores")->fetchColumn();

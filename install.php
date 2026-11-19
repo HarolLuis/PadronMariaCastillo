@@ -47,6 +47,7 @@ if ($step === 'execute') {
                 . "date_default_timezone_set('America/Santo_Domingo');\n"
                 . "define('DEBUG_MODE', false);\n";
 
+            file_put_contents(__DIR__ . '/api/config.local.php', $configContent);
             file_put_contents(__DIR__ . '/api/config.php', $configContent);
 
             $success = "¡Instalación y configuración completada con éxito! La base de datos ha sido creada y configurada.";

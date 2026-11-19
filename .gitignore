@@ -4,6 +4,12 @@
 Thumbs.db
 .DS_Store
 
+# Archivos de configuración local permanente (evita sobreescritura de contraseñas por Git)
+*.local.php
+config.local.php
+api/config.local.php
+padrondemohs/api/config.local.php
+
 # IDE
 .vscode/
 .idea/
