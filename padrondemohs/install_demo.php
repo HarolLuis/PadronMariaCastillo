@@ -1,7 +1,7 @@
 <?php
 /**
  * Asistente de Carga Inicial para la Base de Datos DEMO
- * Subdominio: padrondemohs.padronmc.com
+ * Subdominio: padrondemohs
  * Base de Datos: u122945382_PadronDemo
  */
 
@@ -76,7 +76,7 @@ if ($step === 'execute') {
         <div>
           <div class="flex items-center gap-2">
             <span class="bg-amber-400 text-slate-950 text-[10px] font-black uppercase px-2 py-0.5 rounded-full">ENTORNO DEMO</span>
-            <span class="text-xs text-indigo-300">padrondemohs.padronmc.com</span>
+            <span class="text-xs text-indigo-300">padrondemohs</span>
           </div>
           <h1 class="text-lg font-black leading-tight mt-1">Carga Inicial de Base de Datos Demo</h1>
         </div>
@@ -116,7 +116,7 @@ if ($step === 'execute') {
 
         <div class="space-y-3">
           <a href="index.php" class="block w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-center rounded-xl shadow-lg transition text-sm">
-            <i class="fa-solid fa-arrow-right mr-2"></i> Abrir Aplicación Demo (padrondemohs.padronmc.com)
+            <i class="fa-solid fa-arrow-right mr-2"></i> Abrir Aplicación Demo (padrondemohs)
           </a>
           <a href="api/test_db.php" class="block w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-center rounded-xl transition text-xs">
             <i class="fa-solid fa-stethoscope mr-1.5"></i> Ver Diagnóstico de Conexión

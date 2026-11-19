@@ -383,7 +383,7 @@
                 <span class="bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-black text-[10px] sm:text-xs px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-sm inline-flex items-center gap-1.5">
                   <i class="fa-solid fa-flask text-indigo-900"></i> ENTORNO DEMO
                 </span>
-                <span class="text-[11px] font-semibold text-amber-200">padrondemohs.padronmc.com</span>
+                <span class="text-[11px] font-semibold text-amber-200">padrondemohs</span>
               </div>
               <h1 class="text-sm sm:text-base md:text-lg font-extrabold tracking-tight leading-tight truncate sm:whitespace-normal">PADRÓN ELECTORAL · MARÍA CASTILLO</h1>
               <p class="text-[11px] sm:text-xs text-amber-300 font-semibold truncate sm:whitespace-normal">«Aprender También es Crecer» · 2028 - 2032</p>
