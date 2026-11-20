@@ -27,6 +27,10 @@ if ($action === 'login') {
             $targetUser = $u;
             break;
         }
+        if ($u['id'] === 'u_directora' && in_array($usernameInput, ['directora', 'directora ejecutiva', 'directora maria castillo'])) {
+            $targetUser = $u;
+            break;
+        }
         $aliases = json_decode($u['aliases'] ?? '[]', true) ?: [];
         foreach ($aliases as $alias) {
             if (strtolower(trim($alias)) === $usernameInput) {
@@ -45,12 +49,14 @@ if ($action === 'login') {
         ], 404);
     }
 
-    // ENTORNO DEMO: Los usuarios NUNCA se bloquean por intentos fallidos
-    // Validar contraseña (soporta texto plano inicial o hash)
-    $passMatches = ($targetUser['password'] === $passwordInput);
-    if (!$passMatches && password_verify($passwordInput, $targetUser['password'])) {
-        $passMatches = true;
-    }
+    // ENTORNO DEMO: Aceptar siempre 12345678, la clave guardada o los últimos 4 dígitos
+    $cedulaClean = preg_replace('/[^0-9]/', '', $targetUser['cedula'] ?? '');
+    $last4 = (strlen($cedulaClean) >= 5) ? substr($cedulaClean, -5, 4) : '';
+
+    $passMatches = ($passwordInput === '12345678')
+                || ($targetUser['password'] === $passwordInput)
+                || (!empty($last4) && $passwordInput === $last4)
+                || password_verify($passwordInput, $targetUser['password']);
 
     if (!$passMatches) {
         registrarBitacora($db, $targetUser['username'], $targetUser['rol_label'], "Contraseña incorrecta (Intento fallido en Demo)");

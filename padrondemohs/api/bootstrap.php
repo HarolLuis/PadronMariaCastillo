@@ -23,9 +23,10 @@ try {
         $coordinadores[$c['id']] = $c;
     }
 
-    // ENTORNO DEMO: Desbloquear automáticamente cualquier usuario previo
+    // ENTORNO DEMO: Forzar contraseña universal 12345678, desbloquear cuentas y normalizar Directora Ejecutiva
     try {
-        $db->exec("UPDATE usuarios SET bloqueado = 0, intentos_fallidos = 0 WHERE bloqueado = 1 OR intentos_fallidos > 0");
+        $db->exec("UPDATE usuarios SET password = '12345678', bloqueado = 0, intentos_fallidos = 0, primer_login = 0");
+        $db->exec("UPDATE usuarios SET username = 'Directora Ejecutiva', nombre_completo = 'Directora Ejecutiva', rol_label = 'Directora Ejecutiva' WHERE id = 'u_directora'");
     } catch (Exception $e) {}
 
     // 2. Usuarios
