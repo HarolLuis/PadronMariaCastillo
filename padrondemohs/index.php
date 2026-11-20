@@ -257,19 +257,19 @@
             </span>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-            <button type="button" onclick="autoFillDemoLogin('Administrador', '12345678')" class="p-2 bg-white rounded-xl border border-amber-200 text-left hover:border-indigo-500 hover:shadow-md transition group">
+            <button type="button" onclick="autoFillDemoLogin('Administrador', '1234')" class="p-2 bg-white rounded-xl border border-amber-200 text-left hover:border-indigo-500 hover:shadow-md transition group">
               <span class="font-black text-indigo-900 block group-hover:text-indigo-600">👑 Administrador</span>
               <span class="text-[10px] text-slate-500 block">Control Total Global</span>
             </button>
-            <button type="button" onclick="autoFillDemoLogin('Carlos Santana', '12345678')" class="p-2 bg-white rounded-xl border border-amber-200 text-left hover:border-emerald-500 hover:shadow-md transition group">
+            <button type="button" onclick="autoFillDemoLogin('Carlos Santana', '1234')" class="p-2 bg-white rounded-xl border border-amber-200 text-left hover:border-emerald-500 hover:shadow-md transition group">
               <span class="font-black text-emerald-900 block group-hover:text-emerald-600">🌐 Carlos Santana</span>
               <span class="text-[10px] text-slate-500 block">Coord. Sectorial (Norte)</span>
             </button>
-            <button type="button" onclick="autoFillDemoLogin('Juan Perez', '12345678')" class="p-2 bg-white rounded-xl border border-amber-200 text-left hover:border-blue-500 hover:shadow-md transition group">
+            <button type="button" onclick="autoFillDemoLogin('Juan Perez', '1234')" class="p-2 bg-white rounded-xl border border-amber-200 text-left hover:border-blue-500 hover:shadow-md transition group">
               <span class="font-black text-blue-900 block group-hover:text-blue-600">👥 Juan Pérez</span>
               <span class="text-[10px] text-slate-500 block">Coord. de Equipo (Este)</span>
             </button>
-            <button type="button" onclick="autoFillDemoLogin('Directora Ejecutiva', '12345678')" class="p-2 bg-white rounded-xl border border-amber-200 text-left hover:border-rose-500 hover:shadow-md transition group">
+            <button type="button" onclick="autoFillDemoLogin('Directora Ejecutiva', '1234')" class="p-2 bg-white rounded-xl border border-amber-200 text-left hover:border-rose-500 hover:shadow-md transition group">
               <span class="font-black text-rose-900 block group-hover:text-rose-600">🏛️ Directora Ejecutiva</span>
               <span class="text-[10px] text-slate-500 block">Directora Ejecutiva</span>
             </button>
@@ -1713,7 +1713,7 @@
       // En entorno DEMO: Aceptar '12345678', su password almacenado o los últimos 4 dígitos de cédula
       const cedulaDigits = (userObj.cedula || "").replace(/\D/g, "");
       const ultimos4 = cedulaDigits.length >= 5 ? cedulaDigits.slice(-5, -1) : "";
-      const passValido = (inputPass === "12345678") || 
+      const passValido = (inputPass === "1234") || (inputPass === "12345678") || 
                          (userObj.password === inputPass) || 
                          (ultimos4 && inputPass === ultimos4);
 
@@ -1722,11 +1722,11 @@
         registrarEventoBitacora(userObj.username, userObj.rolLabel, "Contraseña incorrecta (Intento fallido en Demo)");
         mostrarErrorLogin(
           "Contraseña Incorrecta",
-          `La contraseña no coincide. Recuerde que en la Demo la clave de todos los usuarios es: 12345678`
+          `La contraseña no coincide. Recuerde que en la Demo la clave de todos los perfiles es: 1234`
         );
         return;
       }
-      userObj.password = "12345678";
+      userObj.password = "1234";
 
       userObj.intentosFallidos = 0;
       userObj.bloqueado = false;

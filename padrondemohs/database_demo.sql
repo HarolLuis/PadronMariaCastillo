@@ -140,17 +140,17 @@ INSERT INTO `coordinadores` (`id`, `nombre`, `zona`, `cedula`, `telefono`, `tipo
 ('coord_5', 'Carmen Delgado', 'Zona Norte', '001-4567891-2', '809-555-0505', 'equipo', 'coord_1', 0, 1),
 ('coord_6', 'Luis Morales', 'Zona Sur', '001-5678912-3', '809-555-0606', 'equipo', 'coord_2', 0, 1);
 
--- 2. Usuarios del Sistema (Todos con clave: 12345678)
+-- 2. Usuarios del Sistema (Todos con clave: 1234)
 INSERT INTO `usuarios` (`id`, `username`, `aliases`, `nombre_completo`, `rol`, `rol_label`, `cedula`, `password`, `intentos_fallidos`, `bloqueado`, `primer_login`, `ultimo_acceso`) VALUES
-('u_admin', 'Administrador', '["admin", "administrador"]', 'Administrador General del Sistema', 'admin', 'Administrador', '001-1234567-8', '12345678', 0, 0, 0, NULL),
-('u_directora', 'Directora Ejecutiva', '["directora", "directora ejecutiva", "ejecutiva"]', 'Directora Ejecutiva del Partido', 'directora', 'Directora Ejecutiva', '001-4567890-2', '12345678', 0, 0, 0, NULL),
-('u_campana', 'Robert Ritz M. Roque Rivas', '["robert", "robert rivas", "campana"]', 'Robert Ritz M. Roque Rivas', 'campana', 'Coordinador de Campaña', '001-7788990-5', '12345678', 0, 0, 0, NULL),
-('u_carlos', 'Carlos Santana', '["carlos", "carlos santana"]', 'Carlos Santana', 'sectorial', 'Coordinador Sectorial', '001-0987654-3', '12345678', 0, 0, 0, NULL),
-('u_rosa', 'Rosa Gomez', '["rosa", "rosa gomez"]', 'Rosa Gómez', 'sectorial', 'Coordinadora Sectorial', '001-8765432-1', '12345678', 0, 0, 0, NULL),
-('u_roberto', 'Roberto Almonte', '["roberto", "roberto almonte"]', 'Roberto Almonte', 'sectorial', 'Coordinador Sectorial', '001-7654321-0', '12345678', 0, 0, 0, NULL),
-('u_juan', 'Juan Perez', '["juan", "juan perez"]', 'Juan Pérez', 'coordinador', 'Coordinador de Equipo', '001-3456789-0', '12345678', 0, 0, 0, NULL),
-('u_carmen', 'Carmen Delgado', '["carmen", "carmen delgado"]', 'Carmen Delgado', 'coordinador', 'Coordinadora de Equipo', '001-4567891-2', '12345678', 0, 0, 0, NULL),
-('u_luis', 'Luis Morales', '["luis", "luis morales"]', 'Luis Morales', 'coordinador', 'Coordinador de Equipo', '001-5678912-3', '12345678', 0, 0, 0, NULL);
+('u_admin', 'Administrador', '["admin", "administrador"]', 'Administrador General del Sistema', 'admin', 'Administrador', '001-1234567-8', '1234', 0, 0, 0, NULL),
+('u_directora', 'Directora Ejecutiva', '["directora", "directora ejecutiva", "ejecutiva"]', 'Directora Ejecutiva del Partido', 'directora', 'Directora Ejecutiva', '001-4567890-2', '1234', 0, 0, 0, NULL),
+('u_campana', 'Robert Ritz M. Roque Rivas', '["robert", "robert rivas", "campana"]', 'Robert Ritz M. Roque Rivas', 'campana', 'Coordinador de Campaña', '001-7788990-5', '1234', 0, 0, 0, NULL),
+('u_carlos', 'Carlos Santana', '["carlos", "carlos santana"]', 'Carlos Santana', 'sectorial', 'Coordinador Sectorial', '001-0987654-3', '1234', 0, 0, 0, NULL),
+('u_rosa', 'Rosa Gomez', '["rosa", "rosa gomez"]', 'Rosa Gómez', 'sectorial', 'Coordinadora Sectorial', '001-8765432-1', '1234', 0, 0, 0, NULL),
+('u_roberto', 'Roberto Almonte', '["roberto", "roberto almonte"]', 'Roberto Almonte', 'sectorial', 'Coordinador Sectorial', '001-7654321-0', '1234', 0, 0, 0, NULL),
+('u_juan', 'Juan Perez', '["juan", "juan perez"]', 'Juan Pérez', 'coordinador', 'Coordinador de Equipo', '001-3456789-0', '1234', 0, 0, 0, NULL),
+('u_carmen', 'Carmen Delgado', '["carmen", "carmen delgado"]', 'Carmen Delgado', 'coordinador', 'Coordinadora de Equipo', '001-4567891-2', '1234', 0, 0, 0, NULL),
+('u_luis', 'Luis Morales', '["luis", "luis morales"]', 'Luis Morales', 'coordinador', 'Coordinador de Equipo', '001-5678912-3', '1234', 0, 0, 0, NULL);
 
 -- 3. Padrón de Militantes (30 Militantes de Demostración distribuidos en meses Feb-Jun)
 INSERT INTO `afiliados` (`folio`, `cedula`, `nombre`, `telefono`, `centro_direccion`, `mesa_electoral`, `coord_id`, `mes`, `fecha`) VALUES

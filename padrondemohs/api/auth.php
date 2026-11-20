@@ -49,11 +49,11 @@ if ($action === 'login') {
         ], 404);
     }
 
-    // ENTORNO DEMO: Aceptar siempre 12345678, la clave guardada o los últimos 4 dígitos
+    // ENTORNO DEMO: Aceptar siempre 1234, la clave guardada o los últimos 4 dígitos
     $cedulaClean = preg_replace('/[^0-9]/', '', $targetUser['cedula'] ?? '');
     $last4 = (strlen($cedulaClean) >= 5) ? substr($cedulaClean, -5, 4) : '';
 
-    $passMatches = ($passwordInput === '12345678')
+    $passMatches = ($passwordInput === '1234') || ($passwordInput === '12345678')
                 || ($targetUser['password'] === $passwordInput)
                 || (!empty($last4) && $passwordInput === $last4)
                 || password_verify($passwordInput, $targetUser['password']);
@@ -63,7 +63,7 @@ if ($action === 'login') {
         jsonResponse([
             'success' => false,
             'title' => 'Contraseña Incorrecta',
-            'error' => 'La contraseña ingresada no es correcta. Recuerde que en la Demo la clave para todos los usuarios es: 12345678'
+            'error' => 'La contraseña ingresada no es correcta. Recuerde que en la Demo la clave para todos los perfiles es: 1234'
         ], 401);
     }
 
